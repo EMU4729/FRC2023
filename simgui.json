@@ -4,11 +4,32 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/DriveSub": "Subsystem",
       "/LiveWindow/DriveSub/Differential Drive": "DifferentialDrive",
+      "/LiveWindow/NavigationSub": "Subsystem",
+      "/LiveWindow/TurretSub": "Subsystem",
+      "/LiveWindow/Ungrouped/DigitalInput[4]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Victor SPX [7]": "Motor Controller",
+      "/Shuffleboard/Drive/DriveOutput": "DifferentialDrive",
+      "/Shuffleboard/Drive/TeleopType": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
+      "open": true
     }
   }
 }

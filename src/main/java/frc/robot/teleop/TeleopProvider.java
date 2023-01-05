@@ -14,15 +14,17 @@ import frc.robot.Variables;
 public class TeleopProvider {
   private static Optional<TeleopProvider> inst = Optional.empty();
 
-  private final Command teleop = new TeleopDrive();
-  private final Command demoTeleop = new TeleopDrive(Variables.getInstance().DriveSettingsDEMO);
-  private final Command pidTeleop = new PIDTeleopDrive();
+  private final Command teleop = new TeleopDriveArcade();
+  private final Command demoTeleop = new TeleopDriveArcade(Variables.getInstance().DriveSettingsDEMO);
   public final SendableChooser<Command> chooser = new SendableChooser<>(); // pub for shuffle board
 
   private TeleopProvider() {
+    // 2 stick arcade
     chooser.setDefaultOption("Default Teleop", teleop);
     chooser.addOption("Demo Teleop", demoTeleop);
-    chooser.addOption("PID Teleop", pidTeleop);
+
+    
+
     chooser.addOption("Disable Teleop", new InstantCommand(() -> {
     }));
 

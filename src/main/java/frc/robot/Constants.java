@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.Map;
 import java.util.Optional;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.utils.MotorInfo;
 
 /**
@@ -15,14 +16,8 @@ import frc.robot.utils.MotorInfo;
  */
 public final class Constants {
   private static Optional<Constants> inst = Optional.empty();
-
-  private Constants() {
-  }
-
   public static Constants getInstance() {
-    if (!inst.isPresent()) {
-      inst = Optional.of(new Constants());
-    }
+    if (!inst.isPresent()) inst = Optional.of(new Constants());
     return inst.get();
   }
 
@@ -30,28 +25,16 @@ public final class Constants {
   public final Map<String, String> ENV = System.getenv();
 
   // Drive
-  /**
-   * Information for left master drive [Port,controller type,
-   * {invert,brake,connectionSaftey}]
-   */
+  /** Information for left master drive [Port,controller type, {invert,brake,connectionSaftey}] */
   public final MotorInfo DRIVE_MOTOR_ID_LM = new MotorInfo(4, MotorInfo.Type.TalonSRX)
       .withSafety().encoder(new int[] { 0, 1 }, 60.078 / 256. / 1000);
-  /**
-   * Information for right master drive [Port,controller type,
-   * {invert,brake,connectionSaftey}]
-   */
+  /** Information for right master drive [Port,controller type, {invert,brake,connectionSaftey}] */
   public final MotorInfo DRIVE_MOTOR_ID_RM = new MotorInfo(1, MotorInfo.Type.TalonSRX)
       .withInvert().withSafety().encoder(new int[] { 2, 3 }, 59.883 / 256. / 1000);
-  /**
-   * Information for left slave drive [Port,controller type,
-   * {invert,brake,connectionSaftey}]
-   */
+  /** Information for left slave drive [Port,controller type, {invert,brake,connectionSaftey}] */
   public final MotorInfo DRIVE_MOTOR_ID_LS = new MotorInfo(5, MotorInfo.Type.TalonSRX)
       .withSafety();
-  /**
-   * Information for right slave drive [Port,controller type,
-   * {invert,brake,connectionSaftey}]
-   */
+  /** Information for right slave drive [Port,controller type, {invert,brake,connectionSaftey}] */
   public final MotorInfo DRIVE_MOTOR_ID_RS = new MotorInfo(2, MotorInfo.Type.TalonSRX)
       .withInvert().withSafety();
 
@@ -104,10 +87,8 @@ public final class Constants {
   public final String[] PATH_USB = { "u//", "v//" };
   /** file path header for files on internal storage */
   public final String PATH_INTERNAL = ENV.get("HOME");
-  /** file name for default auto @deprecated */
-  public final String PATH_AUTO_FILE_NAME = "autoCommands.txt";
 
-  // Error Retry Limit
+  // Logger
   /** limit for repeated attempts to create log file on USB storage */
   public final int REPEAT_LIMIT_LOGGER_CREATION = 10;
   /** limit for repeated attempts to read auto from internal storage */
@@ -118,9 +99,8 @@ public final class Constants {
   // Robot features
   /** distance between wheel center side to side (m) */
   public final double ROBOT_WHEEL_WIDTH = 0.870;
-
-  /** Auto straight PID Constants */
-  public double[] AUTO_STRAIGHT_PID = { 0.2, 0.8, 0 }; // UPDATE
+  /** radius of the drive wheels (m) */
+  public final double ROBOT_WHEEL_RAD = Units.inchesToMeters(3);
 
   /** PID constants for throttle during teleop */
   public double[] TELEOP_THROTTLE_PID = { 0.2, 0, 0.8 }; // UPDATE

@@ -52,9 +52,10 @@ public class RobotContainer {
     oi.a.whenPressed(Subsystems.turret.initSlewCommand);
 
     // Turret Slew Control
-    oi.dPadW
-        .whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(-0.3), () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
-    oi.dPadE.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(0.3), () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
+    oi.dPadW.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(-0.3), 
+        () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
+    oi.dPadE.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(0.3), 
+        () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
     // Drive bindings handled in teleop command
   }
 

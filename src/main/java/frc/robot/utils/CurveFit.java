@@ -68,17 +68,28 @@ public class CurveFit {
     if (input == 0) {
       return 0;
     }
+    //simple multiply by the input
+    //intended for reduction or increase of turn rate based on forward speed
     maxOutAdjust = (1 - throtEffect) + throtEffect * Math.abs(maxOutAdjust);
 
-    input = MathUtil.clamp(input, inMin, inMax); // clamp input within the input min max
-    input = ((input - inMin) / (inMax - inMin) - 0.5) * 2; // reset range to -1 to 1
+    input = MathUtil.clamp(input, inMin, inMax); // clamp input within [inMin, inMax]
+    input = ((input - inMin) / (inMax - inMin) - 0.5) * 2; // change range to [-1, 1]
     input = Math.copySign(Math.pow(Math.abs(input), pow), input); // fit power of curve to the input
-    input = Math.copySign(Math.abs(input) * (-outAbsMin + outAbsMax * maxOutAdjust) + outAbsMin, input); // adjust min
-                                                                                                         // starting
-                                                                                                         // point and
-                                                                                                         // end point
-                                                                                                         // either side
-                                                                                                         // of zero
+    // change the range to [-outMax, -outMin], [outMin, outMax]
+    // with equivelant ranges either side of 0 and a jump to outMin once out of the deadzone
+    input = Math.copySign(Math.abs(input) * (-outAbsMin + outAbsMax * maxOutAdjust) + outAbsMin, input);
+
+    /*
+    rough sketch of the result
+                       ___ outAbsMax
+              |
+           __/         ___ outAbsMin
+    ______|______  
+        __|
+       /
+      |
+
+    */
     return input;
   }
 }

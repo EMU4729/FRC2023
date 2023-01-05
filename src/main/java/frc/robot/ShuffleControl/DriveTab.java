@@ -58,15 +58,5 @@ public class DriveTab {
         .add("TeleopType", TeleopProvider.getInstance().chooser)
         .withSize(2, 1).withPosition(2, 4)
         .withWidget(BuiltInWidgets.kComboBoxChooser);
-
-    drive
-        .add("Throttle PID", Subsystems.drive.pidThrot)
-        .withSize(1, 3).withPosition(4, 0)
-        .withWidget(BuiltInWidgets.kPIDController);
-
-    drive
-        .add("Steering PID", Subsystems.drive.pidSteer)
-        .withSize(1, 3).withPosition(4, 3)
-        .withWidget(BuiltInWidgets.kPIDController);
   }
 }
