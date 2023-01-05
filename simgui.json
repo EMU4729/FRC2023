@@ -1,0 +1,14 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/DriveSub": "Subsystem",
+      "/LiveWindow/DriveSub/Differential Drive": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser"
+    }
+  }
+}
