@@ -17,6 +17,11 @@
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
+      "/Shuffleboard/Drive/TeleopType": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "window": {
           "visible": true
@@ -25,6 +30,15 @@
     }
   },
   "NetworkTables": {
+    "Shuffleboard": {
+      "Drive": {
+        "TeleopType": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
     "SmartDashboard": {
       "Field": {
         "open": true
