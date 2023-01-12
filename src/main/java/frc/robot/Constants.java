@@ -108,4 +108,9 @@ public final class Constants {
   public double[] TELEOP_STEERING_PID = { 0.2, 0, 0.8 }; // UPDATE
   /** Encoder max rate for PID loop */
   public double DRIVE_ENCODER_MAX_RATE = 1; // UPDATE
+
+  /** LED string length (in leds) */
+  public int LED_STRING_LENGTH = 60;
+  /** LED string port num */
+  public int LED_STRING_PORT = 10;
 }
