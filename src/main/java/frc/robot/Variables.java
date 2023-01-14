@@ -52,4 +52,7 @@ public final class Variables {
    * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve power}
    */
   public double[][] DriveSettingsPID2 = { { robotminThrot, 1, 1 }, { robotminTurn, 1, 1, 0.3 } };
+
+  /** LED string brightness modifier (0-1) */
+  public double LEDBrightnessMod = 1;
 }
