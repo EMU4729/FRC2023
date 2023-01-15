@@ -112,5 +112,5 @@ public final class Constants {
   /** LED string length (in leds) */
   public int LED_STRING_LENGTH = 60;
   /** LED string port num */
-  public int LED_STRING_PORT = 10;
+  public int LED_STRING_PORT = 0;
 }

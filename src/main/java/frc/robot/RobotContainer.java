@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.auto.AutoProvider;
 import frc.robot.teleop.TeleopProvider;
+import frc.robot.utils.LEDControl;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -23,6 +24,7 @@ import frc.robot.teleop.TeleopProvider;
  */
 public class RobotContainer {
   private final Variables vars = Variables.getInstance();
+  private final Constants cnst = Constants.getInstance();
   private final AutoProvider autoProvider = AutoProvider.getInstance();
   private final TeleopProvider teleopProvider = TeleopProvider.getInstance();
   private final OI oi = OI.getInstance();
@@ -45,8 +47,15 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Invert Drive
-    oi.start.whenPressed(
-        new InstantCommand(() -> vars.invertDriveDirection = !vars.invertDriveDirection));
+    oi.start.whenPressed(new InstantCommand(() -> {
+          vars.invertDriveDirection = !vars.invertDriveDirection;
+          int[] front = {0,3};
+          int[] back = {cnst.LED_STRING_LENGTH-3,cnst.LED_STRING_LENGTH};
+          LEDControl.getInstance().set(vars.invertDriveDirection ? front : back, 
+              LEDControl.Colour.Green, -1, 5);
+          LEDControl.getInstance().set(vars.invertDriveDirection ? back : front,
+              LEDControl.Colour.Red, -1, 5);
+        }));
 
     // Init Turret Slew
     oi.a.whenPressed(Subsystems.turret.initSlewCommand);
