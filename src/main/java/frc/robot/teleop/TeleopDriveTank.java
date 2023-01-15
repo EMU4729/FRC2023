@@ -2,9 +2,9 @@ package frc.robot.teleop;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
+import frc.robot.OI.OI;
 import frc.robot.ShuffleControl.ShuffleControl;
 import frc.robot.Constants;
 import frc.robot.utils.CurveFit;
@@ -36,18 +36,18 @@ public class TeleopDriveTank extends CommandBase {
 
   @Override
   public void execute() {
-    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.controller.getLeftY(), 
+    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getLeftY(), 
         cnst.CONTROLLER_AXIS_DEADZONE));
-    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.controller.getRightY(), 
+    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getRightY(), 
         cnst.CONTROLLER_AXIS_DEADZONE));
 
     //flips the direction of forward based on controller button
     throttleL = throttleL * (vars.invertDriveDirection ? 1 : -1);
     throttleR = throttleR * (vars.invertDriveDirection ? 1 : -1);
 
-    ShuffleControl.setControlAxis(-oi.controller.getLeftY(), oi.controller.getRightY());
-    ShuffleControl.setThrotGraph(-oi.controller.getLeftY(), throttleL);
-    ShuffleControl.setSteerGraph(oi.controller.getRightY(), throttleR);
+    ShuffleControl.setControlAxis(-oi.xBox1.controller.getLeftY(), oi.xBox1.controller.getRightY());
+    ShuffleControl.setThrotGraph(-oi.xBox1.controller.getLeftY(), throttleL);
+    ShuffleControl.setSteerGraph(oi.xBox1.controller.getRightY(), throttleR);
 
     Subsystems.drive.tank(throttleL, throttleR);
   }

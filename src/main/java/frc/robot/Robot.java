@@ -38,12 +38,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
-    int[] front = {0,2};
-    int[] back = {Constants.getInstance().LED_STRING_LENGTH-3,Constants.getInstance().LED_STRING_LENGTH-1};
-    LEDControl.getInstance().set(Variables.getInstance().invertDriveDirection ? front : back, 
-        LEDControl.Colour.Green, -1, 5);
-    LEDControl.getInstance().set(Variables.getInstance().invertDriveDirection ? back : front,
-        LEDControl.Colour.Red, -1, 5);
+    LEDControl.getInstance().runDirectionLights();
     new ShuffleControl();
   }
 
@@ -67,6 +62,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
+    LEDControl.getInstance().updatePeriodic();
     CommandScheduler.getInstance().run();
   }
 

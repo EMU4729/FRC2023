@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.simulation.AddressableLEDSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Variables;
 
 public class LEDControl {
   private static Optional<LEDControl> inst = Optional.empty();
@@ -19,13 +20,17 @@ public class LEDControl {
   }
 
   private Constants cnst = Constants.getInstance();
+  private Variables vars = Variables.getInstance();
 
   private AddressableLED leds = new AddressableLED(cnst.LED_STRING_PORT);
   private AddressableLEDBuffer ledsBuff = new AddressableLEDBuffer(cnst.LED_STRING_LENGTH);
   /** lednum< queue< [r,g,b,endTime,priority]>> */
   private ArrayList<ArrayList<ledState>> ledStack = new ArrayList<ArrayList<ledState>>();
 
+  private Optional<Instant> nextEndTime = Optional.empty();
+
   public static enum Colour {
+    Black,
     Red,
     Green,
     Blue,
@@ -110,8 +115,23 @@ public class LEDControl {
     set(new int[] {0,cnst.LED_STRING_LENGTH-1}, colourToInt(col), duration, priority);
   }
 
+  
+  public void setFlash(int[] ledsToSet, int[] colour1, int[] colour2,
+      int duration, int priority, int period) {
+    if(period > duration) throw new IllegalArgumentException("period > duration");
+    for(int i = duration; i > 0; i -= period){
+      set(ledsToSet, colour1, i, 4);
+      set(ledsToSet, colour2, i - period/2, 4);
+    }
+  }
+  public void setFlash(int[] ledsToSet, Colour col1, Colour col2, 
+      int duration, int priority, int period){
+    setFlash(ledsToSet, colourToInt(col1), colourToInt(col2), duration, priority, period);
+  }
+
   private int[] colourToInt(Colour col){
     int[] setCol = {0,0,0};
+    if(col == Colour.Black) return setCol;
     if(col == Colour.Red   || col == Colour.Yellow || col == Colour.Magenta) setCol[0] = 255;
     if(col == Colour.Green || col == Colour.Yellow || col == Colour.Cyan)    setCol[1] = 255;
     if(col == Colour.Blue  || col == Colour.Cyan   || col == Colour.Magenta) setCol[2] = 255;
@@ -119,17 +139,45 @@ public class LEDControl {
   }
 
   private void update(){
+    Instant minEndTime = Instant.MAX;
     for(int i = 0; i < cnst.LED_STRING_LENGTH; i++){
-      if(ledStack.size() == 0) {
+      if(ledStack.get(i).size() == 0) {
         ledsBuff.setRGB(i, 0, 0, 0);
         continue;
       }
+
+      ledState tmp = ledStack.get(i).get(0);
+      minEndTime = minEndTime.isBefore(tmp.endTime) ? minEndTime : tmp.endTime;
       
-      System.out.println(ledStack.get(i).toString());
-      int[] tmp = ledStack.get(i).get(0).col;
-      ledsBuff.setRGB(i, tmp[0], tmp[1], tmp[2]);
+      ledsBuff.setRGB(i, tmp.col[0], tmp.col[1], tmp.col[2]);
     }
+    nextEndTime = minEndTime.equals(Instant.MAX) ? Optional.empty() : Optional.of(minEndTime);
     leds.setData(ledsBuff);
   }
 
+  public void updatePeriodic(){
+    Instant timeNow = Instant.now();
+    if(nextEndTime.isPresent() && timeNow.isAfter(nextEndTime.get())){
+      for(int i = 0; i < cnst.LED_STRING_LENGTH; i++){
+        while(ledStack.get(i).size() > 0 && timeNow.isAfter(ledStack.get(i).get(0).endTime)){
+          ledStack.get(i).remove(0);
+        }
+      }
+      update();
+    }
+  }
+
+  public void runDirectionLights(){
+    int[] front = {0,2};
+    int[] back = {cnst.LED_STRING_LENGTH-3,cnst.LED_STRING_LENGTH-1};
+    set(vars.invertDriveDirection ? front : back, Colour.Green, -1, 5);
+    set(vars.invertDriveDirection ? back : front, Colour.Red, -1, 5);
+  }
+
+  public void runCubeLights(){
+    setFlash(new int[]{3,56}, Colour.Magenta, Colour.Black, 3000, 4, 250);
+  }
+  public void runConeLights(){
+    setFlash(new int[]{3,56}, Colour.Yellow, Colour.Black, 3000, 4, 250);
+  }
 }

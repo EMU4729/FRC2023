@@ -2,9 +2,9 @@ package frc.robot.teleop;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
+import frc.robot.OI.OI;
 import frc.robot.ShuffleControl.ShuffleControl;
 import frc.robot.Constants;
 import frc.robot.utils.CurveFit;
@@ -38,17 +38,17 @@ public class TeleopDriveArcade extends CommandBase {
 
   @Override
   public void execute() {
-    double throttle = throtFit.fit(MathUtil.applyDeadband(oi.controller.getLeftY(), 
+    double throttle = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getLeftY(), 
         cnst.CONTROLLER_AXIS_DEADZONE));
-    double steering = steerFit.fit(MathUtil.applyDeadband(oi.controller.getRightX(), 
+    double steering = steerFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getRightX(), 
         cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
 
     //flips the direction of forward based on controller button
     throttle = throttle * (vars.invertDriveDirection ? 1 : -1);
 
-    ShuffleControl.setControlAxis(-oi.controller.getLeftY(), oi.controller.getRightX());
-    ShuffleControl.setThrotGraph(-oi.controller.getLeftY(), throttle);
-    ShuffleControl.setSteerGraph(oi.controller.getRightX(), steering);
+    ShuffleControl.setControlAxis(-oi.xBox1.controller.getLeftY(), oi.xBox1.controller.getRightX());
+    ShuffleControl.setThrotGraph(-oi.xBox1.controller.getLeftY(), throttle);
+    ShuffleControl.setSteerGraph(oi.xBox1.controller.getRightX(), steering);
 
     Subsystems.drive.arcade(throttle, steering);
   }

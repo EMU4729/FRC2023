@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.OI.OI;
 import frc.robot.auto.AutoProvider;
 import frc.robot.teleop.TeleopProvider;
 import frc.robot.utils.LEDControl;
@@ -47,23 +48,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Invert Drive
-    oi.start.whenPressed(new InstantCommand(() -> {
+    oi.xBox1.start.whenPressed(new InstantCommand(() -> {
           vars.invertDriveDirection = !vars.invertDriveDirection;
-          int[] front = {0,3};
-          int[] back = {cnst.LED_STRING_LENGTH-3,cnst.LED_STRING_LENGTH};
-          LEDControl.getInstance().set(vars.invertDriveDirection ? front : back, 
-              LEDControl.Colour.Green, -1, 5);
-          LEDControl.getInstance().set(vars.invertDriveDirection ? back : front,
-              LEDControl.Colour.Red, -1, 5);
+          LEDControl.getInstance().runDirectionLights();
         }));
 
+    // Game Piece LEDs
+    oi.xBox1.rBump.whenPressed(new InstantCommand(() -> LEDControl.getInstance().runCubeLights()));
+    oi.xBox1.lBump.whenPressed(new InstantCommand(() -> LEDControl.getInstance().runConeLights()));
+
     // Init Turret Slew
-    oi.a.whenPressed(Subsystems.turret.initSlewCommand);
+    oi.xBox1.a.whenPressed(Subsystems.turret.initSlewCommand);
 
     // Turret Slew Control
-    oi.dPadW.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(-0.3), 
+    oi.xBox1.dPadW.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(-0.3), 
         () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
-    oi.dPadE.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(0.3), 
+    oi.xBox1.dPadE.whenHeld(new StartEndCommand(() -> Subsystems.turret.setSpeed(0.3), 
         () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
     // Drive bindings handled in teleop command
   }
