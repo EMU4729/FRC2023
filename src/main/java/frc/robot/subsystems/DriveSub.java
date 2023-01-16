@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -12,11 +11,8 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
-import frc.robot.Subsystems;
 import frc.robot.simulation.SimConstants;
-import frc.robot.utils.CurveFit;
 
 /**
  * Drive Subsystem.
@@ -41,17 +37,15 @@ public class DriveSub extends SubsystemBase {
   // Simulation Variables
 
   /** @wip add corrected values */
-  private final LinearSystem<N2, N2, N2> drivetrainSystem =
-    LinearSystemId.identifyDrivetrainSystem(
-        simCnst.KV_LINEAR, 
-        simCnst.KA_LINEAR, 
-        simCnst.KV_ANGULAR, 
-        simCnst.KA_ANGULAR
-    );
-  public final DifferentialDrivetrainSim drivetrainSimulator =  new DifferentialDrivetrainSim(
+  private final LinearSystem<N2, N2, N2> drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(
+      simCnst.KV_LINEAR,
+      simCnst.KA_LINEAR,
+      simCnst.KV_ANGULAR,
+      simCnst.KA_ANGULAR);
+  public final DifferentialDrivetrainSim drivetrainSimulator = new DifferentialDrivetrainSim(
       drivetrainSystem, DCMotor.getCIM(2), 10.71, cnst.ROBOT_WHEEL_WIDTH, cnst.ROBOT_WHEEL_RAD, null);
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public DriveSub() {
     addChild("Differential Drive", drive);
@@ -91,12 +85,11 @@ public class DriveSub extends SubsystemBase {
   // Simulation Functions
 
   @Override
-  public void simulationPeriodic(){
-    //set sim motor volts to cur motor throt * bat volts
+  public void simulationPeriodic() {
+    // set sim motor volts to cur motor throt * bat volts
     drivetrainSimulator.setInputs(
-        leftMotors.get() * RobotController.getInputVoltage(), 
-        rightMotors.get() * RobotController.getInputVoltage()
-    );
+        leftMotors.get() * RobotController.getInputVoltage(),
+        rightMotors.get() * RobotController.getInputVoltage());
     drivetrainSimulator.update(0.02);
   }
 }

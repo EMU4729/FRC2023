@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class PiBridge {
     private static Optional<PiBridge> inst = Optional.empty();
-    
+
     /** Type: Number */
     public final NetworkTableEntry x;
     /** Type: Number */
@@ -22,7 +22,12 @@ public class PiBridge {
         x = table.getEntry("x");
         y = table.getEntry("y");
         dist = table.getEntry("dist");
-        inst.startClientTeam(4729);
+
+        // TODO: Check if this new connection code actually works
+        inst.startClient4("fluffy");
+        inst.setServerTeam(4729);
+        inst.startDSClient();
+        inst.setServer("host", NetworkTableInstance.kDefaultPort4);
     }
 
     public static PiBridge getInstance() {

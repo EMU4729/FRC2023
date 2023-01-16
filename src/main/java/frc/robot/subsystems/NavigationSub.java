@@ -21,11 +21,12 @@ public class NavigationSub extends SubsystemBase {
 
   public final ADIS16470_IMU imu = new ADIS16470_IMU();
   private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
-      Rotation2d.fromDegrees(imu.getAngle()));
+      Rotation2d.fromDegrees(imu.getAngle()),
+      0., 0.);
 
   public final Encoder drvLeftEncoder = cnst.DRIVE_MOTOR_ID_LM.createEncoder();
   public final Encoder drvRightEncoder = cnst.DRIVE_MOTOR_ID_RM.createEncoder();
-  
+
   public Field2d field = new Field2d();
 
   /** m from start pos in x rel to start angle @WIP not implimented */
@@ -46,7 +47,7 @@ public class NavigationSub extends SubsystemBase {
   private final EncoderSim drvLeftEncoderSim = new EncoderSim(drvLeftEncoder);
   private final EncoderSim drvRightEncoderSim = new EncoderSim(drvRightEncoder);
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
   public void periodic() {
@@ -54,12 +55,10 @@ public class NavigationSub extends SubsystemBase {
         drvRightEncoder.getDistance());
     ShuffleControl.field.setRobotPose(odometry.getPoseMeters());
 
-    
-
-    if(RobotController.getUserButton()){
+    if (RobotController.getUserButton()) {
       Logger.info("Resetting Odometry (0,0,0)");
       imu.calibrate();
-      resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
+      resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
     }
   }
 
@@ -71,12 +70,14 @@ public class NavigationSub extends SubsystemBase {
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
+
   /** @return direction the robot is facing in degrees */
-  public double getHeadingDeg(){
+  public double getHeadingDeg() {
     return getHeadingRot2d().getDegrees();
   }
+
   /** @return direction the robot is facing as a Rotation2d */
-  public Rotation2d getHeadingRot2d(){
+  public Rotation2d getHeadingRot2d() {
     return getPose().getRotation();
   }
 
@@ -103,18 +104,19 @@ public class NavigationSub extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     imu.reset();
-    odometry.resetPosition(pose, getHeadingRot2d());
+    odometry.resetPosition(
+        Rotation2d.fromDegrees(imu.getAngle()),
+        0., 0., pose);
 
-    //sim
+    // sim
     Subsystems.drive.drivetrainSimulator.setPose(pose);
   }
-
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Simulation Functions
 
   @Override
-  public void simulationPeriodic(){
+  public void simulationPeriodic() {
     DifferentialDrivetrainSim drvTrnSim = Subsystems.drive.drivetrainSimulator;
 
     drvLeftEncoderSim.setDistance(drvTrnSim.getLeftPositionMeters());

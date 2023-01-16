@@ -22,7 +22,7 @@ public class AutoDriveStraight extends CommandBase {
 
   public void run(double targetAngle, double speed) {
     this.speed = speed;
-    this.schedule(true);
+    this.schedule();
   }
 
   @Override

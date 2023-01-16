@@ -6,9 +6,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import frc.robot.utils.logger.Logger;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.utils.logger.Logger;
 
 public class MotorInfo {
   public final int motorPort;
@@ -113,7 +113,7 @@ public class MotorInfo {
 
     Encoder encoder = new Encoder(encoderPort.get()[0], encoderPort.get()[1], invert, Encoder.EncodingType.k2X);
     encoder.setDistancePerPulse(encoderSteps.get());
-    encoder.setMaxPeriod(0.1);
+    encoder.setMinRate(0.1 * encoderSteps.get()); // TODO: Check if this works lol
     encoder.setMinRate(10);
     encoder.setSamplesToAverage(5);
     return encoder;

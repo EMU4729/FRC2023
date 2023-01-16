@@ -5,29 +5,31 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.utils.AxisButton;
+import frc.robot.utils.AxisButtonSupplier;
 
 public class XboxCtrl {
   private final Constants cnst = Constants.getInstance();
 
-  public XboxCtrl(){
+  public XboxCtrl() {
     this(Constants.getInstance().DEVICE_PORT_XBOX_CONTROLLER_1);
   }
 
-  public XboxCtrl(int portNum){
+  public XboxCtrl(int portNum) {
     controller = new XboxController(portNum);
 
     ////////
     start = new JoystickButton(controller, Button.kStart.value);
-    back  = new JoystickButton(controller, Button.kBack.value);
+    back = new JoystickButton(controller, Button.kBack.value);
 
-    lBump    = new JoystickButton(controller, Button.kLeftBumper.value);
-    rBump    = new JoystickButton(controller, Button.kRightBumper.value);
+    lBump = new JoystickButton(controller, Button.kLeftBumper.value);
+    rBump = new JoystickButton(controller, Button.kRightBumper.value);
 
-    ltButton  = new AxisButton(controller, Axis.kLeftTrigger.value, cnst.CONTROLLER_TRIGGER_THRESHOLD);
-    rtButton  = new AxisButton(controller, Axis.kRightTrigger.value, cnst.CONTROLLER_TRIGGER_THRESHOLD);
+    ltButton = new Trigger(
+        new AxisButtonSupplier(controller, Axis.kLeftTrigger.value, cnst.CONTROLLER_TRIGGER_THRESHOLD));
+    rtButton = new Trigger(
+        new AxisButtonSupplier(controller, Axis.kRightTrigger.value, cnst.CONTROLLER_TRIGGER_THRESHOLD));
 
     lsButton = new JoystickButton(controller, Button.kLeftStick.value);
     rsButton = new JoystickButton(controller, Button.kRightStick.value);
@@ -37,13 +39,13 @@ public class XboxCtrl {
     x = new JoystickButton(controller, Button.kX.value);
     y = new JoystickButton(controller, Button.kY.value);
 
-    dPadN  = new POVButton(controller, 0);
+    dPadN = new POVButton(controller, 0);
     dPadNE = new POVButton(controller, 45);
-    dPadE  = new POVButton(controller, 90);
+    dPadE = new POVButton(controller, 90);
     dPadSE = new POVButton(controller, 135);
-    dPadS  = new POVButton(controller, 180);
+    dPadS = new POVButton(controller, 180);
     dPadSW = new POVButton(controller, 225);
-    dPadW  = new POVButton(controller, 270);
+    dPadW = new POVButton(controller, 270);
     dPadNW = new POVButton(controller, 315);
   }
 
@@ -57,8 +59,8 @@ public class XboxCtrl {
   public final JoystickButton lBump;
   public final JoystickButton rBump;
 
-  public final AxisButton ltButton;
-  public final AxisButton rtButton;
+  public final Trigger ltButton;
+  public final Trigger rtButton;
 
   public final JoystickButton lsButton;
   public final JoystickButton rsButton;
