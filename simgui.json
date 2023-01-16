@@ -40,6 +40,9 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "Shuffleboard": {
       "Drive": {
         "TeleopType": {
@@ -54,6 +57,14 @@
         "open": true
       },
       "open": true
+    },
+    "transitory": {
+      "SmartDashboard": {
+        "Field": {
+          "open": true
+        },
+        "open": true
+      }
     }
   }
 }
