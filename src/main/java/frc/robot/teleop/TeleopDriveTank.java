@@ -4,7 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
-import frc.robot.OI.OI;
+import frc.robot.OI.OICtrl;
 import frc.robot.ShuffleControl.ShuffleControl;
 import frc.robot.Constants;
 import frc.robot.utils.CurveFit;
@@ -15,7 +15,7 @@ import frc.robot.utils.CurveFit;
 public class TeleopDriveTank extends CommandBase {
   private final Variables vars = Variables.getInstance();
   private final Constants cnst = Constants.getInstance();
-  private final OI oi = OI.getInstance();
+  private final OICtrl oi = OICtrl.getInstance();
 
   private final CurveFit throtFit;
 

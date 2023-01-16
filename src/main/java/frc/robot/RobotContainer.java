@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import frc.robot.OI.OI;
+import frc.robot.OI.OICtrl;
 import frc.robot.auto.AutoProvider;
 import frc.robot.teleop.TeleopProvider;
 import frc.robot.utils.LEDControl;
@@ -28,7 +28,7 @@ public class RobotContainer {
   private final Constants cnst = Constants.getInstance();
   private final AutoProvider autoProvider = AutoProvider.getInstance();
   private final TeleopProvider teleopProvider = TeleopProvider.getInstance();
-  private final OI oi = OI.getInstance();
+  private final OICtrl oi = OICtrl.getInstance();
 
   /**
    * The container for the robot. Contains Subsystemsystems, OI devices, and commands.
