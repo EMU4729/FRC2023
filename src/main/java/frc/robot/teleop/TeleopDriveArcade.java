@@ -2,11 +2,11 @@ package frc.robot.teleop;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
-import frc.robot.OI.OICtrl;
 import frc.robot.ShuffleControl.ShuffleControl;
-import frc.robot.Constants;
 import frc.robot.utils.CurveFit;
 
 /**
@@ -15,7 +15,7 @@ import frc.robot.utils.CurveFit;
 public class TeleopDriveArcade extends CommandBase {
   private final Variables vars = Variables.getInstance();
   private final Constants cnst = Constants.getInstance();
-  private final OICtrl oi = OICtrl.getInstance();
+  private final OI oi = OI.getInstance();
 
   private final CurveFit throtFit;
   private final CurveFit steerFit;
@@ -38,17 +38,17 @@ public class TeleopDriveArcade extends CommandBase {
 
   @Override
   public void execute() {
-    double throttle = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getLeftY(), 
+    double throttle = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.getLeftY(),
         cnst.CONTROLLER_AXIS_DEADZONE));
-    double steering = steerFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getRightX(), 
+    double steering = steerFit.fit(MathUtil.applyDeadband(oi.xBox1.getRightX(),
         cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
 
-    //flips the direction of forward based on controller button
+    // flips the direction of forward based on controller button
     throttle = throttle * (vars.invertDriveDirection ? 1 : -1);
 
-    ShuffleControl.setControlAxis(-oi.xBox1.controller.getLeftY(), oi.xBox1.controller.getRightX());
-    ShuffleControl.setThrotGraph(-oi.xBox1.controller.getLeftY(), throttle);
-    ShuffleControl.setSteerGraph(oi.xBox1.controller.getRightX(), steering);
+    ShuffleControl.setControlAxis(-oi.xBox1.getLeftY(), oi.xBox1.getRightX());
+    ShuffleControl.setThrotGraph(-oi.xBox1.getLeftY(), throttle);
+    ShuffleControl.setSteerGraph(oi.xBox1.getRightX(), steering);
 
     Subsystems.drive.arcade(throttle, steering);
   }

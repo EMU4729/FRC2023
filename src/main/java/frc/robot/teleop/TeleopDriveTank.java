@@ -2,11 +2,11 @@ package frc.robot.teleop;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
-import frc.robot.OI.OICtrl;
 import frc.robot.ShuffleControl.ShuffleControl;
-import frc.robot.Constants;
 import frc.robot.utils.CurveFit;
 
 /**
@@ -15,7 +15,7 @@ import frc.robot.utils.CurveFit;
 public class TeleopDriveTank extends CommandBase {
   private final Variables vars = Variables.getInstance();
   private final Constants cnst = Constants.getInstance();
-  private final OICtrl oi = OICtrl.getInstance();
+  private final OI oi = OI.getInstance();
 
   private final CurveFit throtFit;
 
@@ -36,18 +36,18 @@ public class TeleopDriveTank extends CommandBase {
 
   @Override
   public void execute() {
-    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getLeftY(), 
+    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.getLeftY(),
         cnst.CONTROLLER_AXIS_DEADZONE));
-    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.controller.getRightY(), 
+    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.getRightY(),
         cnst.CONTROLLER_AXIS_DEADZONE));
 
-    //flips the direction of forward based on controller button
+    // flips the direction of forward based on controller button
     throttleL = throttleL * (vars.invertDriveDirection ? 1 : -1);
     throttleR = throttleR * (vars.invertDriveDirection ? 1 : -1);
 
-    ShuffleControl.setControlAxis(-oi.xBox1.controller.getLeftY(), oi.xBox1.controller.getRightY());
-    ShuffleControl.setThrotGraph(-oi.xBox1.controller.getLeftY(), throttleL);
-    ShuffleControl.setSteerGraph(oi.xBox1.controller.getRightY(), throttleR);
+    ShuffleControl.setControlAxis(-oi.xBox1.getLeftY(), oi.xBox1.getRightY());
+    ShuffleControl.setThrotGraph(-oi.xBox1.getLeftY(), throttleL);
+    ShuffleControl.setSteerGraph(oi.xBox1.getRightY(), throttleR);
 
     Subsystems.drive.tank(throttleL, throttleR);
   }
