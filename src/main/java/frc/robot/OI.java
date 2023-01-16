@@ -16,7 +16,7 @@ public class OI {
     return inst.get();
   }
 
-  private Constants cnst = Constants.getInstance();
-  public final CommandXboxController xBox1 = new CommandXboxController(cnst.DEVICE_PORT_XBOX_CONTROLLER_1);
+  private final Constants cnst = Constants.getInstance();
 
+  public final CommandXboxController xBox1 = new CommandXboxController(cnst.DEVICE_PORT_XBOX_CONTROLLER_1);
 }
