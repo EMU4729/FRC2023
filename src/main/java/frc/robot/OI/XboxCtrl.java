@@ -53,29 +53,29 @@ public class XboxCtrl {
 
   public final XboxController controller;
 
-  public final JoystickButton start;
-  public final JoystickButton back;
+  public final Trigger start;
+  public final Trigger back;
 
-  public final JoystickButton lBump;
-  public final JoystickButton rBump;
+  public final Trigger lBump;
+  public final Trigger rBump;
 
   public final Trigger ltButton;
   public final Trigger rtButton;
 
-  public final JoystickButton lsButton;
-  public final JoystickButton rsButton;
+  public final Trigger lsButton;
+  public final Trigger rsButton;
 
-  public final JoystickButton a;
-  public final JoystickButton b;
-  public final JoystickButton x;
-  public final JoystickButton y;
+  public final Trigger a;
+  public final Trigger b;
+  public final Trigger x;
+  public final Trigger y;
 
-  public final POVButton dPadN;
-  public final POVButton dPadNE;
-  public final POVButton dPadE;
-  public final POVButton dPadSE;
-  public final POVButton dPadS;
-  public final POVButton dPadSW;
-  public final POVButton dPadW;
-  public final POVButton dPadNW;
+  public final Trigger dPadN;
+  public final Trigger dPadNE;
+  public final Trigger dPadE;
+  public final Trigger dPadSE;
+  public final Trigger dPadS;
+  public final Trigger dPadSW;
+  public final Trigger dPadW;
+  public final Trigger dPadNW;
 }
