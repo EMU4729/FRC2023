@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.auto.AutoProvider;
 import frc.robot.teleop.TeleopProvider;
 import frc.robot.utils.LEDControl;
@@ -57,14 +56,6 @@ public class RobotContainer {
     oi.xBox1.rightBumper().onTrue(new InstantCommand(() -> LEDControl.getInstance().runCubeLights()));
     oi.xBox1.leftBumper().onTrue(new InstantCommand(() -> LEDControl.getInstance().runConeLights()));
 
-    // Init Turret Slew
-    oi.xBox1.a().onTrue(Subsystems.turret.initSlewCommand);
-
-    // Turret Slew Control
-    oi.xBox1.pov(270).whileTrue(new StartEndCommand(() -> Subsystems.turret.setSpeed(-0.3),
-        () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
-    oi.xBox1.pov(90).whileTrue(new StartEndCommand(() -> Subsystems.turret.setSpeed(0.3),
-        () -> Subsystems.turret.setSpeed(0), Subsystems.turret));
     // Drive bindings handled in teleop command
   }
 
