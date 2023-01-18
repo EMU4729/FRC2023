@@ -18,12 +18,16 @@ public class ArmSub extends SubsystemBase {
 
     double r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-    double theta = Math.toDegrees(Math.atan(y / x));
-    double alpha = Math.toDegrees(Math.acos(
+    double theta = Math.atan(y / x);
+    double alpha = Math.acos(
         (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2))
-            / (2 * a * b)));
+            / (2 * a * r));
     double beta = Math.asin(
-        (r * Math.sin(Math.toRadians(alpha))) / b);
+        (r * Math.sin(alpha)) / b);
+
+    alpha = Math.toDegrees(alpha);
+    beta = Math.toDegrees(beta);
+    theta = Math.toDegrees(theta);
 
     double[] res = { alpha + theta, beta };
     return res;
