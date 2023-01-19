@@ -2,8 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +20,7 @@ public class ArmSub extends SubsystemBase {
   private final Encoder upperArmEncoder = cnst.UPPER_ARM_MOTOR_ID.createEncoder();
   private final Encoder foreArmEncoder = cnst.FORE_ARM_MOTOR_ID.createEncoder();
 
-  private Pose2d targetPose = new Pose2d(1., 1., new Rotation2d());
+  private Translation2d targetCoords = new Translation2d(1., 1.);
 
   /**
    * Calculates the angles of the two arms from a given pose with
@@ -32,7 +31,7 @@ public class ArmSub extends SubsystemBase {
    *         the robot, and the 2nd element is the angle between the fore arm and
    *         the upper arm. All angles are in degrees.
    */
-  private double[] ik(Pose2d pose) {
+  private double[] ik(Translation2d pose) {
     double a = cnst.UPPER_ARM_LENGTH;
     double b = cnst.FORE_ARM_LENGTH;
     double x = pose.getX();
@@ -60,7 +59,7 @@ public class ArmSub extends SubsystemBase {
     // THIS CODE DOES NOT WORK AND WILL FAIL HORRIBLY. PLEASE DO NOT USE THIS CODE.
     // IT IS ONLY FOR DEMONSTRATION PURPOSES.
     if (false) {
-      double[] ikRes = ik(targetPose);
+      double[] ikRes = ik(targetCoords);
       double upperArmTargetAngle = ikRes[0];
       double foreArmTargetAngle = ikRes[1];
 
