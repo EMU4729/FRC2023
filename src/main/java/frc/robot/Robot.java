@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.ShuffleControl.ShuffleControl;
 import frc.robot.utils.LEDControl;
 import frc.robot.utils.logger.Logger;
 
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     LEDControl.getInstance().runDirectionLights();
+    new ShuffleControl();
   }
 
   /**
