@@ -6,7 +6,6 @@ import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
-import frc.robot.ShuffleControl.ShuffleControl;
 import frc.robot.utils.CurveFit;
 
 /**
@@ -44,10 +43,6 @@ public class TeleopDriveTank extends CommandBase {
     // flips the direction of forward based on controller button
     throttleL = throttleL * (vars.invertDriveDirection ? 1 : -1);
     throttleR = throttleR * (vars.invertDriveDirection ? 1 : -1);
-
-    ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
-    ShuffleControl.setThrotGraph(-oi.pilot.getLeftY(), throttleL);
-    ShuffleControl.setSteerGraph(oi.pilot.getRightY(), throttleR);
 
     Subsystems.drive.tank(throttleL, throttleR);
   }

@@ -6,7 +6,6 @@ import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
-import frc.robot.ShuffleControl.ShuffleControl;
 import frc.robot.utils.CurveFit;
 
 /**
@@ -45,10 +44,6 @@ public class TeleopDriveArcade extends CommandBase {
 
     // flips the direction of forward based on controller button
     throttle = throttle * (vars.invertDriveDirection ? 1 : -1);
-
-    ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
-    ShuffleControl.setThrotGraph(-oi.pilot.getLeftY(), throttle);
-    ShuffleControl.setSteerGraph(oi.pilot.getRightX(), steering);
 
     Subsystems.drive.arcade(throttle, steering);
   }
