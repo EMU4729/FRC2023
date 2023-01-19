@@ -61,6 +61,10 @@ public final class Constants {
         public final double FORE_ARM_LENGTH = 1; // UPDATE
         /** Length of the upper arm, in metres */
         public final double UPPER_ARM_LENGTH = 1; // UPDATE
+        /** PID Constants for Upper Arm Movement */
+        public final double[] UPPER_ARM_PID = { 0.2, 0, 0.8 }; // UPDATE
+        /** PID Constants for Fore Arm Movement */
+        public final double[] FORE_ARM_PID = { 0.2, 0, 0.8 }; // UPDATE
         // TODO: Add gripper servos
 
         // Controllers
