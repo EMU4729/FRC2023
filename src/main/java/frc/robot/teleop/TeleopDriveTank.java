@@ -36,18 +36,18 @@ public class TeleopDriveTank extends CommandBase {
 
   @Override
   public void execute() {
-    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.getLeftY(),
+    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
         cnst.CONTROLLER_AXIS_DEADZONE));
-    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.getRightY(),
+    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getRightY(),
         cnst.CONTROLLER_AXIS_DEADZONE));
 
     // flips the direction of forward based on controller button
     throttleL = throttleL * (vars.invertDriveDirection ? 1 : -1);
     throttleR = throttleR * (vars.invertDriveDirection ? 1 : -1);
 
-    ShuffleControl.setControlAxis(-oi.xBox1.getLeftY(), oi.xBox1.getRightY());
-    ShuffleControl.setThrotGraph(-oi.xBox1.getLeftY(), throttleL);
-    ShuffleControl.setSteerGraph(oi.xBox1.getRightY(), throttleR);
+    ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
+    ShuffleControl.setThrotGraph(-oi.pilot.getLeftY(), throttleL);
+    ShuffleControl.setSteerGraph(oi.pilot.getRightY(), throttleR);
 
     Subsystems.drive.tank(throttleL, throttleR);
   }

@@ -38,17 +38,17 @@ public class TeleopDriveArcade extends CommandBase {
 
   @Override
   public void execute() {
-    double throttle = throtFit.fit(MathUtil.applyDeadband(oi.xBox1.getLeftY(),
+    double throttle = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
         cnst.CONTROLLER_AXIS_DEADZONE));
-    double steering = steerFit.fit(MathUtil.applyDeadband(oi.xBox1.getRightX(),
+    double steering = steerFit.fit(MathUtil.applyDeadband(oi.pilot.getRightX(),
         cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
 
     // flips the direction of forward based on controller button
     throttle = throttle * (vars.invertDriveDirection ? 1 : -1);
 
-    ShuffleControl.setControlAxis(-oi.xBox1.getLeftY(), oi.xBox1.getRightX());
-    ShuffleControl.setThrotGraph(-oi.xBox1.getLeftY(), throttle);
-    ShuffleControl.setSteerGraph(oi.xBox1.getRightX(), steering);
+    ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
+    ShuffleControl.setThrotGraph(-oi.pilot.getLeftY(), throttle);
+    ShuffleControl.setSteerGraph(oi.pilot.getRightX(), steering);
 
     Subsystems.drive.arcade(throttle, steering);
   }

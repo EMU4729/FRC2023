@@ -18,5 +18,6 @@ public class OI {
 
   private final Constants cnst = Constants.getInstance();
 
-  public final CommandXboxController xBox1 = new CommandXboxController(cnst.DEVICE_PORT_XBOX_CONTROLLER_1);
+  public final CommandXboxController pilot = new CommandXboxController(cnst.PILOT_XBOX_CONTROLLER_PORT);
+  public final CommandXboxController copilot = new CommandXboxController(cnst.COPILOT_XBOX_CONTROLLER_PORT);
 }

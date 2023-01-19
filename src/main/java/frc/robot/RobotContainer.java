@@ -47,14 +47,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Invert Drive
-    oi.xBox1.start().onTrue(new InstantCommand(() -> {
+    oi.pilot.start().onTrue(new InstantCommand(() -> {
       vars.invertDriveDirection = !vars.invertDriveDirection;
       LEDControl.getInstance().runDirectionLights();
     }));
 
     // Game Piece LEDs
-    oi.xBox1.rightBumper().onTrue(new InstantCommand(() -> LEDControl.getInstance().runCubeLights()));
-    oi.xBox1.leftBumper().onTrue(new InstantCommand(() -> LEDControl.getInstance().runConeLights()));
+    oi.pilot.rightBumper().onTrue(new InstantCommand(() -> LEDControl.getInstance().runCubeLights()));
+    oi.pilot.leftBumper().onTrue(new InstantCommand(() -> LEDControl.getInstance().runConeLights()));
 
     // Drive bindings handled in teleop command
   }

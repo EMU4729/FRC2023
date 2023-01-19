@@ -63,9 +63,11 @@ public final class Constants {
         public final double UPPER_ARM_LENGTH = 1; // UPDATE
         // TODO: Add gripper servos
 
-        // Controller
-        /** Port Number for xbox controller input device */
-        public final int DEVICE_PORT_XBOX_CONTROLLER_1 = 0; // WORKING
+        // Controllers
+        /** Port Number for Pilot Xbox Controller */
+        public final int PILOT_XBOX_CONTROLLER_PORT = 0; // WORKING
+        /** Port Number for Copilot Xbox Controller */
+        public final int COPILOT_XBOX_CONTROLLER_PORT = 1; // TEST
         /** Threshold for triggering the controller right and left triggers */
         public final double CONTROLLER_TRIGGER_THRESHOLD = 0.5;
         /** deadband for controller axies either side of 0 */
