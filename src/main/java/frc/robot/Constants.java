@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import edu.wpi.first.math.util.Units;
 import frc.robot.utils.MotorInfo;
+import frc.robot.utils.PIDControllerConstants;
 
 /**
  * Constants - use this class to store any port ids, file paths, or basically
@@ -62,9 +63,9 @@ public final class Constants {
         /** Length of the upper arm, in metres */
         public final double UPPER_ARM_LENGTH = 1; // UPDATE
         /** PID Constants for Upper Arm Movement */
-        public final double[] UPPER_ARM_PID = { 0.2, 0, 0.8 }; // UPDATE
+        public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
         /** PID Constants for Fore Arm Movement */
-        public final double[] FORE_ARM_PID = { 0.2, 0, 0.8 }; // UPDATE
+        public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
         // TODO: Add gripper servos
 
         // Controllers
@@ -97,10 +98,6 @@ public final class Constants {
         /** radius of the drive wheels (m) */
         public final double ROBOT_WHEEL_RAD = Units.inchesToMeters(3);
 
-        /** PID constants for throttle during teleop */
-        public double[] TELEOP_THROTTLE_PID = { 0.2, 0, 0.8 }; // UPDATE
-        /** PID constants for steering during teleop */
-        public double[] TELEOP_STEERING_PID = { 0.2, 0, 0.8 }; // UPDATE
         /** Encoder max rate for PID loop */
         public double DRIVE_ENCODER_MAX_RATE = 1; // UPDATE
 

@@ -12,10 +12,8 @@ import frc.robot.Constants;
 public class ArmSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
 
-  private final PIDController upperArmController = new PIDController(cnst.UPPER_ARM_PID[0], cnst.UPPER_ARM_PID[1],
-      cnst.UPPER_ARM_PID[2]);
-  private final PIDController foreArmController = new PIDController(cnst.FORE_ARM_PID[0], cnst.FORE_ARM_PID[1],
-      cnst.FORE_ARM_PID[2]);
+  private final PIDController upperArmController = cnst.UPPER_ARM_PID.createPIDController();
+  private final PIDController foreArmController = cnst.FORE_ARM_PID.createPIDController();
 
   private final MotorController upperArmMotor = cnst.UPPER_ARM_MOTOR_ID.createMotorController();
   private final MotorController foreArmMotor = cnst.FORE_ARM_MOTOR_ID.createMotorController();
