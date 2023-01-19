@@ -25,7 +25,6 @@ public class MotorInfo {
     VictorSPX
   }
 
-  /** {invert,brake,safety} */
   public MotorInfo(int motorPort, Type type) {
     this.motorPort = motorPort;
     this.type = type;

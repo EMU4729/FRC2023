@@ -91,6 +91,7 @@ public class NavigationSub extends SubsystemBase {
     return drvRightEncoder.getRate();
   }
 
+  /** Resets the drive base encoders. */
   public void resetEncoders() {
     drvLeftEncoder.reset();
     drvRightEncoder.reset();

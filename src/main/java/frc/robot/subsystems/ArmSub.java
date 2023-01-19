@@ -23,6 +23,15 @@ public class ArmSub extends SubsystemBase {
 
   private Pose2d targetPose = new Pose2d(1., 1., new Rotation2d());
 
+  /**
+   * Calculates the angles of the two arms from a given pose with
+   * inverse kinematics.
+   * 
+   * @param pose The desired pose
+   * @return An array where the 1st element is the angle between the upper arm and
+   *         the robot, and the 2nd element is the angle between the fore arm and
+   *         the upper arm. All angles are in degrees.
+   */
   private double[] ik(Pose2d pose) {
     double a = cnst.UPPER_ARM_LENGTH;
     double b = cnst.FORE_ARM_LENGTH;

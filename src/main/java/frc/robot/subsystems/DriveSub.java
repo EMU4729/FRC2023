@@ -52,7 +52,7 @@ public class DriveSub extends SubsystemBase {
   }
 
   /**
-   * Activates tank drive. Similar to MoveTank from ev3dev.
+   * Tank drive.
    * 
    * @param leftSpeed  The left speed.
    * @param rightSpeed The right speed.
@@ -64,7 +64,7 @@ public class DriveSub extends SubsystemBase {
   }
 
   /**
-   * Activates arcade drive. Similar to MoveSteering from ev3dev.
+   * Arcade drive.
    * 
    * @param throttle The speed
    * @param steering The steering
@@ -76,7 +76,7 @@ public class DriveSub extends SubsystemBase {
 
   }
 
-  /** Stop all motors. */
+  /** Stops all motors. */
   public void off() {
     drive.stopMotor();
   }
