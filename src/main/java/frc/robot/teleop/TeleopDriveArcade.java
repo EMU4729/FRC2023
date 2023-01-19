@@ -66,8 +66,6 @@ public class TeleopDriveArcade extends CommandBase {
     throttle = throttle * (vars.invertDriveDirection ? 1 : -1);
 
     ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
-    ShuffleControl.setThrotGraph(-oi.pilot.getLeftY(), throttle);
-    ShuffleControl.setSteerGraph(oi.pilot.getRightX(), steering);
 
     Subsystems.drive.arcade(throttle, steering);
   }

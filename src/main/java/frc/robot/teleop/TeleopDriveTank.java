@@ -62,8 +62,6 @@ public class TeleopDriveTank extends CommandBase {
     throttleR = throttleR * (vars.invertDriveDirection ? 1 : -1);
 
     ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
-    ShuffleControl.setThrotGraph(-oi.pilot.getLeftY(), throttleL);
-    ShuffleControl.setSteerGraph(oi.pilot.getRightY(), throttleR);
 
     Subsystems.drive.tank(throttleL, throttleR);
   }

@@ -18,14 +18,6 @@ public class ShuffleControl {
     driveTab.setControlAxis(contX, contY);
   }
 
-  public static void setSteerGraph(double in, double out) {
-    driveTab.setSteerGraph(in, out);
-  }
-
-  public static void setThrotGraph(double in, double out) {
-    driveTab.setThrotGraph(in, out);
-  }
-
   // nav tab
   public void setGyro(double gyro, double encode) {
     navTab.setGyroAngle(gyro, encode);

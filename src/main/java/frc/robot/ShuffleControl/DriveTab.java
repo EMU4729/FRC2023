@@ -27,26 +27,6 @@ public class DriveTab {
     controlY.setDouble(contY);
   }
 
-  private GenericEntry steerPIDGraphSense = drive
-      .add("Steering Graph", new double[] { 0, 0 })
-      .withSize(4, 3).withPosition(5, 3)
-      .withWidget(BuiltInWidgets.kGraph)
-      .getEntry();
-
-  public void setSteerGraph(double in, double out) {
-    steerPIDGraphSense.setDoubleArray(new double[] { in, out });
-  }
-
-  private GenericEntry throtPIDGraphSense = drive
-      .add("Throttle Graph", new double[] { 0, 0 })
-      .withSize(4, 3).withPosition(5, 0)
-      .withWidget(BuiltInWidgets.kGraph)
-      .getEntry();
-
-  public void setThrotGraph(double in, double out) {
-    throtPIDGraphSense.setDoubleArray(new double[] { in, out });
-  }
-
   protected DriveTab() {
     drive
         .add("DriveOutput", Subsystems.drive.drive)
