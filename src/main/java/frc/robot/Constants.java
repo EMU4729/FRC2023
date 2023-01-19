@@ -66,7 +66,11 @@ public final class Constants {
         public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
         /** PID Constants for Fore Arm Movement */
         public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
-        // TODO: Add gripper servos
+        /** Gripper Grip Servo 1 Channel */
+        public final int GRIPPER_GRIP_SERVO_1 = 0; // UPDATE
+        /** Gripper Grip Servo 2 Channel */
+        public final int GRIPPER_GRIP_SERVO_2 = 1; // UPDATE
+        // TODO: Add gripper pivot servo(s)
 
         // Controllers
         /** Port Number for Pilot Xbox Controller */
