@@ -12,19 +12,17 @@ import java.util.Optional;
  */
 public final class Variables {
   private static Optional<Variables> inst = Optional.empty();
+
   public static Variables getInstance() {
-    if (!inst.isPresent()) inst = Optional.of(new Variables());
+    if (!inst.isPresent())
+      inst = Optional.of(new Variables());
     return inst.get();
   }
-
 
   /**
    * Bool to invert robot drive direction flipping the apparent front of the robot
    */
   public boolean invertDriveDirection = false;
-
-  public double test1Speed = 0.5;
-  public double test2Speed = 0.5;
 
   /** max speed of robot m/s */
   public double robotMaxSpeed = 3.850;
@@ -34,22 +32,34 @@ public final class Variables {
   public double robotminTurn = 0.3;
   /**
    * settings for robot drive in default teleop
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve power}
+   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+   * power}
    */
   public double[][] DriveSettingsTELEOP = { { robotminThrot, 1, 3 }, { robotminTurn, 1, 3, 0.3 } };
   /**
    * settings for robot drive in demo mode
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve power}
+   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+   * power}
    */
   public double[][] DriveSettingsDEMO = { { robotminThrot, 0.5, 3 }, { robotminTurn, 0.6, 3, 0.1 } };
+
+  /**
+   * settings for copilot drive
+   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+   * power}
+   */
+  public double[][] DriveSettingsCOPILOT = { { robotminThrot, 0.5, 3 }, { robotminTurn, 0.6, 3, 0.1 } };
+
   /**
    * settings for robot drive in PID drive
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve power}
+   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+   * power}
    */
   public double[][] DriveSettingsPID1 = { { 0, robotMaxSpeed, 3 }, { 0, 1, 3, 0.3 } };
   /**
    * settings for robot drive in PID drive
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve power}
+   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+   * power}
    */
   public double[][] DriveSettingsPID2 = { { robotminThrot, 1, 1 }, { robotminTurn, 1, 1, 0.3 } };
 

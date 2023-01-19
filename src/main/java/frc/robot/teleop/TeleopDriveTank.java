@@ -17,6 +17,7 @@ public class TeleopDriveTank extends CommandBase {
   private final OI oi = OI.getInstance();
 
   private final CurveFit throtFit;
+  private final CurveFit copilotThrotFit;
 
   int i = 0;
 
@@ -26,6 +27,8 @@ public class TeleopDriveTank extends CommandBase {
 
   public TeleopDriveTank(double[][] settings) {
     throtFit = new CurveFit(settings[0][0], settings[0][1], settings[0][2]);
+    copilotThrotFit = new CurveFit(vars.DriveSettingsCOPILOT[0][0], vars.DriveSettingsCOPILOT[0][1],
+        vars.DriveSettingsCOPILOT[0][2]);
     addRequirements(Subsystems.drive);
   }
 
@@ -35,10 +38,23 @@ public class TeleopDriveTank extends CommandBase {
 
   @Override
   public void execute() {
-    double throttleL = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
-        cnst.CONTROLLER_AXIS_DEADZONE));
-    double throttleR = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getRightY(),
-        cnst.CONTROLLER_AXIS_DEADZONE));
+    double throttleL;
+    double throttleR;
+
+    // if the pilot isn't moving the robot
+    if (Math.abs(oi.pilot.getLeftY()) < 0.05 && Math.abs(oi.pilot.getRightY()) < 0.05) {
+      // take input from the copilot
+      throttleL = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+      throttleR = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getRightY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+    } else {
+      // take input from the pilot
+      throttleL = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+      throttleR = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getRightY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+    }
 
     // flips the direction of forward based on controller button
     throttleL = throttleL * (vars.invertDriveDirection ? 1 : -1);
