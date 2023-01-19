@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,19 +23,9 @@ public class GripperGripSub extends SubsystemBase {
     servoTwo.set(1);
   }
 
-  /** @return Command to open the gripper */
-  public Command openCommand() {
-    return this.runOnce(this::open);
-  }
-
   /** Closes the gripper */
   public void close() {
     servoOne.set(-1);
     servoTwo.set(-1);
-  }
-
-  /** @return Command to close the gripper */
-  public Command closeCommand() {
-    return this.runOnce(this::close);
   }
 }

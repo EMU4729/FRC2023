@@ -18,8 +18,7 @@ public class AutoProvider {
 
   private AutoProvider() {
     chooser.setDefaultOption("Default Auto", auto);
-    chooser.addOption("Disable Auto", new InstantCommand(() -> {
-    }));
+    chooser.addOption("Disable Auto", new InstantCommand());
     SmartDashboard.putData(chooser);
   }
 
