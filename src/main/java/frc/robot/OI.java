@@ -34,7 +34,7 @@ public class OI {
    * @param value The value to apply the deadband to
    * @return The value with the deadband applied
    */
-  public double applyDeadband(double value) {
+  public double applyAxisDeadband(double value) {
     return MathUtil.applyDeadband(value, cnst.CONTROLLER_AXIS_DEADZONE);
   }
 

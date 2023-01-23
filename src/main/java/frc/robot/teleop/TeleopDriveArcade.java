@@ -48,14 +48,15 @@ public class TeleopDriveArcade extends CommandBase {
     // If pilot is moving the robot
     if (oi.pilotIsActive()) {
       // take input from the pilot
-      throttle = throtFit.fit(oi.applyDeadband(oi.pilot.getLeftY()));
-      steering = steerFit.fit(oi.applyDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
-                                                                                // throttle
+      throttle = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
+      steering = steerFit.fit(oi.applyAxisDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
+      // throttle
     } else {
       // take input from the copilot
-      throttle = copilotThrotFit.fit(oi.applyDeadband(oi.copilot.getLeftY()));
-      steering = copilotSteerFit.fit(oi.applyDeadband(oi.copilot.getRightX()), throttle);// limiting max steering based
-                                                                                         // on throttle
+      throttle = copilotThrotFit.fit(oi.applyAxisDeadband(oi.copilot.getLeftY()));
+      steering = copilotSteerFit.fit(oi.applyAxisDeadband(oi.copilot.getRightX()), throttle);// limiting max steering
+                                                                                             // based
+      // on throttle
     }
 
     // flips the direction of forward based on controller button

@@ -42,12 +42,12 @@ public class TeleopDriveTank extends CommandBase {
     // if the pilot is moving the robot
     if (oi.pilotIsActive()) {
       // take input from the pilot
-      throttleL = throtFit.fit(oi.applyDeadband(oi.pilot.getLeftY()));
-      throttleR = throtFit.fit(oi.applyDeadband(oi.pilot.getRightY()));
+      throttleL = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
+      throttleR = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getRightY()));
     } else {
       // take input from the copilot
-      throttleL = copilotThrotFit.fit(oi.applyDeadband(oi.copilot.getLeftY()));
-      throttleR = copilotThrotFit.fit(oi.applyDeadband(oi.copilot.getRightY()));
+      throttleL = copilotThrotFit.fit(oi.applyAxisDeadband(oi.copilot.getLeftY()));
+      throttleR = copilotThrotFit.fit(oi.applyAxisDeadband(oi.copilot.getRightY()));
     }
 
     // flips the direction of forward based on controller button
