@@ -31,7 +31,7 @@ public class OI {
   /**
    * Applies the controller axis deadband to a value
    * 
-   * @param value
+   * @param value The value to apply the deadband to
    * @return The value with the deadband applied
    */
   public double applyDeadband(double value) {

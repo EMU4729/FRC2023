@@ -51,8 +51,8 @@ public class TeleopDriveTank extends CommandBase {
     }
 
     // flips the direction of forward based on controller button
-    throttleL = throttleL * (vars.invertDriveDirection ? 1 : -1);
-    throttleR = throttleR * (vars.invertDriveDirection ? 1 : -1);
+    throttleL *= vars.invertDriveDirection ? 1 : -1;
+    throttleR *= vars.invertDriveDirection ? 1 : -1;
 
     ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
 
