@@ -16,6 +16,10 @@ public class OI {
     return inst.get();
   }
 
+  public boolean pilotIsActive() {
+    return Math.abs(pilot.getLeftY()) > 0.05 && Math.abs(pilot.getRightX()) > 0.05;
+  }
+
   private final Constants cnst = Constants.getInstance();
 
   public final CommandXboxController pilot = new CommandXboxController(cnst.PILOT_XBOX_CONTROLLER_PORT);

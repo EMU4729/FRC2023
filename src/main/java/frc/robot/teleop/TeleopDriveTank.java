@@ -40,18 +40,18 @@ public class TeleopDriveTank extends CommandBase {
     double throttleL;
     double throttleR;
 
-    // if the pilot isn't moving the robot
-    if (Math.abs(oi.pilot.getLeftY()) < 0.05 && Math.abs(oi.pilot.getRightY()) < 0.05) {
-      // take input from the copilot
-      throttleL = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-      throttleR = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getRightY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-    } else {
+    // if the pilot is moving the robot
+    if (oi.pilotIsActive()) {
       // take input from the pilot
       throttleL = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
           cnst.CONTROLLER_AXIS_DEADZONE));
       throttleR = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getRightY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+    } else {
+      // take input from the copilot
+      throttleL = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+      throttleR = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getRightY(),
           cnst.CONTROLLER_AXIS_DEADZONE));
     }
 

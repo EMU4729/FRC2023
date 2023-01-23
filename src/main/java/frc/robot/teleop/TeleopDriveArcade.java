@@ -47,18 +47,18 @@ public class TeleopDriveArcade extends CommandBase {
     double throttle;
     double steering;
 
-    // If pilot isn't moving the robot
-    if (Math.abs(oi.pilot.getLeftY()) < 0.05 && Math.abs(oi.pilot.getRightX()) < 0.05) {
-      // take input from the copilot
-      throttle = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-      steering = copilotSteerFit.fit(MathUtil.applyDeadband(oi.copilot.getRightX(),
-          cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
-    } else {
+    // If pilot is moving the robot
+    if (oi.pilotIsActive()) {
       // take input from the pilot
       throttle = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
           cnst.CONTROLLER_AXIS_DEADZONE));
       steering = steerFit.fit(MathUtil.applyDeadband(oi.pilot.getRightX(),
+          cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
+    } else {
+      // take input from the copilot
+      throttle = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
+          cnst.CONTROLLER_AXIS_DEADZONE));
+      steering = copilotSteerFit.fit(MathUtil.applyDeadband(oi.copilot.getRightX(),
           cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
     }
 
