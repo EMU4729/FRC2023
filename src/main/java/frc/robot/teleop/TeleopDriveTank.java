@@ -23,13 +23,13 @@ public class TeleopDriveTank extends CommandBase {
   int i = 0;
 
   public TeleopDriveTank() {
-    this(Variables.getInstance().DriveSettingsTELEOP);
+    this(Variables.getInstance().teleopDriveSettings);
   }
 
   public TeleopDriveTank(double[][] settings) {
     throtFit = new CurveFit(settings[0][0], settings[0][1], settings[0][2]);
-    copilotThrotFit = new CurveFit(vars.DriveSettingsCOPILOT[0][0], vars.DriveSettingsCOPILOT[0][1],
-        vars.DriveSettingsCOPILOT[0][2]);
+    copilotThrotFit = new CurveFit(vars.copilotDriveSettings[0][0], vars.copilotDriveSettings[0][1],
+        vars.copilotDriveSettings[0][2]);
     addRequirements(Subsystems.drive);
   }
 

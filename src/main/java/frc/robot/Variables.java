@@ -25,44 +25,44 @@ public final class Variables {
   public boolean invertDriveDirection = false;
 
   /** max speed of robot m/s */
-  public double robotMaxSpeed = 3.850;
+  public double driveMaxSpeed = 3.850;
   /** min throttle for movement */
-  public double robotminThrot = 0.3;
+  public double driveMinThrot = 0.3;
   /** min throttle for turning */
-  public double robotminTurn = 0.3;
+  public double driveMinTurn = 0.3;
   /**
    * settings for robot drive in default teleop
    * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
    * power}
    */
-  public double[][] DriveSettingsTELEOP = { { robotminThrot, 1, 3 }, { robotminTurn, 1, 3, 0.3 } };
+  public double[][] teleopDriveSettings = { { driveMinThrot, 1, 3 }, { driveMinTurn, 1, 3, 0.3 } };
   /**
    * settings for robot drive in demo mode
    * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
    * power}
    */
-  public double[][] DriveSettingsDEMO = { { robotminThrot, 0.5, 3 }, { robotminTurn, 0.6, 3, 0.1 } };
+  public double[][] demoDriveSettings = { { driveMinThrot, 0.5, 3 }, { driveMinTurn, 0.6, 3, 0.1 } };
 
   /**
    * settings for copilot drive
    * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
    * power}
    */
-  public double[][] DriveSettingsCOPILOT = { { robotminThrot, 0.5, 3 }, { robotminTurn, 0.6, 3, 0.1 } };
+  public double[][] copilotDriveSettings = { { driveMinThrot, 0.5, 3 }, { driveMinTurn, 0.6, 3, 0.1 } };
 
   /**
    * settings for robot drive in PID drive
    * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
    * power}
    */
-  public double[][] DriveSettingsPID1 = { { 0, robotMaxSpeed, 3 }, { 0, 1, 3, 0.3 } };
+  public double[][] pid1DriveSettings = { { 0, driveMaxSpeed, 3 }, { 0, 1, 3, 0.3 } };
   /**
    * settings for robot drive in PID drive
    * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
    * power}
    */
-  public double[][] DriveSettingsPID2 = { { robotminThrot, 1, 1 }, { robotminTurn, 1, 1, 0.3 } };
+  public double[][] pid2DriveSettings = { { driveMinThrot, 1, 1 }, { driveMinTurn, 1, 1, 0.3 } };
 
   /** LED string brightness modifier (0-1) */
-  public double LEDBrightnessMod = 1;
+  public double ledBrightnessMod = 1;
 }
