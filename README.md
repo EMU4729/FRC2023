@@ -1,3 +1,3 @@
-# FRCTemplate
+# FRC2023
 
-Template for UNSW FRC Code
+Robot code for FRC 2023 Charged Up.
