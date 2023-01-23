@@ -24,12 +24,12 @@ public class TeleopProvider {
 
   private TeleopProvider() {
     // 2 stick arcade
-    chooser.setDefaultOption("Default Teleop", teleop);
+    chooser.setDefaultOption("Arcade Teleop", teleop);
     chooser.addOption("Demo Teleop", demoTeleop);
 
     // 2 stick tank
-    chooser.addOption("Teleop Tank", teleopTank);
-    chooser.addOption("Demo Teleop Tank", demoTeleopTank);
+    chooser.addOption("Tank Teleop", teleopTank);
+    chooser.addOption("Demo Tank Teleop", demoTeleopTank);
     chooser.addOption("Disable Teleop", new InstantCommand());
 
     SmartDashboard.putData(chooser);
