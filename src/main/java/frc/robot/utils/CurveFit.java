@@ -10,6 +10,14 @@ public class CurveFit {
   public double pow;
   public double throtEffect = 1;
 
+  public static CurveFit throtFromDriveSettings(double[][] settings) {
+    return new CurveFit(settings[0][0], settings[0][1], settings[0][2]);
+  }
+
+  public static CurveFit steerFromDriveSettings(double[][] settings) {
+    return new CurveFit(settings[1][0], settings[1][1], settings[1][2]).setThrotEffect(settings[1][3]);
+  }
+
   /** fits curve and adjusts range of input */
   public CurveFit(double outMin, double outMax, double pow) {
     this(-1, 1, outMin, outMax, pow);
@@ -68,28 +76,29 @@ public class CurveFit {
     if (input == 0) {
       return 0;
     }
-    //simple multiply by the input
-    //intended for reduction or increase of turn rate based on forward speed
+    // simple multiply by the input
+    // intended for reduction or increase of turn rate based on forward speed
     maxOutAdjust = (1 - throtEffect) + throtEffect * Math.abs(maxOutAdjust);
 
     input = MathUtil.clamp(input, inMin, inMax); // clamp input within [inMin, inMax]
     input = ((input - inMin) / (inMax - inMin) - 0.5) * 2; // change range to [-1, 1]
     input = Math.copySign(Math.pow(Math.abs(input), pow), input); // fit power of curve to the input
     // change the range to [-outMax, -outMin], [outMin, outMax]
-    // with equivelant ranges either side of 0 and a jump to outMin once out of the deadzone
+    // with equivelant ranges either side of 0 and a jump to outMin once out of the
+    // deadzone
     input = Math.copySign(Math.abs(input) * (-outAbsMin + outAbsMax * maxOutAdjust) + outAbsMin, input);
 
     /*
-    rough sketch of the result
-                       ___ outAbsMax
-              |
-           __/         ___ outAbsMin
-    ______|______  
-        __|
-       /
-      |
-
-    */
+     * rough sketch of the result
+     * ___ outAbsMax
+     * |
+     * __/ ___ outAbsMin
+     * ______|______
+     * __|
+     * /
+     * |
+     * 
+     */
     return input;
   }
 }

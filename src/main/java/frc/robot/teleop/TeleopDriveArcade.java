@@ -27,13 +27,12 @@ public class TeleopDriveArcade extends CommandBase {
   }
 
   public TeleopDriveArcade(double[][] settings) {
-    throtFit = new CurveFit(settings[0][0], settings[0][1], settings[0][2]);
-    steerFit = new CurveFit(settings[1][0], settings[1][1], settings[1][2]).setThrotEffect(settings[1][3]);
+    throtFit = CurveFit.throtFromDriveSettings(settings);
+    steerFit = CurveFit.steerFromDriveSettings(settings);
 
-    copilotThrotFit = new CurveFit(vars.copilotDriveSettings[0][0], vars.copilotDriveSettings[0][1],
-        vars.copilotDriveSettings[0][2]);
-    copilotSteerFit = new CurveFit(vars.copilotDriveSettings[1][0], vars.copilotDriveSettings[1][1],
-        vars.copilotDriveSettings[1][2]).setThrotEffect(vars.copilotDriveSettings[1][3]);
+    copilotThrotFit = CurveFit.throtFromDriveSettings(vars.copilotDriveSettings);
+    copilotSteerFit = CurveFit.steerFromDriveSettings(vars.copilotDriveSettings);
+
     addRequirements(Subsystems.drive);
   }
 

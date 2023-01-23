@@ -24,9 +24,9 @@ public class TeleopDriveTank extends CommandBase {
   }
 
   public TeleopDriveTank(double[][] settings) {
-    throtFit = new CurveFit(settings[0][0], settings[0][1], settings[0][2]);
-    copilotThrotFit = new CurveFit(vars.copilotDriveSettings[0][0], vars.copilotDriveSettings[0][1],
-        vars.copilotDriveSettings[0][2]);
+    throtFit = CurveFit.throtFromDriveSettings(settings);
+    copilotThrotFit = CurveFit.throtFromDriveSettings(vars.copilotDriveSettings);
+
     addRequirements(Subsystems.drive);
   }
 
