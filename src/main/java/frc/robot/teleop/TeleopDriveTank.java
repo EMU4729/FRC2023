@@ -1,6 +1,5 @@
 package frc.robot.teleop;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -43,16 +42,12 @@ public class TeleopDriveTank extends CommandBase {
     // if the pilot is moving the robot
     if (oi.pilotIsActive()) {
       // take input from the pilot
-      throttleL = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-      throttleR = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getRightY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
+      throttleL = throtFit.fit(oi.applyDeadband(oi.pilot.getLeftY()));
+      throttleR = throtFit.fit(oi.applyDeadband(oi.pilot.getRightY()));
     } else {
       // take input from the copilot
-      throttleL = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-      throttleR = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getRightY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
+      throttleL = copilotThrotFit.fit(oi.applyDeadband(oi.copilot.getLeftY()));
+      throttleR = copilotThrotFit.fit(oi.applyDeadband(oi.copilot.getRightY()));
     }
 
     // flips the direction of forward based on controller button

@@ -1,6 +1,5 @@
 package frc.robot.teleop;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -50,16 +49,14 @@ public class TeleopDriveArcade extends CommandBase {
     // If pilot is moving the robot
     if (oi.pilotIsActive()) {
       // take input from the pilot
-      throttle = throtFit.fit(MathUtil.applyDeadband(oi.pilot.getLeftY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-      steering = steerFit.fit(MathUtil.applyDeadband(oi.pilot.getRightX(),
-          cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
+      throttle = throtFit.fit(oi.applyDeadband(oi.pilot.getLeftY()));
+      steering = steerFit.fit(oi.applyDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
+                                                                                // throttle
     } else {
       // take input from the copilot
-      throttle = copilotThrotFit.fit(MathUtil.applyDeadband(oi.copilot.getLeftY(),
-          cnst.CONTROLLER_AXIS_DEADZONE));
-      steering = copilotSteerFit.fit(MathUtil.applyDeadband(oi.copilot.getRightX(),
-          cnst.CONTROLLER_AXIS_DEADZONE), throttle);// limiting max steering based on throttle
+      throttle = copilotThrotFit.fit(oi.applyDeadband(oi.copilot.getLeftY()));
+      steering = copilotSteerFit.fit(oi.applyDeadband(oi.copilot.getRightX()), throttle);// limiting max steering based
+                                                                                         // on throttle
     }
 
     // flips the direction of forward based on controller button
