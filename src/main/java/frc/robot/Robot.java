@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.ShuffleControl.ShuffleControl;
-import frc.robot.utils.LEDControl.LEDControl;
 import frc.robot.utils.logger.Logger;
 
 /**
@@ -38,7 +37,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
-    LEDControl.getInstance().runDirectionLights();
+    // LEDControl.getInstance().runDirectionLights();
     new ShuffleControl();
   }
 
@@ -62,7 +61,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
-    LEDControl.getInstance().updatePeriodic();
+    // LEDControl.getInstance().updatePeriodic();
     CommandScheduler.getInstance().run();
   }
 
