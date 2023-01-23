@@ -25,10 +25,7 @@ public class AsyncTimer {
    * @param duration The duration of the timer in milliseconds.
    */
   public AsyncTimer(int duration) {
-    this.start = Instant.now();
-    this.timed = this.start;
-    this.paused = false;
-    this.duration = duration;
+    this(duration, false);
   }
 
   /**
