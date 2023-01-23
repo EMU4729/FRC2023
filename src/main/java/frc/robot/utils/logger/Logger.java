@@ -1,15 +1,15 @@
 package frc.robot.utils.logger;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.Date;
-import java.util.Calendar;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
 
 import frc.robot.Constants;
 
@@ -54,7 +54,7 @@ public class Logger {
   }
 
   public static void warn(String content) {
-    LogLine logLine = new LogLine(content, LogLevel.WARN);
+    LogLine logLine = new LogLine(content, LogLevel.WARNING);
     addLine(logLine);
   }
 
