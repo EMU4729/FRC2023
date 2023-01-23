@@ -24,6 +24,11 @@ public final class Constants {
     return inst.get();
   }
 
+  private Constants() {
+    if (checkLEDs())
+      throw new IllegalArgumentException("num of leds or segments sizes is wrong");
+  }
+
   // Envars
   public final Map<String, String> ENV = System.getenv();
 
@@ -58,17 +63,17 @@ public final class Constants {
   public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(-1, MotorInfo.Type.Never).withBrake();
   /** Information for Fore Arm Motor */
   public final MotorInfo FORE_ARM_MOTOR_ID = new MotorInfo(-1, MotorInfo.Type.Never).withBrake();
-  /** Length of the forearm, in metres */
+  /** Length of the forearm, in metres @wip update arm length */
   public final double FORE_ARM_LENGTH = 1; // UPDATE
-  /** Length of the upper arm, in metres */
+  /** Length of the upper arm, in metres @wip update arm length */
   public final double UPPER_ARM_LENGTH = 1; // UPDATE
-  /** PID Constants for Upper Arm Movement */
+  /** PID Constants for Upper Arm Movement @wip update constants */
   public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
   /** PID Constants for Fore Arm Movement */
   public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
-  /** Gripper Grip Servo 1 Channel */
+  /** Gripper Grip Servo 1 Channel @wip update servo port */
   public final int GRIPPER_GRIP_SERVO_1 = 0; // UPDATE
-  /** Gripper Grip Servo 2 Channel */
+  /** Gripper Grip Servo 2 Channel @wip update servo port */
   public final int GRIPPER_GRIP_SERVO_2 = 1; // UPDATE
   // TODO: Add gripper pivot servo(s)
 
@@ -102,11 +107,24 @@ public final class Constants {
   /** radius of the drive wheels (m) */
   public final double ROBOT_WHEEL_RAD = Units.inchesToMeters(3);
 
-  /** Encoder max rate for PID loop */
-  public double DRIVE_ENCODER_MAX_RATE = 1; // UPDATE
-
+  // LEDs
   /** LED string length (in leds) */
-  public int LED_STRING_LENGTH = 60;
+  public final int LED_STRING_LENGTH = 42;
   /** LED string port num */
-  public int LED_STRING_PORT = 0;
+  public final int LED_STRING_PORT = 9;
+  /**
+   * Max number of colour changes/s (red -> black -> red -> black = 4) for leds
+   */
+  public final int LED_MAX_FLASH_RATE = 8;
+  /**  */
+  public final int[] LED_ZONE_SIZES = { 3, 36, 3 };
+  /** number of zones currently on the robot */
+  public final int LED_ZONES = LED_ZONE_SIZES.length;
+
+  private boolean checkLEDs() {
+    int tmp = 0;
+    for (int i = 0; i < LED_ZONES; i++)
+      tmp += LED_ZONE_SIZES[i];
+    return tmp == LED_STRING_LENGTH;
+  }
 }
