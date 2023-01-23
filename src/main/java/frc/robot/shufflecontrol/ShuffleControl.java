@@ -1,4 +1,4 @@
-package frc.robot.ShuffleControl;
+package frc.robot.shufflecontrol;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
