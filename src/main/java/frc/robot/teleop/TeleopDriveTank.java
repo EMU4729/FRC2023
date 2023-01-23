@@ -20,7 +20,7 @@ public class TeleopDriveTank extends CommandBase {
   private final CurveFit copilotThrotFit;
 
   public TeleopDriveTank() {
-    this(Variables.getInstance().teleopDriveSettings);
+    this(Variables.getInstance().pilotDriveSettings);
   }
 
   public TeleopDriveTank(double[][] settings) {

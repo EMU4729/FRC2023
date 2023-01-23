@@ -23,7 +23,7 @@ public class TeleopDriveArcade extends CommandBase {
   private final CurveFit copilotSteerFit;
 
   public TeleopDriveArcade() {
-    this(Variables.getInstance().teleopDriveSettings);
+    this(Variables.getInstance().pilotDriveSettings);
   }
 
   public TeleopDriveArcade(double[][] settings) {
