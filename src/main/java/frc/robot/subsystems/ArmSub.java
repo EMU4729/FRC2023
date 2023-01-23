@@ -56,8 +56,7 @@ public class ArmSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // THIS CODE DOES NOT WORK AND WILL FAIL HORRIBLY. PLEASE DO NOT USE THIS CODE.
-    // IT IS ONLY FOR DEMONSTRATION PURPOSES.
+    // THIS CODE IS UNTESTED. IT CAN CAUSE SOME SERIOUS DAMAGE.
     if (false) {
       double[] ikRes = ik(targetCoords);
       double upperArmTargetAngle = ikRes[0];
