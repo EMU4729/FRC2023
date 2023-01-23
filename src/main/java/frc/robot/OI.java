@@ -17,15 +17,26 @@ public class OI {
     return inst.get();
   }
 
+  private final Constants cnst = Constants.getInstance();
+
+  /**
+   * Checks if the pilot is moving the robot.
+   * 
+   * @return true if the pilot is moving the robot, false otherwise.
+   */
   public boolean pilotIsActive() {
     return Math.abs(pilot.getLeftY()) > 0.05 && Math.abs(pilot.getRightX()) > 0.05;
   }
 
+  /**
+   * Applies the controller axis deadband to a value
+   * 
+   * @param value
+   * @return The value with the deadband applied
+   */
   public double applyDeadband(double value) {
     return MathUtil.applyDeadband(value, cnst.CONTROLLER_AXIS_DEADZONE);
   }
-
-  private final Constants cnst = Constants.getInstance();
 
   public final CommandXboxController pilot = new CommandXboxController(cnst.PILOT_XBOX_CONTROLLER_PORT);
   public final CommandXboxController copilot = new CommandXboxController(cnst.COPILOT_XBOX_CONTROLLER_PORT);
