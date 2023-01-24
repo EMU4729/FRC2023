@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.AutoProvider;
 import frc.robot.teleop.TeleopProvider;
+import frc.robot.utils.LEDControl.LEDControl;
+import frc.robot.utils.LEDControl.LEDPattern;
+import frc.robot.utils.LEDControl.LEDState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -46,9 +49,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Invert Drive
+    
     oi.pilot.start().onTrue(new InstantCommand(() -> {
       vars.invertDriveDirection = !vars.invertDriveDirection;
-      // LEDControl.getInstance().runDirectionLights();
+      LEDPattern.runDirLEDS();
     }));
 
     // Game Piece LEDs

@@ -7,6 +7,17 @@
       "window": {
         "visible": true
       }
+    },
+    "RoboRIO": {
+      "6V Rail": {
+        "open": true
+      },
+      "RoboRIO Input": {
+        "open": true
+      },
+      "window": {
+        "visible": true
+      }
     }
   },
   "NTProvider": {
@@ -27,6 +38,11 @@
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/Drive/TeleopType": {
         "window": {
           "visible": true

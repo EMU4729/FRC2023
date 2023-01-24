@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants;
+import frc.robot.utils.logger.Logger;
 
 public class LEDControl {
   private static Optional<LEDControl> inst = Optional.empty();
@@ -45,7 +46,7 @@ public class LEDControl {
           queueLock.unlock();
           Thread.sleep(20);
         } catch(InterruptedException e){
-          //ignored
+          Logger.error("LEDControl : InterruptedException :  :( ");
         }
       }    
     });
@@ -58,11 +59,16 @@ public class LEDControl {
 
     for(int i = 0; i < PatternQueue.size(); i++){
       buffer = PatternQueue.get(i).update(buffer);
+      for(int j = 0; j < LEDsBuff.getLength(); j++){
+        System.out.println(buffer[0] + " " + buffer[1] + " " + buffer[2]);
+      }
     }
-
+    System.out.println("--");
     for(int i = 0; i < LEDsBuff.getLength(); i++){
-      LEDsBuff.setRGB(i, buffer[i][0], buffer[i][1], buffer[i][2]);
+      if(buffer[i] != null) LEDsBuff.setRGB(i, buffer[i][0], buffer[i][1], buffer[i][2]);
+      else System.out.println("null");
     }
+    LEDs.setData(LEDsBuff);
   }
 
   private void wipeExpired(){
@@ -72,17 +78,21 @@ public class LEDControl {
   }
 
   public static void setPattern(LEDPattern newPattern){
-    LEDControl ths = LEDControl.getInstance();
-    ths.queueLock.lock();
-    for(int i = 0; i < ths.PatternQueue.size(); i++){
-      if(newPattern.priority >= ths.PatternQueue.get(i).priority){
-        ths.PatternQueue.add(i, newPattern);
+    LEDControl This = LEDControl.getInstance();
+    This.queueLock.lock();
+    if(This.PatternQueue.size() == 0){
+      This.PatternQueue.add(newPattern);
+      This.queueLock.unlock();
+      return;
+    } 
+    for(int i = 0; i < This.PatternQueue.size(); i++){
+      if(newPattern.priority > This.PatternQueue.get(i).priority){ 
+        This.PatternQueue.add(i, newPattern);
+      } else if(newPattern.priority == This.PatternQueue.get(i).priority){
+        This.PatternQueue.remove(i);
+        This.PatternQueue.add(i, newPattern);
       }
     }
-    ths.queueLock.unlock();
-  }
-
-  public static void runDirectionLEDs(){
-    
+    This.queueLock.unlock();
   }
 }

@@ -25,7 +25,10 @@ public class OI {
    * @return true if the pilot is moving the robot, false otherwise.
    */
   public boolean pilotIsActive() {
-    return Math.abs(pilot.getLeftY()) > 0.05 && Math.abs(pilot.getRightX()) > 0.05;
+    //return true;
+    return Math.abs(pilot.getLeftY())  > cnst.CONTROLLER_AXIS_DEADZONE || 
+           Math.abs(pilot.getRightY()) > cnst.CONTROLLER_AXIS_DEADZONE ||
+           Math.abs(pilot.getRightX()) > cnst.CONTROLLER_AXIS_DEADZONE;
   }
 
   /**

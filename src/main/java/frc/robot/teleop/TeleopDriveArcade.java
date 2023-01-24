@@ -42,8 +42,8 @@ public class TeleopDriveArcade extends CommandBase {
 
   @Override
   public void execute() {
-    double throttle;
-    double steering;
+    double throttle = 0;
+    double steering = 0;
 
     // If pilot is moving the robot
     if (oi.pilotIsActive()) {

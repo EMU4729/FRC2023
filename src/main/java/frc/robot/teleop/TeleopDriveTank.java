@@ -36,8 +36,8 @@ public class TeleopDriveTank extends CommandBase {
 
   @Override
   public void execute() {
-    double throttleL;
-    double throttleR;
+    double throttleL = 0;
+    double throttleR = 0;
 
     // if the pilot is moving the robot
     if (oi.pilotIsActive()) {

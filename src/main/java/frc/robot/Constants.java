@@ -25,8 +25,6 @@ public final class Constants {
   }
 
   private Constants() {
-    if (checkLEDs())
-      throw new IllegalArgumentException("num of leds or segments sizes is wrong");
   }
 
   // Envars
@@ -99,7 +97,7 @@ public final class Constants {
   /** limit for repeated attempts to read auto from internal storage */
   public final int REPEAT_LIMIT_AUTO_READ = 10;
   /** save attempts per second for the logger */
-  public int LOGGER_SAVE_RATE = 10;
+  public final int LOGGER_SAVE_RATE = 10;
 
   // Robot features
   /** distance between wheel center side to side (m) */
@@ -117,14 +115,5 @@ public final class Constants {
    */
   public final int LED_MAX_FLASH_RATE = 8;
   /**  */
-  public final int[] LED_ZONE_SIZES = { 3, 36, 3 };
-  /** number of zones currently on the robot */
-  public final int LED_ZONES = LED_ZONE_SIZES.length;
-
-  private boolean checkLEDs() {
-    int tmp = 0;
-    for (int i = 0; i < LED_ZONES; i++)
-      tmp += LED_ZONE_SIZES[i];
-    return tmp == LED_STRING_LENGTH;
-  }
+  public final int[] LED_ZONES = {0,3,39,42};
 }
