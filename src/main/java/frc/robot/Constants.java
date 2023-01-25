@@ -78,6 +78,9 @@ public final class Constants {
   /** Path to the auto pathweaver json, relative to the robot deploy directory */
   public final String PATHWEAVER_PATH = "paths/GoToGameObject.wpilib.json";
 
+  /** PID Constants for Charge Pad Balance Command */
+  public final PIDControllerConstants BALANCE_CHARGE_PAD_PID = new PIDControllerConstants(0.1, 0, 0); // UPDATE
+
   // Gripper + Arm
   /** Information for Upper Arm Motor */
   public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake();

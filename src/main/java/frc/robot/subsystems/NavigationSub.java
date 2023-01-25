@@ -86,6 +86,19 @@ public class NavigationSub extends SubsystemBase {
     return getPose().getRotation();
   }
 
+  // TODO: Check if the getRoll() and getPitch() methods are correct
+
+  /** @return The roll angle of the robot */
+  public double getRoll() {
+    return imu.getXComplementaryAngle();
+
+  }
+
+  /** @return The pitch angle of the robot */
+  public double getPitch() {
+    return imu.getYComplementaryAngle();
+  }
+
   /** Gets the left encoder rate. @return The speed. m/s */
   public double getLeftEncoderRate() {
     return drvLeftEncoder.getRate();
