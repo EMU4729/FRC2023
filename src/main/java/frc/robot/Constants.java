@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.Map;
 import java.util.Optional;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utils.MotorInfo;
 import frc.robot.utils.PIDControllerConstants;
@@ -55,6 +56,27 @@ public final class Constants {
    */
   public final MotorInfo DRIVE_MOTOR_ID_RS = new MotorInfo(2, MotorInfo.Type.TalonSRX)
       .withInvert().withSafety();
+
+  /** KS value from SysId */
+  public final double DRIVE_KS_VOLTS = 0.88881;
+  /** KV value from SysId */
+  public final double DRIVE_KV_VOLT_SECONDS_PER_METER = 3.0288;
+  /** KA value from SysId */
+  public final double DRIVE_KA_VOLT_SECONDS_SQUARED_PER_METER = 1.036;
+  /** Horizontal distance between the drive wheels, in meters */
+  public final double DRIVE_TRACK_WIDTH_METERS = 0.55;
+  /** Drive kinematics */
+  public final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(DRIVE_TRACK_WIDTH_METERS);
+  /** Auto max velocity */
+  public final double DRIVE_MAX_METERS_PER_SECOND = 2;
+  /** Auto max acceleration */
+  public final double DRIVE_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
+  /** Auto ramsete b variable */
+  public final double DRIVE_RAMSETE_B = 2;
+  /** Auto ramsete zeta variable */
+  public final double DRIVE_RAMSETE_ZETA = 0.7;
+  /** Path to the auto pathweaver json, relative to the robot deploy directory */
+  public final String PATHWEAVER_PATH = "paths/Default.wpilib.json";
 
   // Gripper + Arm
   /** Information for Upper Arm Motor */
@@ -115,5 +137,5 @@ public final class Constants {
    */
   public final int LED_MAX_FLASH_RATE = 8;
   /**  */
-  public final int[] LED_ZONES = {0,3,39,42};
+  public final int[] LED_ZONES = { 0, 3, 39, 42 };
 }

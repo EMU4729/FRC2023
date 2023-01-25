@@ -64,6 +64,19 @@ public class DriveSub extends SubsystemBase {
   }
 
   /**
+   * Tank drives the robot using voltages.
+   * <strong>Highly unsafe.</strong> Values are uncapped, so use with caution.
+   * 
+   * @param leftVoltage  The left output
+   * @param rightVoltage The right output
+   */
+  public void tankVoltage(double leftVoltage, double rightVoltage) {
+    leftMotors.setVoltage(leftVoltage);
+    rightMotors.setVoltage(rightVoltage);
+    drive.feed();
+  }
+
+  /**
    * Arcade drive.
    * 
    * @param throttle The speed
