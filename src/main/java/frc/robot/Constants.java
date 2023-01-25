@@ -76,7 +76,7 @@ public final class Constants {
   /** Auto ramsete zeta variable */
   public final double DRIVE_RAMSETE_ZETA = 0.7;
   /** Path to the auto pathweaver json, relative to the robot deploy directory */
-  public final String PATHWEAVER_PATH = "paths/Default.wpilib.json";
+  public final String PATHWEAVER_PATH = "paths/GoToGameObject.wpilib.json";
 
   // Gripper + Arm
   /** Information for Upper Arm Motor */
