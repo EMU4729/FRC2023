@@ -122,10 +122,12 @@ public class LEDState {
   public int[][] setToBuff(int[][] colourBuff, short[][] LEDsRanges){
     int patternIdx = 0;
     for(int i = 0; i < colourBuff.length; i++){
+      System.out.println(colourBuff[i]);
       if(colourBuff[i] != null) continue; //skip LEDs filled by higher priority Patterns
       for(short[] ledRng : LEDsRanges){
+        System.out.println(ledRng[0] +" "+ ledRng[1]);
         if(i > ledRng[0] && i < ledRng[1]){ //only add colours if pattern covers this LED
-          colourBuff[i] = getCol(patternIdx); //get colour for this stage in the sequence
+          colourBuff[i] = getCol(drawSequence[patternIdx]); //get colour for this stage in the sequence
           break;
         }
       }
@@ -135,10 +137,11 @@ public class LEDState {
   }
 
   public int[] getCol(int col){
+    if(col == 0) return new int[] {0,0,0};
     return new int[] {
-      Byte.toUnsignedInt(colours[col][0]),
-      Byte.toUnsignedInt(colours[col][1]),
-      Byte.toUnsignedInt(colours[col][2])
+      Byte.toUnsignedInt(colours[col-1][0]),
+      Byte.toUnsignedInt(colours[col-1][1]),
+      Byte.toUnsignedInt(colours[col-1][2])
     };
   }
 

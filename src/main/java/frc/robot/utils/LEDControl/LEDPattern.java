@@ -34,18 +34,6 @@ public class LEDPattern {
    */
   public LEDPattern(String[] LEDStates, short[] LEDPattern, short[][] LEDsRanges,
         int duration, int flashDuration, int priority){
-    int maxStateUsed = -1;
-    for(short patternStep : LEDPattern){
-      maxStateUsed = maxStateUsed > patternStep ? maxStateUsed : patternStep;
-    }
-    if(maxStateUsed > LEDStates.length){
-      Logger.error
-          ("LEDPattern : New Pattern : More colours used in pattern pattern than provided in array");
-    } else if (maxStateUsed < LEDStates.length){
-      Logger.warn("LEDPattern : New Pattern : Last colour/s unused,"+
-          " Have you remembered 0 is already defined in the pattern as black : "+
-          "Pattern-" + LEDPattern);
-    }
     if(duration < 1000 / flashDuration) 
         Logger.error("LEDPattern : New Pattern : duration > flash length");
 
@@ -69,12 +57,17 @@ public class LEDPattern {
 
   public int[][] update(int[][] colourBuff){
     if(duration >= 0 && Instant.now().isAfter(endTime)) return colourBuff;
+    System.out.println("----------|||" + LEDPattern.length);
     if(LEDPattern.length == 1) return LEDStates.get(0).setToBuff(colourBuff, LEDsRanges);
-
-    int sinceFlash = (int) lastFlash.until(Instant.now(), ChronoUnit.MILLIS);
+    System.out.println("----------");
+    int sinceFlash = lastFlash != null ? (int) lastFlash.until(Instant.now(), ChronoUnit.MILLIS) : 0;
     double ShiftStage = sinceFlash/duration;
 
-    if(ShiftStage < 0.8) return LEDStates.get(patternStep).setToBuff(colourBuff, LEDsRanges);
+    if(true || ShiftStage < 0.8) {
+      int[][] a = LEDStates.get(patternStep).setToBuff(colourBuff, LEDsRanges);
+      //System.out.println("--"+ a[0] +" "+ a[1] +" "+ a[2]);
+      return LEDStates.get(patternStep).setToBuff(colourBuff, LEDsRanges);
+    }
 
     ShiftStage = (ShiftStage-0.8) * 5;
     int[][] current = LEDStates.get(patternStep).setToBuff(new int[colourBuff.length][], LEDsRanges);
@@ -102,15 +95,17 @@ public class LEDPattern {
     Constants cnst = Constants.getInstance();
     Variables vars = Variables.getInstance();
     LEDPattern DirLEDNorm = new LEDPattern(
-        LEDState.newLEDState("EndsFor", new int[][] {{255,0,0},{0,255,0}}, new int[] {1,1,1,2,2,2}),
+        new String[] {LEDState.newLEDState("EndsFor", new int[][] {{255,0,0},{0,255,0}}, 
+        new int[] {1,1,1,2,2,2})}, new short[] {1,2},
         new short[][] {{(short) cnst.LED_ZONES[0], (short) (cnst.LED_ZONES[1]-1)}, 
                        {(short) cnst.LED_ZONES[2], (short) (cnst.LED_ZONES[3]-1)}},
-        -1, 5);
+        -1, -1, 5);
     LEDPattern DirLEDRev = new LEDPattern(
-        LEDState.newLEDState("EndsBac", new int[][] {{255,0,0},{0,255,0}}, new int[] {2,2,2,1,1,1}), 
+        new String[] {LEDState.newLEDState("EndsBac", new int[][] {{255,0,0},{0,255,0}}, new int[] {2,2,2,1,1,1})},
+        new short[] {1,2}, 
         new short[][] {{(short) cnst.LED_ZONES[0], (short) (cnst.LED_ZONES[1]-1)}, 
                        {(short) cnst.LED_ZONES[2], (short) (cnst.LED_ZONES[3]-1)}},
-        -1, 5);
+        -1, -1, 5);
     LEDControl.setPattern(vars.invertDriveDirection ? DirLEDNorm : DirLEDRev);
   }
 }

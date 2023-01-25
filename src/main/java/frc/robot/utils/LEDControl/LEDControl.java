@@ -55,18 +55,14 @@ public class LEDControl {
 
   private void update(){
     wipeExpired();
-    int[][] buffer = new int[cnst.LED_STRING_LENGTH][3];
+    int[][] buffer = new int[cnst.LED_STRING_LENGTH][];
 
     for(int i = 0; i < PatternQueue.size(); i++){
       buffer = PatternQueue.get(i).update(buffer);
-      for(int j = 0; j < LEDsBuff.getLength(); j++){
-        System.out.println(buffer[0] + " " + buffer[1] + " " + buffer[2]);
-      }
     }
-    System.out.println("--");
     for(int i = 0; i < LEDsBuff.getLength(); i++){
+      //if(buffer[i] != null) System.out.println(buffer[i][0] +" "+ buffer[i][1] +" "+ buffer[i][2]);
       if(buffer[i] != null) LEDsBuff.setRGB(i, buffer[i][0], buffer[i][1], buffer[i][2]);
-      else System.out.println("null");
     }
     LEDs.setData(LEDsBuff);
   }
