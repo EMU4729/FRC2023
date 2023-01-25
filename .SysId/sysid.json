@@ -1,5 +1,7 @@
 {
   "SysId": {
-    "Analysis Type": "General Mechanism"
+    "Analysis Type": "Drivetrain",
+    "mode": "Client (NT4)",
+    "serverTeam": "4729"
   }
 }
