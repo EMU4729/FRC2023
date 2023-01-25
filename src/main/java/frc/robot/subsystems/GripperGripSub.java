@@ -15,8 +15,6 @@ public class GripperGripSub extends SubsystemBase {
     servoTwo.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
   }
 
-  // TODO: Check if the open and close methods are the right way around
-
   /** Opens the gripper */
   public void open() {
     servoOne.set(1);
