@@ -1,6 +1,6 @@
 {
   "counts per rotation": 2048.0,
-  "encoder type": "Built-in",
+  "encoder type": "roboRIO quadrature",
   "encoding": false,
   "gearing denominator": 1.0,
   "gearing numerator": 1.0,
@@ -25,7 +25,7 @@
     true,
     false
   ],
-  "secondary encoder inverted": false,
+  "secondary encoder inverted": true,
   "secondary encoder ports": [
     2,
     3

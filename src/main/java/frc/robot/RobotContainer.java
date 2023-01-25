@@ -52,7 +52,7 @@ public class RobotContainer {
     
     oi.pilot.start().onTrue(new InstantCommand(() -> {
       vars.invertDriveDirection = !vars.invertDriveDirection;
-      LEDPattern.runDirLEDS();
+      // LEDPattern.runDirLEDS();
     }));
 
     // Game Piece LEDs
@@ -61,8 +61,8 @@ public class RobotContainer {
     // oi.pilot.leftBumper().onTrue(new InstantCommand(() ->
     // LEDControl.getInstance().runConeLights()));
 
-    oi.pilot.povUp().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
-    oi.pilot.povDown().onTrue(new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip));
+    // oi.pilot.povUp().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
+    // oi.pilot.povDown().onTrue(new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip));
 
     // Drive bindings handled in teleop command
   }

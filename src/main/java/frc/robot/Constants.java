@@ -58,9 +58,9 @@ public final class Constants {
 
   // Gripper + Arm
   /** Information for Upper Arm Motor */
-  public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(-1, MotorInfo.Type.Never).withBrake();
+  public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake();
   /** Information for Fore Arm Motor */
-  public final MotorInfo FORE_ARM_MOTOR_ID = new MotorInfo(-1, MotorInfo.Type.Never).withBrake();
+  public final MotorInfo FORE_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake();
   /** Length of the forearm, in metres @wip update arm length */
   public final double FORE_ARM_LENGTH = 1; // UPDATE
   /** Length of the upper arm, in metres @wip update arm length */
