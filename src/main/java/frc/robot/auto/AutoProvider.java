@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class AutoProvider {
   private static Optional<AutoProvider> inst = Optional.empty();
 
-  private final Command auto = new Auto();
+  private final Command auto = new PathWeaverAuto();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   private AutoProvider() {
-    chooser.setDefaultOption("Default Auto", auto);
+    chooser.setDefaultOption("PathWeaver Auto", auto);
     chooser.addOption("Disable Auto", new InstantCommand());
     SmartDashboard.putData(chooser);
   }

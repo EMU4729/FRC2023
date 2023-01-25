@@ -16,16 +16,20 @@ import frc.robot.Constants;
 import frc.robot.Subsystems;
 import frc.robot.utils.logger.Logger;
 
-public class Auto extends SequentialCommandGroup {
+public class PathWeaverAuto extends SequentialCommandGroup {
   public final Constants cnst = Constants.getInstance();
 
-  public Auto() {
+  public PathWeaverAuto() {
+    this(Constants.getInstance().PATHWEAVER_PATH);
+  }
+
+  public PathWeaverAuto(String pathweaverPath) {
     Trajectory trajectory = new Trajectory();
     try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(cnst.PATHWEAVER_PATH);
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(pathweaverPath);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
     } catch (IOException e) {
-      Logger.error("Auto : Unable to open trajectory: " + cnst.PATHWEAVER_PATH + e);
+      Logger.error("Auto : Unable to open trajectory: " + pathweaverPath + e);
     }
 
     RamseteCommand ramseteCommand = new RamseteCommand(
