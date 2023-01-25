@@ -81,7 +81,7 @@ public final class Constants {
   /** PID Constants for Charge Pad Balance Command */
   public final PIDControllerConstants BALANCE_CHARGE_PAD_PID = new PIDControllerConstants(0.1, 0, 0); // UPDATE
   /** Charge Pad Balance Angle Deadband */
-  public final double BALANCE_CHARGE_PAD_DEADBAND = 5;
+  public final double BALANCE_CHARGE_PAD_DEADBAND = 2;
 
   // Gripper + Arm
   /** Information for Upper Arm Motor */
