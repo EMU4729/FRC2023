@@ -60,7 +60,9 @@ public class TeleopDriveArcade extends CommandBase {
     }
 
     // flips the direction of forward based on controller button
-    throttle *= vars.invertDriveDirection ? 1 : -1;
+    if (vars.invertDriveDirection) {
+      throttle *= -1;
+    }
 
     ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
 
