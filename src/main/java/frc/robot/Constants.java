@@ -113,8 +113,9 @@ public final class Constants {
   /** Subarm Pivot Endoer Upper Bound */
   public final double SUBARM_PIVOT_UPPER_LIMIT = 180;
   /**
-   * Information for Subarm Rotation Motor @wip update everything but the encoder
-   * steps, that's fine
+   * Information for Subarm Rotation Motor
+   * 
+   * @wip update everything but the encoder steps, that's fine
    */
   public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX)
       .encoder(new int[] { 100, 100 }, 360. / 44.4 / 4.);
