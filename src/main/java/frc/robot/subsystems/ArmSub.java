@@ -116,22 +116,22 @@ public class ArmSub extends SubsystemBase {
   // TODO: Update the coordinates on all the preconfigured methods
   /** Move the arm to the low field position */
   public void lowField() {
-    setCoords(1, 1);
+    setCoords(1, 0.5);
   }
 
   /** Move the arm to the far field position */
   public void farField() {
-    setCoords(1, 1);
+    setCoords(2, 0.5);
   }
 
   /** Move the arm to the lower rung position */
   public void lowerRung() {
-    setCoords(1, 1);
+    setCoords(1.5, 1);
   }
 
   /** Move the arm to the upper rung position */
   public void upperRung() {
-    setCoords(1, 1);
+    setCoords(2, 1.5);
   }
 
   private double getForeArmAngle() {
