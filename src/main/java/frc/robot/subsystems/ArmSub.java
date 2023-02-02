@@ -134,14 +134,6 @@ public class ArmSub extends SubsystemBase {
     setCoords(2, 1.5);
   }
 
-  private double getForeArmAngle() {
-    return foreArmEncoder.getDistance();
-  }
-
-  private double getUpperArmAngle() {
-    return upperArmEncoder.getDistance();
-  }
-
   /**
    * Zeroes the upper and fore arm encoders.
    * Use this method when the upper arm pointing up and the fore arm is pointed
@@ -156,8 +148,8 @@ public class ArmSub extends SubsystemBase {
   public void periodic() {
     // THIS CODE IS UNTESTED. IT CAN CAUSE SOME SERIOUS DAMAGE.
     if (false) {
-      double upperArmOutput = upperArmController.calculate(getUpperArmAngle());
-      double foreArmOutput = foreArmController.calculate(getForeArmAngle());
+      double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance());
+      double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
       upperArmOutput = MathUtil.clamp(upperArmOutput, -1, 1);
       foreArmOutput = MathUtil.clamp(foreArmOutput, -1, 1);

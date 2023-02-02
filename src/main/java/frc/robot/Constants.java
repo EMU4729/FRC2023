@@ -85,9 +85,11 @@ public final class Constants {
 
   // Gripper + Arm
   /** Information for Upper Arm Motor */
-  public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake();
+  public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake()
+      .encoder(new int[] { 100, 100 }, 59.883 / 256. / 1000);
   /** Information for Fore Arm Motor */
-  public final MotorInfo FORE_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake();
+  public final MotorInfo FORE_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake()
+      .encoder(new int[] { 100, 100 }, 59.883 / 256. / 1000);
   /** Length of the forearm, in metres @wip update arm length */
   public final double FORE_ARM_LENGTH = 1; // UPDATE
   /** Length of the upper arm, in metres @wip update arm length */
@@ -112,7 +114,7 @@ public final class Constants {
   public final double SUBARM_PIVOT_UPPER_LIMIT = 180;
   /** Information for Subarm Rotation Motor @wip update everything */
   public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX)
-      .encoder(new int[] { 100, 100 }, 360. / 44.4);
+      .encoder(new int[] { 100, 100 }, 360. / 44.4 / 4.);
 
   // Controllers
   /** Port Number for Pilot Xbox Controller */

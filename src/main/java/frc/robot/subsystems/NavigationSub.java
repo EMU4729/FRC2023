@@ -63,15 +63,12 @@ public class NavigationSub extends SubsystemBase {
     }
   }
 
-  /**
-   * Returns the currently-estimated pose of the robot.
-   * 
-   * @return The pose as a Pose2d.
-   */
+  /** @return The currently-estimated pose of the robot. */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
 
+  /** @return The wheel speeds of the robot */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftEncoderRate(), getRightEncoderRate());
   }
