@@ -53,7 +53,7 @@ public class ArmSub extends SubsystemBase {
     beta = Math.toDegrees(beta);
     theta = Math.toDegrees(theta);
 
-    double[] res = { alpha + theta, beta };
+    double[] res = { alpha + theta - 90, beta };
     return res;
   }
 
@@ -135,14 +135,11 @@ public class ArmSub extends SubsystemBase {
   }
 
   private double getForeArmAngle() {
-    // No offset needed as the angle between it and the upper arm will be 0 at
-    // calibration.
     return foreArmEncoder.getDistance();
   }
 
   private double getUpperArmAngle() {
-    // Adds 90 degrees to offset the calibration value.
-    return upperArmEncoder.getDistance() + 90;
+    return upperArmEncoder.getDistance();
   }
 
   /**
