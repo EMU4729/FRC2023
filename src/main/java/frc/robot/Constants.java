@@ -106,9 +106,13 @@ public final class Constants {
   // Subarm
   /** Subarm Pivot Servo Channel @wip update servo port */
   public final int SUBARM_PIVOT_SERVO = 2;
+  /** Subarm Pivot Encoder Lower Limit */
+  public final double SUBARM_PIVOT_LOWER_LIMIT = -5;
+  /** Subarm Pivot Endoer Upper Bound */
+  public final double SUBARM_PIVOT_UPPER_LIMIT = 180;
   /** Information for Subarm Rotation Motor @wip update everything */
   public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX)
-      .encoder(new int[] { 100, 100 }, 69. / 420.);
+      .encoder(new int[] { 100, 100 }, 360. / 44.4);
 
   // Controllers
   /** Port Number for Pilot Xbox Controller */
