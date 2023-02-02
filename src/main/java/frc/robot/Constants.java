@@ -86,10 +86,10 @@ public final class Constants {
   // Gripper + Arm
   /** Information for Upper Arm Motor */
   public final MotorInfo UPPER_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake()
-      .encoder(new int[] { 100, 100 }, 59.883 / 256. / 1000);
+      .encoder(new int[] { 100, 100 }, 360. / 2048.); // @wip account for gearing ratios to the actual arm
   /** Information for Fore Arm Motor */
   public final MotorInfo FORE_ARM_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX).withBrake()
-      .encoder(new int[] { 100, 100 }, 59.883 / 256. / 1000);
+      .encoder(new int[] { 100, 100 }, 360. / 2048.); // @wip account for gearing ratios to the actual arm
   /** Length of the forearm, in metres @wip update arm length */
   public final double FORE_ARM_LENGTH = 1; // UPDATE
   /** Length of the upper arm, in metres @wip update arm length */
