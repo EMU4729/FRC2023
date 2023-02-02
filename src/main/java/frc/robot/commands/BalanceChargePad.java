@@ -10,7 +10,7 @@ public class BalanceChargePad extends CommandBase {
   public final PIDController controller = cnst.BALANCE_CHARGE_PAD_PID.createPIDController();
 
   public BalanceChargePad() {
-    addRequirements(Subsystems.nav, Subsystems.drive);
+    addRequirements(Subsystems.drive);
   }
 
   @Override

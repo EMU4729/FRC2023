@@ -92,6 +92,8 @@ public final class Constants {
   public final double FORE_ARM_LENGTH = 1; // UPDATE
   /** Length of the upper arm, in metres @wip update arm length */
   public final double UPPER_ARM_LENGTH = 1; // UPDATE
+  /** Velocity of the arm movements */
+  public final double ARM_VELOCITY = 0.05;
   /** PID Constants for Upper Arm Movement @wip update constants */
   public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.2, 0, 0.8); // UPDATE
   /** PID Constants for Fore Arm Movement */
@@ -100,7 +102,13 @@ public final class Constants {
   public final int GRIPPER_GRIP_SERVO_1 = 0; // UPDATE
   /** Gripper Grip Servo 2 Channel @wip update servo port */
   public final int GRIPPER_GRIP_SERVO_2 = 1; // UPDATE
-  // TODO: Add gripper pivot servo(s)
+
+  // Subarm
+  /** Subarm Pivot Servo Channel @wip update servo port */
+  public final int SUBARM_PIVOT_SERVO = 2;
+  /** Information for Subarm Rotation Motor @wip update everything */
+  public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(100, MotorInfo.Type.TalonSRX)
+      .encoder(new int[] { 100, 100 }, 69. / 420.);
 
   // Controllers
   /** Port Number for Pilot Xbox Controller */
