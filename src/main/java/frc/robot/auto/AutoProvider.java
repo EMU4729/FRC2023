@@ -13,11 +13,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class AutoProvider {
   private static Optional<AutoProvider> inst = Optional.empty();
 
-  private final Command auto = new DefaultAuto();
+  private final Command middleAuto = new MiddleAuto();
+  private final Command middleAutoWithoutPickup = new MiddleAutoWithoutPickup();
+  private final Command leftAuto = new LeftAuto();
+  private final Command rightAuto = new RightAuto();
+
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   private AutoProvider() {
-    chooser.setDefaultOption("Default Auto", auto);
+    chooser.setDefaultOption("Middle Auto", middleAuto);
+    chooser.addOption("Middle Auto Without Pickup", middleAutoWithoutPickup);
+    chooser.addOption("Left Auto", leftAuto);
+    chooser.addOption("Right Auto", rightAuto);
     chooser.addOption("Disable Auto", new InstantCommand());
     SmartDashboard.putData(chooser);
   }
@@ -29,7 +36,7 @@ public class AutoProvider {
     return inst.get();
   }
 
-  public Command getAuto() {
+  public Command getMiddleAuto() {
     return chooser.getSelected();
   }
 }
