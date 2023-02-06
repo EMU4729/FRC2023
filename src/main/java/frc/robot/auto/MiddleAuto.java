@@ -12,16 +12,23 @@ public class MiddleAuto extends SequentialCommandGroup {
 
   public MiddleAuto() {
     addCommands(
+        // Drop off preloaded game object
         new InstantCommand(Subsystems.arm::upperRung, Subsystems.arm),
         new WaitCommand(2),
         new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
         new WaitCommand(1),
+
+        // Move to middle game object in middle of field
         new PathWeaverCommand("paths/MidDropOffToMidGameObject.wpilib.json"),
+
+        // Pick up game object
         new InstantCommand(Subsystems.arm::farField, Subsystems.arm),
         new WaitCommand(2),
         new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip),
         new WaitCommand(1),
         new InstantCommand(Subsystems.arm::lowField, Subsystems.arm),
+
+        // Move to charge pad and balance
         new PathWeaverCommand("paths/MidGameObjectToChargePad.wpilib.json"),
         new BalanceChargePad());
   }

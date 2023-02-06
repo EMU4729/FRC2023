@@ -11,11 +11,16 @@ public class LeftAuto extends SequentialCommandGroup {
 
   public LeftAuto() {
     addCommands(
+        // Drop preloaded game object
         new InstantCommand(Subsystems.arm::upperRung, Subsystems.arm),
         new WaitCommand(2),
         new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
         new WaitCommand(1),
+
+        // Move to left game object in middle of field
         new PathWeaverCommand("paths/LeftDropOffToLeftGameObject.wpilib.json"),
+
+        // Pick up game object
         new InstantCommand(Subsystems.arm::farField, Subsystems.arm),
         new WaitCommand(2),
         new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip),

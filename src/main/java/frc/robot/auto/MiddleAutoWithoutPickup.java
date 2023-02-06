@@ -12,10 +12,13 @@ public class MiddleAutoWithoutPickup extends SequentialCommandGroup {
 
   public MiddleAutoWithoutPickup() {
     addCommands(
+        // Drop off preloaded game object
         new InstantCommand(Subsystems.arm::upperRung, Subsystems.arm),
         new WaitCommand(2),
         new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
         new WaitCommand(1),
+
+        // Move to charge pad via past the charge pad (to get points) and balance
         new PathWeaverCommand("paths/MidDropOffToChargePadViaPastChargePad.wpilib.json"),
         new BalanceChargePad());
   }
