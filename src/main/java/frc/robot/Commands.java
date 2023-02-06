@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.commands.ArmPickUp;
 import frc.robot.commands.BalanceChargePad;
 
 /**
@@ -7,4 +8,5 @@ import frc.robot.commands.BalanceChargePad;
  */
 public class Commands {
   public static BalanceChargePad balanceChargePad = new BalanceChargePad();
+  public static ArmPickUp armPickUp = new ArmPickUp();
 }
