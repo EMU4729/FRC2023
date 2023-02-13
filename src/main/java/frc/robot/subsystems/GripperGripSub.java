@@ -23,7 +23,7 @@ public class GripperGripSub extends SubsystemBase {
 
   /** Closes the gripper */
   public void close() {
-    servoOne.set(-1);
-    servoTwo.set(-1);
+    servoOne.set(0);
+    servoTwo.set(0);
   }
 }
