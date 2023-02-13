@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -115,23 +116,35 @@ public class ArmSub extends SubsystemBase {
 
   // TODO: Update the coordinates on all the preconfigured methods
   /** Move the arm to the low field position */
-  public void lowField() {
-    setCoords(1, 0.5);
+  public Command lowField() {
+    return moveTo(1, 0.5);
   }
 
   /** Move the arm to the far field position */
-  public void farField() {
-    setCoords(2, 0.5);
+  public Command farField() {
+    return moveTo(2, 0.5);
   }
 
   /** Move the arm to the lower rung position */
-  public void lowerRung() {
-    setCoords(1.5, 1);
+  public Command lowerRung() {
+    return moveTo(1.5, 1);
   }
 
   /** Move the arm to the upper rung position */
-  public void upperRung() {
-    setCoords(2, 1.5);
+  public Command upperRung() {
+    return moveTo(2, 1.5);
+  }
+
+  public Command moveTo(double x, double y) {
+    return new FunctionalCommand(
+        () -> this.setCoords(x, y),
+        () -> {
+        },
+        (interrupted) -> {
+        },
+        () -> Math.abs(upperArmTargetAngle - upperArmEncoder.getDistance()) < 3
+            && Math.abs(foreArmTargetAngle - foreArmEncoder.getDistance()) < 3,
+        this);
   }
 
   /**

@@ -9,6 +9,7 @@ public class ArmPickUp extends CommandBase {
 
   public ArmPickUp() {
     addRequirements(Subsystems.arm);
+    andThen(Subsystems.arm.lowField());
   }
 
   public double distanceFromStart() {
@@ -33,10 +34,5 @@ public class ArmPickUp extends CommandBase {
   public boolean isFinished() {
     double distance = distanceFromStart();
     return distance <= 0.5 || distance >= 2.5;
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    Subsystems.arm.lowField();
   }
 }

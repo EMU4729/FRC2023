@@ -1,5 +1,6 @@
 package frc.robot.auto;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -13,8 +14,7 @@ public class MiddleAuto extends SequentialCommandGroup {
   public MiddleAuto() {
     addCommands(
         // Drop off preloaded game object
-        new InstantCommand(Subsystems.arm::upperRung, Subsystems.arm),
-        new WaitCommand(2),
+        Subsystems.arm.upperRung(),
         new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
         new WaitCommand(1),
 
@@ -22,14 +22,16 @@ public class MiddleAuto extends SequentialCommandGroup {
         new PathWeaverCommand("paths/MidDropOffToMidGameObject.wpilib.json"),
 
         // Pick up game object
-        new InstantCommand(Subsystems.arm::farField, Subsystems.arm),
-        new WaitCommand(2),
+        Subsystems.arm.farField(),
         new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip),
         new WaitCommand(1),
-        new InstantCommand(Subsystems.arm::lowField, Subsystems.arm),
 
-        // Move to charge pad and balance
-        new PathWeaverCommand("paths/MidGameObjectToChargePad.wpilib.json"),
-        new BalanceChargePad());
+        Commands.sequence(
+            // Move to charge pad and balance
+            new PathWeaverCommand("paths/MidGameObjectToChargePad.wpilib.json"),
+            new BalanceChargePad())
+            // Move the arm to lowfield concurrently
+            .alongWith(
+                Subsystems.arm.lowField()));
   }
 }

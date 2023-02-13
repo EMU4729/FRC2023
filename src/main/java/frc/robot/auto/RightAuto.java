@@ -12,8 +12,7 @@ public class RightAuto extends SequentialCommandGroup {
   public RightAuto() {
     addCommands(
         // Drop off preloaded game object
-        new InstantCommand(Subsystems.arm::upperRung, Subsystems.arm),
-        new WaitCommand(2),
+        Subsystems.arm.upperRung(),
         new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
         new WaitCommand(1),
 
@@ -21,10 +20,9 @@ public class RightAuto extends SequentialCommandGroup {
         new PathWeaverCommand("paths/RightDropOffToRightGameObject.wpilib.json"),
 
         // Pick up game object
-        new InstantCommand(Subsystems.arm::farField, Subsystems.arm),
-        new WaitCommand(2),
+        Subsystems.arm.farField(),
         new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip),
         new WaitCommand(1),
-        new InstantCommand(Subsystems.arm::lowField, Subsystems.arm));
+        Subsystems.arm.lowField());
   }
 }

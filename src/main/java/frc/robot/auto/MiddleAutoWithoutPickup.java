@@ -13,8 +13,7 @@ public class MiddleAutoWithoutPickup extends SequentialCommandGroup {
   public MiddleAutoWithoutPickup() {
     addCommands(
         // Drop off preloaded game object
-        new InstantCommand(Subsystems.arm::upperRung, Subsystems.arm),
-        new WaitCommand(2),
+        Subsystems.arm.upperRung(),
         new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
         new WaitCommand(1),
 
