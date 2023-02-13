@@ -20,6 +20,9 @@ public class ShuffleControl {
 
   // nav tab
   public void setGyro(double gyro, double encode) {
-    navTab.setGyroAngle(gyro, encode);
+    // This is commented out as the nav tab is entirely graphs and absolutely hogs
+    // the driver station's memory
+
+    // navTab.setGyroAngle(gyro, encode);
   }
 }
