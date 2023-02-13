@@ -115,22 +115,22 @@ public class ArmSub extends SubsystemBase {
   }
 
   // TODO: Update the coordinates on all the preconfigured methods
-  /** Move the arm to the low field position */
+  /** @return A {@link Command} that moves the arm to the low field position */
   public Command lowField() {
     return moveTo(1, 0.5);
   }
 
-  /** Move the arm to the far field position */
+  /** @return A {@link Command} that moves the arm to the far field position */
   public Command farField() {
     return moveTo(2, 0.5);
   }
 
-  /** Move the arm to the lower rung position */
+  /** @return a {@link Command} that moves the arm to the lower rung position */
   public Command lowerRung() {
     return moveTo(1.5, 1);
   }
 
-  /** Move the arm to the upper rung position */
+  /** @return a {@link Command} that moves the arm to the upper rung position */
   public Command upperRung() {
     return moveTo(2, 1.5);
   }
