@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,11 +16,17 @@ public class ArmSub extends SubsystemBase {
   private final PIDController upperArmController = cnst.UPPER_ARM_PID.createPIDController();
   private final PIDController foreArmController = cnst.FORE_ARM_PID.createPIDController();
 
-  private final MotorController upperArmMotor = cnst.UPPER_ARM_MOTOR_ID.createMotorController();
-  private final MotorController foreArmMotor = cnst.FORE_ARM_MOTOR_ID.createMotorController();
+  private final MotorController upperArmMasterMotor = cnst.UPPER_ARM_MASTER_MOTOR_ID.createMotorController();
+  private final MotorController upperArmSlaveMotor = cnst.UPPER_ARM_SLAVE_MOTOR_ID.createMotorController();
 
-  private final Encoder upperArmEncoder = cnst.UPPER_ARM_MOTOR_ID.createEncoder();
-  private final Encoder foreArmEncoder = cnst.FORE_ARM_MOTOR_ID.createEncoder();
+  private final MotorController foreArmMasterMotor = cnst.FORE_ARM_MASTER_MOTOR_ID.createMotorController();
+  private final MotorController foreArmSlaveMotor = cnst.FORE_ARM_SLAVE_MOTOR_ID.createMotorController();
+
+  private final MotorControllerGroup upperArmMotors = new MotorControllerGroup(upperArmMasterMotor, upperArmSlaveMotor);
+  private final MotorControllerGroup foreArmMotors = new MotorControllerGroup(foreArmMasterMotor, foreArmSlaveMotor);
+
+  private final Encoder upperArmEncoder = cnst.UPPER_ARM_MASTER_MOTOR_ID.createEncoder();
+  private final Encoder foreArmEncoder = cnst.FORE_ARM_MASTER_MOTOR_ID.createEncoder();
 
   private boolean invert = false;
 
@@ -167,8 +174,8 @@ public class ArmSub extends SubsystemBase {
       upperArmOutput = MathUtil.clamp(upperArmOutput, -1, 1);
       foreArmOutput = MathUtil.clamp(foreArmOutput, -1, 1);
 
-      upperArmMotor.set(upperArmOutput);
-      foreArmMotor.set(foreArmOutput);
+      upperArmMotors.set(upperArmOutput);
+      foreArmMotors.set(foreArmOutput);
     }
   }
 }
