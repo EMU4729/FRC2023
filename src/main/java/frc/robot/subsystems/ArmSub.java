@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utils.AsyncTimer;
+import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
 public class ArmSub extends SubsystemBase {
@@ -38,11 +38,24 @@ public class ArmSub extends SubsystemBase {
   private double upperArmTargetAngle;
   private double foreArmTargetAngle;
 
-  private AsyncTimer logTimer = new AsyncTimer(1000);
-
   public ArmSub() {
     upperArmController.setTolerance(3);
     foreArmController.setTolerance(3);
+  }
+
+  /**
+   * Updates the arm tab in shuffleboard. Call this function regularly.
+   * 
+   * @param upperArmOutput The speed of the upper arm motors
+   * @param foreArmOutput  The speed of the fore arm motors
+   */
+  private void updateShuffleboard(double upperArmOutput, double foreArmOutput) {
+    ShuffleControl.armTab.setOutputs(upperArmOutput, foreArmOutput);
+    ShuffleControl.armTab.setTargetCoords(targetX, targetY);
+    ShuffleControl.armTab.setTargetAngles(upperArmTargetAngle, foreArmTargetAngle);
+    ShuffleControl.armTab.setEncoderAngles(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+    ShuffleControl.armTab.setControllerErrors(upperArmController.getPositionError(),
+        foreArmController.getPositionError());
   }
 
   /**
@@ -76,10 +89,10 @@ public class ArmSub extends SubsystemBase {
 
     // Return previous results if coordinates are invalid
     if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
-      return new double[] {foreArmTargetAngle, upperArmTargetAngle};
+      return new double[] { foreArmTargetAngle, upperArmTargetAngle };
     }
 
-    return new double[] {foreArmAngle, upperArmAngle};
+    return new double[] { foreArmAngle, upperArmAngle };
   }
 
   /** Inverts the arm. */
@@ -202,29 +215,15 @@ public class ArmSub extends SubsystemBase {
 
     if (!calibrated) {
       // Don't do anything if no calibration has happened.
+      updateShuffleboard(0, 0);
       return;
     }
-
 
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
     upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
     foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
-    if (logTimer.isFinished()) {
-      Logger.info("--- ARMSUB DUMP START ---");
-      Logger.info("Upper Arm Output: " + upperArmOutput);
-      Logger.info("Fore Arm Output: " + foreArmOutput);
-      Logger.info("Target Coords: " + targetX + ", " + targetY);
-      Logger.info("Upper Arm Target Angle: " + upperArmTargetAngle);
-      Logger.info("Fore Arm Target Angle: " + foreArmTargetAngle);
-      Logger.info("Upper Arm Encoder Distance: " + upperArmEncoder.getDistance());
-      Logger.info("Fore Arm Encoder Distance: " + foreArmEncoder.getDistance());
-      Logger.info("Upper Arm Error: " + upperArmController.getPositionError());
-      Logger.info("Fore Arm Error: " + foreArmController.getPositionError());
-      Logger.info("--- ARMSUB DUMP END ---");
-      logTimer = new AsyncTimer(1000);
-    }
 
     if (!upperArmController.atSetpoint()) {
       upperArmMotors.set(upperArmOutput);
@@ -237,5 +236,7 @@ public class ArmSub extends SubsystemBase {
     } else {
       foreArmMotors.stopMotor();
     }
+
+    updateShuffleboard(upperArmOutput, foreArmOutput);
   }
 }
