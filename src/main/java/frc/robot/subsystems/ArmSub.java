@@ -29,11 +29,17 @@ public class ArmSub extends SubsystemBase {
   private final Encoder foreArmEncoder = cnst.FORE_ARM_MASTER_MOTOR_ID.createEncoder();
 
   private boolean invert = false;
+  private boolean calibrated = false;
 
   private double targetX;
   private double targetY;
   private double upperArmTargetAngle;
   private double foreArmTargetAngle;
+
+  public ArmSub() {
+    upperArmController.setTolerance(3);
+    foreArmController.setTolerance(3);
+  }
 
   /**
    * Calculates the angles of the two arms from a given pose with
@@ -72,6 +78,25 @@ public class ArmSub extends SubsystemBase {
   }
 
   /**
+   * Sets the target angles for the arm
+   * 
+   * @param upperArm The target angle for the upper arm
+   * @param foreArm  The target angle for the fore arm
+   */
+  private void setAngles(double upperArm, double foreArm) {
+    upperArmTargetAngle = MathUtil.clamp(upperArm, 0, 90);
+    foreArmTargetAngle = MathUtil.clamp(foreArm, 0, 180);
+
+    if (invert) {
+      upperArmTargetAngle *= -1;
+      foreArmTargetAngle *= -1;
+    }
+
+    upperArmController.setSetpoint(upperArmTargetAngle);
+    foreArmController.setSetpoint(foreArmTargetAngle);
+  }
+
+  /**
    * Sets the target coordinates for the arm.
    * 
    * @param x The target x
@@ -81,16 +106,7 @@ public class ArmSub extends SubsystemBase {
     targetX = x;
     targetY = y;
     double[] res = ik(targetX, targetY);
-    upperArmTargetAngle = MathUtil.clamp(res[0], 0, 90);
-    foreArmTargetAngle = MathUtil.clamp(res[1], 0, 180);
-
-    if (invert) {
-      upperArmTargetAngle *= -1;
-      foreArmTargetAngle *= -1;
-    }
-
-    upperArmController.setSetpoint(upperArmTargetAngle);
-    foreArmController.setSetpoint(foreArmTargetAngle);
+    setAngles(res[0], res[1]);
   }
 
   /** Returns a {@link Command} that moves the arm up indefinitely. */
@@ -149,9 +165,7 @@ public class ArmSub extends SubsystemBase {
         },
         (interrupted) -> {
         },
-        () -> Math.abs(upperArmTargetAngle - upperArmEncoder.getDistance()) < 3
-            && Math.abs(foreArmTargetAngle - foreArmEncoder.getDistance()) < 3,
-        this);
+        () -> foreArmController.atSetpoint() && upperArmController.atSetpoint(), this);
   }
 
   /**
@@ -162,20 +176,26 @@ public class ArmSub extends SubsystemBase {
   public void calibrate() {
     upperArmEncoder.reset();
     foreArmEncoder.reset();
+    setAngles(0, 0);
+    calibrated = true;
   }
 
   @Override
   public void periodic() {
-    // THIS CODE IS UNTESTED. IT CAN CAUSE SOME SERIOUS DAMAGE.
-    if (false) {
-      double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance());
-      double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
+    // PRAY TO GOD THAT THIS CODE WORKS.
 
-      upperArmOutput = MathUtil.clamp(upperArmOutput, -1, 1);
-      foreArmOutput = MathUtil.clamp(foreArmOutput, -1, 1);
-
-      upperArmMotors.set(upperArmOutput);
-      foreArmMotors.set(foreArmOutput);
+    if (!calibrated) {
+      // Don't do anything if no calibration has happened.
+      return;
     }
+
+    double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance());
+    double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
+
+    upperArmOutput = MathUtil.clamp(upperArmOutput, -1, 1);
+    foreArmOutput = MathUtil.clamp(foreArmOutput, -1, 1);
+
+    upperArmMotors.set(upperArmOutput);
+    foreArmMotors.set(foreArmOutput);
   }
 }

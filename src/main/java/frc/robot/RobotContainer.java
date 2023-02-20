@@ -43,21 +43,30 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Invert Drive
 
-    oi.pilot.start().onTrue(new InstantCommand(() -> {
-      vars.invertDriveDirection = !vars.invertDriveDirection;
-      // LEDPattern.runDirLEDS();
-    }));
+    // oi.pilot.start().onTrue(new InstantCommand(() -> {
+    // vars.invertDriveDirection = !vars.invertDriveDirection;
+    // // LEDPattern.runDirLEDS();
+    // }));
 
-    // Game Piece LEDs
-    // oi.pilot.rightBumper().onTrue(new InstantCommand(() ->
-    // LEDControl.getInstance().runCubeLights()));
-    // oi.pilot.leftBumper().onTrue(new InstantCommand(() ->
-    // LEDControl.getInstance().runConeLights()));
+    // Calibration
+    oi.pilot.start().onTrue(new InstantCommand(Subsystems.arm::calibrate, Subsystems.arm));
 
-    // oi.pilot.povUp().onTrue(new InstantCommand(Subsystems.gripperGrip::open,
-    // Subsystems.gripperGrip));
-    // oi.pilot.povDown().onTrue(new InstantCommand(Subsystems.gripperGrip::close,
-    // Subsystems.gripperGrip));
+    // D-Pad Arm Bindings
+    oi.pilot.povUp().onTrue(Subsystems.arm.farField());
+    oi.pilot.povRight().onTrue(Subsystems.arm.lowField());
+    oi.pilot.povDown().onTrue(Subsystems.arm.lowerRung());
+    oi.pilot.povLeft().onTrue(Subsystems.arm.upperRung());
+
+    // Fine arm movement bindings
+    oi.pilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
+    oi.pilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
+    oi.pilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveUp());
+    oi.pilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveDown());
+
+    // Arm Invert - DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS
+    // DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE
+    // THIS DO NOT USE THIS DO NOT USE THIS
+    oi.pilot.b().onTrue(new InstantCommand(Subsystems.arm::invert, Subsystems.arm));
 
     // Drive bindings handled in teleop command
   }
