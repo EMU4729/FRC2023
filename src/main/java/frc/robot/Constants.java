@@ -87,20 +87,16 @@ public final class Constants {
         // Gripper + Arm
         /** Information for Upper Arm Master Motor */
         public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 100, 100 }, 360. / 2048.); // @wip account for gearing ratios to the actual
-                                                                        // arm
+                        .encoder(new int[] { -1, -1 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                                                                      // arm
         /** Information for Upper Arm Slave Motor */
-        public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 100, 100 }, 360. / 2048.); // @wip account for gearing ratios to the actual
-                                                                        // arm
+        public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
         /** Information for Fore Arm Master Motor */
         public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 100, 100 }, 360. / 2048.); // @wip account for gearing ratios to the actual
-                                                                        // arm
+                        .encoder(new int[] { -1, -1 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                                                                      // arm
         /** Information for Fore Arm Slave Motor */
-        public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 100, 100 }, 360. / 2048.); // @wip account for gearing ratios to the actual
-                                                                        // arm
+        public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
         /** Length of the forearm, in metres @wip update arm length */
         public final double FORE_ARM_LENGTH = 1; // UPDATE
         /** Length of the upper arm, in metres @wip update arm length */
@@ -129,7 +125,7 @@ public final class Constants {
          * @wip update everything but the encoder steps, that's fine
          */
         public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
-                        .encoder(new int[] { 100, 100 }, 360. / 44.4 / 4.);
+                        .encoder(new int[] { -1, -1 }, 360. / 44.4 / 4.);
 
         // Controllers
         /** Port Number for Pilot Xbox Controller */

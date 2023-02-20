@@ -192,8 +192,8 @@ public class ArmSub extends SubsystemBase {
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance());
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
-    upperArmOutput = MathUtil.clamp(upperArmOutput, -1, 1);
-    foreArmOutput = MathUtil.clamp(foreArmOutput, -1, 1);
+    upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
+    foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
 
     upperArmMotors.set(upperArmOutput);
     foreArmMotors.set(foreArmOutput);
