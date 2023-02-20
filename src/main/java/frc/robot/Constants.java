@@ -87,13 +87,13 @@ public final class Constants {
         // Gripper + Arm
         /** Information for Upper Arm Master Motor */
         public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 0, 1 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                        .encoder(new int[] { 4, 5 }, 360. / 2048.); // @wip account for gearing ratios to the actual
                                                                     // arm
         /** Information for Upper Arm Slave Motor */
         public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
         /** Information for Fore Arm Master Motor */
         public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 2, 3 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                        .encoder(new int[] { 6, 7 }, 360. / 2048.); // @wip account for gearing ratios to the actual
                                                                     // arm
         /** Information for Fore Arm Slave Motor */
         public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
@@ -104,9 +104,9 @@ public final class Constants {
         /** Velocity of the arm movements */
         public final double ARM_VELOCITY = 0.05;
         /** PID Constants for Upper Arm Movement @wip update constants */
-        public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.001, 0, 0.008); // UPDATE
+        public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
         /** PID Constants for Fore Arm Movement */
-        public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.001, 0, 0.008); // UPDATE
+        public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
         /** Gripper Grip Servo 1 Channel @wip update servo port */
         public final int GRIPPER_GRIP_SERVO_1 = 0; // UPDATE
         /** Gripper Grip Servo 2 Channel @wip update servo port */
@@ -125,7 +125,7 @@ public final class Constants {
          * @wip update everything but the encoder steps, that's fine
          */
         public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
-                        .encoder(new int[] { -1, -1 }, 360. / 44.4 / 4.);
+                        .encoder(new int[] { 8, 9 }, 360. / 44.4 / 4.);
 
         // Controllers
         /** Port Number for Pilot Xbox Controller */

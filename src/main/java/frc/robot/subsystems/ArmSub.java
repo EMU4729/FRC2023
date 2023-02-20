@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utils.AsyncTimer;
+import frc.robot.utils.logger.Logger;
 
 public class ArmSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
@@ -36,6 +38,8 @@ public class ArmSub extends SubsystemBase {
   private double upperArmTargetAngle;
   private double foreArmTargetAngle;
 
+  private AsyncTimer logTimer = new AsyncTimer(1000);
+
   public ArmSub() {
     upperArmController.setTolerance(3);
     foreArmController.setTolerance(3);
@@ -56,7 +60,7 @@ public class ArmSub extends SubsystemBase {
 
     double r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-    double theta = Math.atan(y / x);
+    double theta = Math.atan2(y, x);
     double alpha = Math.acos(
         (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2))
             / (2 * a * r));
@@ -67,8 +71,15 @@ public class ArmSub extends SubsystemBase {
     beta = Math.toDegrees(beta);
     theta = Math.toDegrees(theta);
 
-    double[] res = { alpha + theta - 90, beta };
-    return res;
+    double foreArmAngle = alpha + theta - 90;
+    double upperArmAngle = beta;
+
+    // Return previous results if coordinates are invalid
+    if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
+      return new double[] {foreArmTargetAngle, upperArmTargetAngle};
+    }
+
+    return new double[] {foreArmAngle, upperArmAngle};
   }
 
   /** Inverts the arm. */
@@ -84,6 +95,10 @@ public class ArmSub extends SubsystemBase {
    * @param foreArm  The target angle for the fore arm
    */
   private void setAngles(double upperArm, double foreArm) {
+    if (!calibrated) {
+      Logger.warn("ArmSub : Arm hasn't been calibrated yet!");
+    }
+
     upperArmTargetAngle = MathUtil.clamp(upperArm, 0, 90);
     foreArmTargetAngle = MathUtil.clamp(foreArm, 0, 180);
 
@@ -178,6 +193,7 @@ public class ArmSub extends SubsystemBase {
     foreArmEncoder.reset();
     setAngles(0, 0);
     calibrated = true;
+    Logger.info("ArmSub : Calibrated!");
   }
 
   @Override
@@ -189,13 +205,37 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
-    double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance());
+
+    double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
     upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
     foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+    if (logTimer.isFinished()) {
+      Logger.info("--- ARMSUB DUMP START ---");
+      Logger.info("Upper Arm Output: " + upperArmOutput);
+      Logger.info("Fore Arm Output: " + foreArmOutput);
+      Logger.info("Target Coords: " + targetX + ", " + targetY);
+      Logger.info("Upper Arm Target Angle: " + upperArmTargetAngle);
+      Logger.info("Fore Arm Target Angle: " + foreArmTargetAngle);
+      Logger.info("Upper Arm Encoder Distance: " + upperArmEncoder.getDistance());
+      Logger.info("Fore Arm Encoder Distance: " + foreArmEncoder.getDistance());
+      Logger.info("Upper Arm Error: " + upperArmController.getPositionError());
+      Logger.info("Fore Arm Error: " + foreArmController.getPositionError());
+      Logger.info("--- ARMSUB DUMP END ---");
+      logTimer = new AsyncTimer(1000);
+    }
 
-    upperArmMotors.set(upperArmOutput);
-    foreArmMotors.set(foreArmOutput);
+    if (!upperArmController.atSetpoint()) {
+      upperArmMotors.set(upperArmOutput);
+    } else {
+      upperArmMotors.stopMotor();
+    }
+
+    if (!foreArmController.atSetpoint()) {
+      foreArmMotors.set(foreArmOutput);
+    } else {
+      foreArmMotors.stopMotor();
+    }
   }
 }

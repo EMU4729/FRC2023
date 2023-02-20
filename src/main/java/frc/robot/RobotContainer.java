@@ -60,8 +60,8 @@ public class RobotContainer {
     // Fine arm movement bindings
     oi.pilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
     oi.pilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
-    oi.pilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveUp());
-    oi.pilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveDown());
+    oi.pilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());
+    oi.pilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveDown());
 
     // Arm Invert - DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS
     // DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE
