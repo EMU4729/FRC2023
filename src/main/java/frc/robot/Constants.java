@@ -87,14 +87,14 @@ public final class Constants {
         // Gripper + Arm
         /** Information for Upper Arm Master Motor */
         public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { -1, -1 }, 360. / 2048.); // @wip account for gearing ratios to the actual
-                                                                      // arm
+                        .encoder(new int[] { 0, 1 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                                                                    // arm
         /** Information for Upper Arm Slave Motor */
         public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
         /** Information for Fore Arm Master Motor */
         public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { -1, -1 }, 360. / 2048.); // @wip account for gearing ratios to the actual
-                                                                      // arm
+                        .encoder(new int[] { 2, 3 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                                                                    // arm
         /** Information for Fore Arm Slave Motor */
         public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
         /** Length of the forearm, in metres @wip update arm length */
