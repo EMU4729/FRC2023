@@ -104,8 +104,8 @@ public class ArmSub extends SubsystemBase {
     invert = !invert;
     double tmp1 = invert ? cnst.ARM_REACH_EXCLUSION[0][0] : cnst.ARM_REACH_EXCLUSION[0][1];
     double tmp2 = invert ? cnst.ARM_REACH_EXCLUSION[0][1] : cnst.ARM_REACH_EXCLUSION[0][0];
-    targets.add(0, new Pair<Double, Double>(tmp1,cnst.ARM_SWING_THROUGH_HEIGHT));
-    targets.add(1, new Pair<Double, Double>(tmp2,cnst.ARM_SWING_THROUGH_HEIGHT));
+    addCoord(0, tmp1, cnst.ARM_SWING_THROUGH_HEIGHT);
+    addCoord(1, tmp2, cnst.ARM_SWING_THROUGH_HEIGHT);
     Pair<Double, Double> tmp = getCurTarget();
     setDestCoord(-tmp.getFirst(), tmp.getSecond());
   }
