@@ -40,6 +40,7 @@ public class ArmSub extends SubsystemBase {
   private List<Pair<Double, Double>> targets = new ArrayList<Pair<Double, Double>>();
   private double upperArmTargetAngle;
   private double foreArmTargetAngle;
+  private Pair<Double, Double> prevArmTargetPoints;
 
   public ArmSub() {
     upperArmController.setTolerance(3);
@@ -54,7 +55,7 @@ public class ArmSub extends SubsystemBase {
    */
   private void updateShuffleboard(double upperArmOutput, double foreArmOutput) {
     ShuffleControl.armTab.setOutputs(upperArmOutput, foreArmOutput);
-    ShuffleControl.armTab.setTargetCoords(targetX, targetY);
+    ShuffleControl.armTab.setTargetCoords(getFinalTarget().getFirst(), getFinalTarget().getSecond());
     ShuffleControl.armTab.setTargetAngles(upperArmTargetAngle, foreArmTargetAngle);
     ShuffleControl.armTab.setEncoderAngles(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
     ShuffleControl.armTab.setControllerErrors(upperArmController.getPositionError(),
@@ -71,24 +72,24 @@ public class ArmSub extends SubsystemBase {
    *         the upper arm. All angles are in degrees.
    */
   private double[] ik(double x, double y) {
-    double a = cnst.UPPER_ARM_LENGTH;
-    double b = cnst.FORE_ARM_LENGTH;
+    double xSign = Math.signum(x);
+    x = Math.abs(x);
 
-    double r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    double L1 = cnst.UPPER_ARM_LENGTH;
+    double L2 = cnst.FORE_ARM_LENGTH;
+
+    double r = Math.hypot(x, y);
 
     double theta = Math.atan2(y, x);
-    double alpha = Math.acos(
-        (Math.pow(a, 2) + Math.pow(r, 2) - Math.pow(b, 2))
-            / (2 * a * r));
-    double beta = Math.asin(
-        (r * Math.sin(alpha)) / b);
+    double alpha = invCosRule(L1, r, L2);
+    double beta = invCosRule(L2, L1, r);
 
     alpha = Math.toDegrees(alpha);
     beta = Math.toDegrees(beta);
     theta = Math.toDegrees(theta);
 
-    double foreArmAngle = alpha + theta - 90;
-    double upperArmAngle = beta;
+    double foreArmAngle = xSign * (alpha + theta - 90);
+    double upperArmAngle = xSign * beta;
 
     // Return previous results if coordinates are invalid
     if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
@@ -101,7 +102,12 @@ public class ArmSub extends SubsystemBase {
   /** Inverts the arm. */
   public void invert() {
     invert = !invert;
-    setCoords(targetX, targetY);
+    double tmp1 = invert ? cnst.ARM_REACH_EXCLUSION[0][0] : cnst.ARM_REACH_EXCLUSION[0][1];
+    double tmp2 = invert ? cnst.ARM_REACH_EXCLUSION[0][1] : cnst.ARM_REACH_EXCLUSION[0][0];
+    targets.add(0, new Pair<Double, Double>(tmp1,cnst.ARM_SWING_THROUGH_HEIGHT));
+    targets.add(1, new Pair<Double, Double>(tmp2,cnst.ARM_SWING_THROUGH_HEIGHT));
+    Pair<Double, Double> tmp = getCurTarget();
+    setDestCoord(-tmp.getFirst(), tmp.getSecond());
   }
 
   /**
@@ -134,9 +140,14 @@ public class ArmSub extends SubsystemBase {
    * @param y The target y
    */
   public void setCoord(Pair<Double, Double> coord, double x, double y) {
+    if(!targetIsValid(x, y)) { //if target coord is not allowed stay still
+      Logger.warn("ArmSub : setCoords : dest is not allowed");
+      Pair<Double, Double> tmp = getCurTarget();
+      x = tmp.getFirst();
+      y = tmp.getSecond();
+    }
+
     targets.set(targets.indexOf(coord), new Pair<Double, Double> (x, y));
-    double[] res = ik(targetX, targetY);
-    setAngles(res[0], res[1]);
   }
   public void setDestCoord(double x, double y){
     setCoord(getFinalTarget(), x, y);
@@ -147,6 +158,23 @@ public class ArmSub extends SubsystemBase {
   }
   public void shiftDestCoord(double x, double y){
     shiftCoord(getFinalTarget(), x, y);
+  }
+
+  public void addCoord(int idx, double x, double y){
+    if(idx > targets.size()) {
+      Logger.warn("ArmSub : addCoord : idx of new too large check code -1 = end");
+      idx = targets.size();
+    }
+    if(idx < 0) idx = targets.size();
+
+    if(!targetIsValid(x, y)) { //if target coord is not allowed stay still
+      Logger.warn("ArmSub : setCoords : dest is not allowed");
+      Pair<Double, Double> tmp = getCurTarget();
+      x = tmp.getFirst();
+      y = tmp.getSecond();
+    }
+
+    targets.add(idx, new Pair<Double, Double>(x, y));
   }
 
   /** Returns a {@link Command} that moves the arm up indefinitely. */
@@ -241,6 +269,13 @@ public class ArmSub extends SubsystemBase {
       upperArmMotors.set(upperArmOutput);
     } else {
       upperArmMotors.stopMotor();
+
+      if(foreArmController.atSetpoint() && prevArmTargetPoints != getFinalTarget()){ //if at both setpoints
+        if(targets.size() > 1) targets.remove(0);
+        Pair<Double, Double> tmp = getCurTarget();
+        double[] res = ik(tmp.getFirst(), tmp.getSecond());
+        setAngles(res[0], res[1]);
+      }
     }
 
     if (!foreArmController.atSetpoint()) {
@@ -268,5 +303,12 @@ public class ArmSub extends SubsystemBase {
     //before checking
     if(Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL) return false;
     return true;
+  }
+
+  double invCosRule(double a, double b, double c){
+    double C = Math.acos(
+        (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
+            / (2 * a * b));
+    return C;
   }
 }

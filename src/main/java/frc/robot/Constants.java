@@ -33,13 +33,13 @@ public final class Constants {
   public final double ROBOT_WHEEL_WIDTH = 0.870;
   /** radius of the drive wheels (m) */
   public final double ROBOT_WHEEL_RAD = Units.inchesToMeters(3);
-  /** length of the robot frame (mm) */
-  public final int ROBOT_LENGTH = (int)(Units.inchesToMeters(28.3)*1000);
-  /** width of the robot frame (mm) @wip check num*/
-  public final int ROBOT_WIDTH = (int)(Units.inchesToMeters(24)*1000);
-  /** max reach outside frame perim [x(from frame),y(from floor)] (mm) */
-  public final int[] ROBOT_REACH_MAX = {(int)(Units.inchesToMeters(48)*1000), 
-                                        (int)(Units.inchesToMeters(78)*1000)};
+  /** length of the robot frame (m) */
+  public final int ROBOT_LENGTH = (int)(Units.inchesToMeters(28.3));
+  /** width of the robot frame (m) @wip check num*/
+  public final int ROBOT_WIDTH = (int)(Units.inchesToMeters(24));
+  /** max reach outside frame perim [x(from frame),y(from floor)] (m) */
+  public final double[] ROBOT_REACH_MAX = {(int)(Units.inchesToMeters(48)), 
+                                           (int)(Units.inchesToMeters(78))};
 
   // Envars
   public final Map<String, String> ENV = System.getenv();
@@ -111,13 +111,13 @@ public final class Constants {
   /** Information for Fore Arm Slave Motor */
   public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
   /** Length of the forearm (second segment)(between axles), in (mm) @wip update arm length */                                      //wip
-  public final int FORE_ARM_LENGTH = 1000; // UPDATE
+  public final double FORE_ARM_LENGTH = 1; // UPDATE
   /** Length of the upper arm (first segment)(between axles), in (mm) @wip update arm length */                                    //wip
-  public final int UPPER_ARM_LENGTH = 1000; // UPDATE
-  /** height off the carpet of the Upper rm axle @wip value just a guess */                                        //wip
-  public final int UPPER_ARM_AXLE_HEIGHT = 200;
-  /** amount the upper arm axle is offset from the centerline in x (forward pos) @wip value guessed*/              //wip
-  public final int UPPER_ARM_X_OFFSET = 50;
+  public final double UPPER_ARM_LENGTH = 1; // UPDATE
+  /** height off the carpet of the Upper rm axle (m) @wip value just a guess */                                    //wip
+  public final double UPPER_ARM_AXLE_HEIGHT = 0.2;
+  /** amount the upper arm axle is offset from the centerline in x (m)(forward pos) @wip value guessed*/           //wip
+  public final double UPPER_ARM_X_OFFSET = 0.05;
   /** Velocity of the arm movements */
   public final double ARM_VELOCITY = 0.05;
   /** PID Constants for Upper Arm Movement @wip update constants */                                                //wip
@@ -130,20 +130,20 @@ public final class Constants {
   public final int GRIPPER_GRIP_SERVO_2 = 1; // UPDATE
   /**
    * distance in x and y from the upper arm axle to the max distance the robot is allowed to reach
-   * [[x- (behind), x+(in front)], [y-(below), y+(above)]] (mm) 
+   * [[x- (behind), x+(in front)], [y-(below), y+(above)]] (m) 
    */
-  public final int[][] MAX_ARM_REACH_LEGAL = {
+  public final double[][] MAX_ARM_REACH_LEGAL = {
       {-(ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] - UPPER_ARM_X_OFFSET), 
           ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] + UPPER_ARM_X_OFFSET},
       {-UPPER_ARM_AXLE_HEIGHT, ROBOT_REACH_MAX[1] - UPPER_ARM_AXLE_HEIGHT}};
   /** length of the combined 2 segment arm, UPPER_ARM_X_OFFSET should be subtracted to find true x (mm) */
-  public final int MAX_ARM_REACH_PHYSICAL = UPPER_ARM_LENGTH + FORE_ARM_LENGTH;
+  public final double MAX_ARM_REACH_PHYSICAL = UPPER_ARM_LENGTH + FORE_ARM_LENGTH;
   /** area the arm should never enter (mm)[[x-(behind), x+(in front)], [y (from floor)]] @wip needs right y*/      //wip
-  public final int[][] ARM_REACH_EXCLUSION = {
+  public final double[][] ARM_REACH_EXCLUSION = {
       {-(ROBOT_LENGTH/2 - UPPER_ARM_X_OFFSET)},
       {200}};
   /** height the arm should seek to hold if moving or stored inside frame perimiter */
-  public final int ARM_SWING_THROUGH_HEIGHT = 
+  public final double ARM_SWING_THROUGH_HEIGHT = 
       UPPER_ARM_AXLE_HEIGHT + UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
 
   // Subarm
