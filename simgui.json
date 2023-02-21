@@ -43,7 +43,7 @@
           "visible": true
         }
       },
-      "/Shuffleboard/Drive/TeleopType": {
+      "/Shuffleboard/Drive/DriveOutput": {
         "window": {
           "visible": true
         }
@@ -52,13 +52,20 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/SendableChooser[1]": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
   "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
     "Shuffleboard": {
       "Drive": {
         "TeleopType": {
@@ -75,6 +82,12 @@
       "open": true
     },
     "transitory": {
+      "Shuffleboard": {
+        "Arm": {
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
         "Field": {
           "open": true

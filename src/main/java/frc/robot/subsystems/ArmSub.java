@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
@@ -11,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
+import edu.wpi.first.math.Pair;
 
 public class ArmSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
@@ -33,8 +37,7 @@ public class ArmSub extends SubsystemBase {
   private boolean invert = false;
   private boolean calibrated = false;
 
-  private double targetX;
-  private double targetY;
+  private List<Pair<Double, Double>> targets = new ArrayList<Pair<Double, Double>>();
   private double upperArmTargetAngle;
   private double foreArmTargetAngle;
 
@@ -130,38 +133,47 @@ public class ArmSub extends SubsystemBase {
    * @param x The target x
    * @param y The target y
    */
-  public void setCoords(double x, double y) {
-    targetX = x;
-    targetY = y;
+  public void setCoord(Pair<Double, Double> coord, double x, double y) {
+    targets.set(targets.indexOf(coord), new Pair<Double, Double> (x, y));
     double[] res = ik(targetX, targetY);
     setAngles(res[0], res[1]);
+  }
+  public void setDestCoord(double x, double y){
+    setCoord(getFinalTarget(), x, y);
+  }
+
+  public void shiftCoord(Pair<Double, Double> coord, double x, double y){
+    setCoord(coord, coord.getFirst() + x, coord.getSecond() + y);
+  }
+  public void shiftDestCoord(double x, double y){
+    shiftCoord(getFinalTarget(), x, y);
   }
 
   /** Returns a {@link Command} that moves the arm up indefinitely. */
   public Command moveUp() {
     return this.run(() -> {
-      setCoords(targetX, targetY + cnst.ARM_VELOCITY);
+      shiftDestCoord(0, cnst.ARM_VELOCITY);
     });
   }
 
   /** Returns a {@link Command} that moves the arm down indefinitely. */
   public Command moveDown() {
     return this.run(() -> {
-      setCoords(targetX, targetY - cnst.ARM_VELOCITY);
+      shiftDestCoord(0, -cnst.ARM_VELOCITY);
     });
   }
 
   /** Returns a {@link Command} that moves the arm forward indefinitely. */
   public Command moveForward() {
     return this.run(() -> {
-      setCoords(targetX + cnst.ARM_VELOCITY, targetY);
+      shiftDestCoord(cnst.ARM_VELOCITY, 0);
     });
   }
 
   /** Returns a {@link Command} that moves the arm backward indefinitely. */
   public Command moveBack() {
     return this.run(() -> {
-      setCoords(targetX - cnst.ARM_VELOCITY, targetY);
+      shiftDestCoord(-cnst.ARM_VELOCITY, 0);
     });
   }
 
@@ -188,7 +200,7 @@ public class ArmSub extends SubsystemBase {
 
   public Command moveTo(double x, double y) {
     return new FunctionalCommand(
-        () -> this.setCoords(x, y),
+        () -> this.setDestCoord(x, y),
         () -> {
         },
         (interrupted) -> {
@@ -238,5 +250,23 @@ public class ArmSub extends SubsystemBase {
     }
 
     updateShuffleboard(upperArmOutput, foreArmOutput);
+  }
+
+  Pair<Double, Double> getFinalTarget(){
+    if(targets.isEmpty()) return new Pair<Double, Double>(0.0,0.0);
+    return targets.get(targets.size() - 1);
+  }
+  Pair<Double, Double> getCurTarget(){
+    if(targets.isEmpty()) return new Pair<Double, Double>(0.0,0.0);
+    return targets.get(0);
+  }  
+
+  boolean targetIsValid(double x, double y){
+    if(x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1]) return false;
+    if(y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1]) return false;
+    //max arm reach is around the axle x is around robot center x is adjusted to be around axle
+    //before checking
+    if(Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL) return false;
+    return true;
   }
 }
