@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
-import edu.wpi.first.math.Pair;
 
 public class ArmSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
@@ -43,7 +44,7 @@ public class ArmSub extends SubsystemBase {
   private Pair<Double, Double> prevArmTargetPoints;
 
   public ArmSub() {
-    targets.add(0, new Pair<Double,Double>(0.0, 0.0));
+    targets.add(0, new Pair<Double, Double>(0.0, 0.0));
     upperArmController.setTolerance(3);
     foreArmController.setTolerance(3);
   }
@@ -136,34 +137,37 @@ public class ArmSub extends SubsystemBase {
    * @param y The target y
    */
   public void setCoord(Pair<Double, Double> coord, double x, double y, boolean invertable) {
-    if(!targetIsValid(x, y)) { //if target coord is not allowed stay still
+    if (!targetIsValid(x, y)) { // if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
       y = tmp.getSecond();
     }
     int inv = invert && invertable ? 1 : -1;
-    targets.set(targets.indexOf(coord), new Pair<Double, Double> (x * inv, y));
+    targets.set(targets.indexOf(coord), new Pair<Double, Double>(x * inv, y));
   }
-  public void setDestCoord(double x, double y, boolean invertable){
+
+  public void setDestCoord(double x, double y, boolean invertable) {
     setCoord(getFinalTarget(), x, y, invertable);
   }
 
-  public void shiftCoord(Pair<Double, Double> coord, double x, double y, boolean invertable){
+  public void shiftCoord(Pair<Double, Double> coord, double x, double y, boolean invertable) {
     setCoord(coord, coord.getFirst() + x, coord.getSecond() + y, invertable);
   }
-  public void shiftDestCoord(double x, double y, boolean invertable){
+
+  public void shiftDestCoord(double x, double y, boolean invertable) {
     shiftCoord(getFinalTarget(), x, y, invertable);
   }
 
-  public void addCoord(int idx, double x, double y, boolean invertable){
-    if(idx > targets.size()) {
+  public void addCoord(int idx, double x, double y, boolean invertable) {
+    if (idx > targets.size()) {
       Logger.warn("ArmSub : addCoord : idx of new too large check code -1 = end");
       idx = targets.size();
     }
-    if(idx < 0) idx = targets.size();
+    if (idx < 0)
+      idx = targets.size();
 
-    if(!targetIsValid(x, y)) { //if target coord is not allowed stay still
+    if (!targetIsValid(x, y)) { // if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
@@ -229,7 +233,14 @@ public class ArmSub extends SubsystemBase {
         },
         (interrupted) -> {
         },
-        () -> foreArmController.atSetpoint() && upperArmController.atSetpoint(), this);
+        () -> {
+          if (RobotBase.isSimulation()) {
+            Logger.info("ArmSub::moveTo : In simulation, skipping...");
+            return true;
+          }
+
+          return foreArmController.atSetpoint() && upperArmController.atSetpoint();
+        }, this);
   }
 
   /**
@@ -266,8 +277,9 @@ public class ArmSub extends SubsystemBase {
     } else {
       upperArmMotors.stopMotor();
 
-      if(foreArmController.atSetpoint() && prevArmTargetPoints != getFinalTarget()){ //if at both setpoints
-        if(targets.size() > 1) targets.remove(0);
+      if (foreArmController.atSetpoint() && prevArmTargetPoints != getFinalTarget()) { // if at both setpoints
+        if (targets.size() > 1)
+          targets.remove(0);
         Pair<Double, Double> tmp = getCurTarget();
         double[] res = ik(tmp.getFirst(), tmp.getSecond());
         setAngles(res[0], res[1]);
@@ -283,25 +295,32 @@ public class ArmSub extends SubsystemBase {
     updateShuffleboard(upperArmOutput, foreArmOutput);
   }
 
-  Pair<Double, Double> getFinalTarget(){
-    if(targets.isEmpty()) return new Pair<Double, Double>(0.0,0.0);
+  Pair<Double, Double> getFinalTarget() {
+    if (targets.isEmpty())
+      return new Pair<Double, Double>(0.0, 0.0);
     return targets.get(targets.size() - 1);
   }
-  Pair<Double, Double> getCurTarget(){
-    if(targets.isEmpty()) return new Pair<Double, Double>(0.0,0.0);
-    return targets.get(0);
-  }  
 
-  boolean targetIsValid(double x, double y){
-    if(x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1]) return false;
-    if(y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1]) return false;
-    //max arm reach is around the axle x is around robot center x is adjusted to be around axle
-    //before checking
-    if(Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL) return false;
+  Pair<Double, Double> getCurTarget() {
+    if (targets.isEmpty())
+      return new Pair<Double, Double>(0.0, 0.0);
+    return targets.get(0);
+  }
+
+  boolean targetIsValid(double x, double y) {
+    if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
+      return false;
+    if (y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1])
+      return false;
+    // max arm reach is around the axle x is around robot center x is adjusted to be
+    // around axle
+    // before checking
+    if (Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL)
+      return false;
     return true;
   }
 
-  double invCosRule(double a, double b, double c){
+  double invCosRule(double a, double b, double c) {
     double C = Math.acos(
         (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
             / (2 * a * b));

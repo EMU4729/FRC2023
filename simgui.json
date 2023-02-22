@@ -66,6 +66,9 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "Shuffleboard": {
       "Drive": {
         "TeleopType": {

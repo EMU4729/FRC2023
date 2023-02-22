@@ -24,6 +24,7 @@ public class PathWeaverCommand extends SequentialCommandGroup {
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(pathweaverPath);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      Logger.info("PathWeaverCommand : Loaded path " + trajectoryPath);
     } catch (IOException e) {
       Logger.error("PathWeaverCommand : Unable to open trajectory: " + pathweaverPath + e);
     }
