@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utils.logger.Logger;
 
 public class SubArmPivotSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
@@ -28,7 +30,13 @@ public class SubArmPivotSub extends SubsystemBase {
         () -> {
         },
         (interrupted) -> motor.stopMotor(),
-        () -> encoder.getDistance() >= cnst.SUBARM_PIVOT_UPPER_LIMIT,
+        () -> {
+          if (RobotBase.isSimulation()) {
+            Logger.info("SubArmPivotSub::up : In simulation, skipping...");
+            return true;
+          }
+          return encoder.getDistance() >= cnst.SUBARM_PIVOT_UPPER_LIMIT;
+        },
         this);
   }
 
@@ -39,7 +47,14 @@ public class SubArmPivotSub extends SubsystemBase {
         () -> {
         },
         (interrupted) -> motor.stopMotor(),
-        () -> encoder.getDistance() <= cnst.SUBARM_PIVOT_LOWER_LIMIT,
+        () -> {
+          if (RobotBase.isSimulation()) {
+            Logger.info("SubArmPivotSub::down : In simulation, skipping...");
+            return true;
+          }
+
+          return encoder.getDistance() <= cnst.SUBARM_PIVOT_LOWER_LIMIT;
+        },
         this);
   }
 }

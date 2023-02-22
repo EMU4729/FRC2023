@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems;
+import frc.robot.utils.logger.Logger;
 
 public class ArmPickUp extends CommandBase {
   Pose2d startPose = Subsystems.nav.getPose();
@@ -27,11 +29,16 @@ public class ArmPickUp extends CommandBase {
   @Override
   public void execute() {
     double distance = distanceFromStart();
-    Subsystems.arm.setCoords(2 - distance, 1.5);
+    Subsystems.arm.setDestCoord(2 - distance, 1.5, true);
   }
 
   @Override
   public boolean isFinished() {
+    if (RobotBase.isSimulation()) {
+      Logger.info("ArmPickUp : In simulation, skipping...");
+      return true;
+    }
+
     double distance = distanceFromStart();
     return distance <= 0.5 || distance >= 2.5;
   }

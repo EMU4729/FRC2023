@@ -43,12 +43,22 @@
           "visible": true
         }
       },
-      "/Shuffleboard/Drive/TeleopType": {
+      "/Shuffleboard/Drive/DriveOutput": {
         "window": {
           "visible": true
         }
       },
       "/SmartDashboard/Field": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/SendableChooser[1]": {
         "window": {
           "visible": true
         }
@@ -75,6 +85,12 @@
       "open": true
     },
     "transitory": {
+      "Shuffleboard": {
+        "Arm": {
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
         "Field": {
           "open": true

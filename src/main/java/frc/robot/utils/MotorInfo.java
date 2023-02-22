@@ -13,7 +13,8 @@ import frc.robot.utils.logger.Logger;
 public class MotorInfo {
   public final int motorPort;
   public final Type type;
-  public boolean invert = false;
+  public boolean invertMotor = false;
+  public boolean invertEncoder = false;
   public boolean brake = false;
   public boolean safety = false;
   public Optional<int[]> encoderPort = Optional.empty();
@@ -41,8 +42,10 @@ public class MotorInfo {
     return this;
   }
 
+  /** inverts both motor and encodor */
   public MotorInfo withInvert() {
-    invert = true;
+    invertMotor = !invertMotor;
+    invertEncoder = !invertEncoder;
     return this;
   }
 
@@ -51,9 +54,15 @@ public class MotorInfo {
     return this;
   }
 
+  public MotorInfo withInvertedEncodor(){
+    invertEncoder = !invertEncoder;
+    return this;
+  }
+
   public MotorController createMotorController() {
     if (motorPort < 0) {
-      throw new IllegalArgumentException("MotorInfo : motor port num < 0, check port is defined");
+      Logger.error("MotorInfo : motor port num < 0, check port is defined : " + motorPort);
+      return new WPI_TalonSRX(99);
     }
     switch (type) {
       case TalonSRX:
@@ -62,7 +71,7 @@ public class MotorInfo {
           Logger.warn(
               "MotorInfo : new WPI_TalonSRX on port " + motorPort + "not found, may not exist or be of wrong type");
         }
-        talon.setInverted(invert);
+        talon.setInverted(invertMotor);
         if (brake) {
           talon.setNeutralMode(NeutralMode.Brake);
         } else {
@@ -76,7 +85,7 @@ public class MotorInfo {
           Logger.warn(
               "MotorInfo : new WPI_VictorSPX on port " + motorPort + "not found, may not exist or be of wrong type");
         }
-        victor.setInverted(invert);
+        victor.setInverted(invertMotor);
         if (brake) {
           victor.setNeutralMode(NeutralMode.Brake);
         } else {
@@ -85,9 +94,11 @@ public class MotorInfo {
         victor.setSafetyEnabled(safety);
         return victor;
       case Never:
-        throw new IllegalStateException("MotorInfo : controller type not set");
+        Logger.error("MotorInfo : controller type not set");
+        return new WPI_TalonSRX(99);
       default:
-        throw new IllegalStateException("MotorInfo : controller type not found");
+        Logger.error("MotorInfo : controller type not found");
+        return new WPI_TalonSRX(99);
     }
   }
 
@@ -110,7 +121,7 @@ public class MotorInfo {
       throw new IllegalStateException("MotorInfo : EncoderSteps not found, check EncoderSteps is defined");
     }
 
-    Encoder encoder = new Encoder(encoderPort.get()[0], encoderPort.get()[1], invert, Encoder.EncodingType.k2X);
+    Encoder encoder = new Encoder(encoderPort.get()[0], encoderPort.get()[1], invertEncoder, Encoder.EncodingType.k2X);
     encoder.setDistancePerPulse(encoderSteps.get());
     encoder.setMinRate(0.1 * encoderSteps.get()); // TODO: Check if this works lol
     encoder.setMinRate(10);

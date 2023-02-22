@@ -56,7 +56,7 @@ public class TeleopDriveTank extends CommandBase {
       throttleR *= -1;
     }
 
-    ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
+    ShuffleControl.driveTab.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
 
     Subsystems.drive.tank(throttleL, throttleR);
   }

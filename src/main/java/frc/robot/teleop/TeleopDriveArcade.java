@@ -64,7 +64,7 @@ public class TeleopDriveArcade extends CommandBase {
       throttle *= -1;
     }
 
-    ShuffleControl.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
+    ShuffleControl.driveTab.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
 
     Subsystems.drive.arcade(throttle, steering);
   }
