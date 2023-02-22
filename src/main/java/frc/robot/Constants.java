@@ -38,8 +38,8 @@ public final class Constants {
   /** width of the robot frame (m) @wip check num*/
   public final int ROBOT_WIDTH = (int)(Units.inchesToMeters(24));
   /** max reach outside frame perim [x(from frame),y(from floor)] (m) */
-  public final double[] ROBOT_REACH_MAX = {(int)(Units.inchesToMeters(48)), 
-                                           (int)(Units.inchesToMeters(78))};
+  public final double[] ROBOT_REACH_MAX = {(Units.inchesToMeters(48)), 
+                                           (Units.inchesToMeters(78))};
 
   // Envars
   public final Map<String, String> ENV = System.getenv();
@@ -119,11 +119,11 @@ public final class Constants {
   /** amount the upper arm axle is offset from the centerline in x (m)(forward pos) @wip value guessed*/           //wip
   public final double UPPER_ARM_X_OFFSET = 0.05;
   /** Velocity of the arm movements */
-  public final double ARM_VELOCITY = 0.05;
+  public final double ARM_VELOCITY = 0.001;
   /** PID Constants for Upper Arm Movement @wip update constants */                                                //wip
   public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
   /** PID Constants for Fore Arm Movement */                                                                       //wip
-  public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
+  public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.01, 0, 0); // UPDATE
   /** Gripper Grip Servo 1 Channel @wip update servo port */                                                       //wip
   public final int GRIPPER_GRIP_SERVO_1 = 0; // UPDATE
   /** Gripper Grip Servo 2 Channel @wip update servo port */                                                       //wip
