@@ -57,7 +57,7 @@ public class RobotContainer {
     oi.pilot.povDown().onTrue(Subsystems.arm.lowerRung());
     oi.pilot.povLeft().onTrue(Subsystems.arm.upperRung());
 
-    // Fine arm movement bindings
+    // Fine arm movement bindings @wip should get proportional control like drive has                              //wip
     oi.pilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
     oi.pilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
     oi.pilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());

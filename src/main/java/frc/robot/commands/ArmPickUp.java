@@ -27,7 +27,7 @@ public class ArmPickUp extends CommandBase {
   @Override
   public void execute() {
     double distance = distanceFromStart();
-    Subsystems.arm.setDestCoord(2 - distance, 1.5);
+    Subsystems.arm.setDestCoord(2 - distance, 1.5, true);
   }
 
   @Override

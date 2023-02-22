@@ -43,6 +43,7 @@ public class ArmSub extends SubsystemBase {
   private Pair<Double, Double> prevArmTargetPoints;
 
   public ArmSub() {
+    targets.add(0, new Pair<Double,Double>(0.0, 0.0));
     upperArmController.setTolerance(3);
     foreArmController.setTolerance(3);
   }
@@ -104,10 +105,10 @@ public class ArmSub extends SubsystemBase {
     invert = !invert;
     double tmp1 = invert ? cnst.ARM_REACH_EXCLUSION[0][0] : cnst.ARM_REACH_EXCLUSION[0][1];
     double tmp2 = invert ? cnst.ARM_REACH_EXCLUSION[0][1] : cnst.ARM_REACH_EXCLUSION[0][0];
-    addCoord(0, tmp1, cnst.ARM_SWING_THROUGH_HEIGHT);
-    addCoord(1, tmp2, cnst.ARM_SWING_THROUGH_HEIGHT);
+    addCoord(0, tmp1, cnst.ARM_SWING_THROUGH_HEIGHT, false);
+    addCoord(1, tmp2, cnst.ARM_SWING_THROUGH_HEIGHT, false);
     Pair<Double, Double> tmp = getCurTarget();
-    setDestCoord(-tmp.getFirst(), tmp.getSecond());
+    setDestCoord(-tmp.getFirst(), tmp.getSecond(), true);
   }
 
   /**
@@ -124,11 +125,6 @@ public class ArmSub extends SubsystemBase {
     upperArmTargetAngle = MathUtil.clamp(upperArm, 0, 90);
     foreArmTargetAngle = MathUtil.clamp(foreArm, 0, 180);
 
-    if (invert) {
-      upperArmTargetAngle *= -1;
-      foreArmTargetAngle *= -1;
-    }
-
     upperArmController.setSetpoint(upperArmTargetAngle);
     foreArmController.setSetpoint(foreArmTargetAngle);
   }
@@ -139,28 +135,28 @@ public class ArmSub extends SubsystemBase {
    * @param x The target x
    * @param y The target y
    */
-  public void setCoord(Pair<Double, Double> coord, double x, double y) {
+  public void setCoord(Pair<Double, Double> coord, double x, double y, boolean invertable) {
     if(!targetIsValid(x, y)) { //if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
       y = tmp.getSecond();
     }
-
-    targets.set(targets.indexOf(coord), new Pair<Double, Double> (x, y));
+    int inv = invert && invertable ? 1 : -1;
+    targets.set(targets.indexOf(coord), new Pair<Double, Double> (x * inv, y));
   }
-  public void setDestCoord(double x, double y){
-    setCoord(getFinalTarget(), x, y);
-  }
-
-  public void shiftCoord(Pair<Double, Double> coord, double x, double y){
-    setCoord(coord, coord.getFirst() + x, coord.getSecond() + y);
-  }
-  public void shiftDestCoord(double x, double y){
-    shiftCoord(getFinalTarget(), x, y);
+  public void setDestCoord(double x, double y, boolean invertable){
+    setCoord(getFinalTarget(), x, y, invertable);
   }
 
-  public void addCoord(int idx, double x, double y){
+  public void shiftCoord(Pair<Double, Double> coord, double x, double y, boolean invertable){
+    setCoord(coord, coord.getFirst() + x, coord.getSecond() + y, invertable);
+  }
+  public void shiftDestCoord(double x, double y, boolean invertable){
+    shiftCoord(getFinalTarget(), x, y, invertable);
+  }
+
+  public void addCoord(int idx, double x, double y, boolean invertable){
     if(idx > targets.size()) {
       Logger.warn("ArmSub : addCoord : idx of new too large check code -1 = end");
       idx = targets.size();
@@ -173,35 +169,35 @@ public class ArmSub extends SubsystemBase {
       x = tmp.getFirst();
       y = tmp.getSecond();
     }
-
-    targets.add(idx, new Pair<Double, Double>(x, y));
+    int inv = invert && invertable ? 1 : -1;
+    targets.add(idx, new Pair<Double, Double>(x * inv, y));
   }
 
   /** Returns a {@link Command} that moves the arm up indefinitely. */
   public Command moveUp() {
     return this.run(() -> {
-      shiftDestCoord(0, cnst.ARM_VELOCITY);
+      shiftDestCoord(0, cnst.ARM_VELOCITY, true);
     });
   }
 
   /** Returns a {@link Command} that moves the arm down indefinitely. */
   public Command moveDown() {
     return this.run(() -> {
-      shiftDestCoord(0, -cnst.ARM_VELOCITY);
+      shiftDestCoord(0, -cnst.ARM_VELOCITY, true);
     });
   }
 
   /** Returns a {@link Command} that moves the arm forward indefinitely. */
   public Command moveForward() {
     return this.run(() -> {
-      shiftDestCoord(cnst.ARM_VELOCITY, 0);
+      shiftDestCoord(cnst.ARM_VELOCITY, 0, true);
     });
   }
 
   /** Returns a {@link Command} that moves the arm backward indefinitely. */
   public Command moveBack() {
     return this.run(() -> {
-      shiftDestCoord(-cnst.ARM_VELOCITY, 0);
+      shiftDestCoord(-cnst.ARM_VELOCITY, 0, true);
     });
   }
 
@@ -228,7 +224,7 @@ public class ArmSub extends SubsystemBase {
 
   public Command moveTo(double x, double y) {
     return new FunctionalCommand(
-        () -> this.setDestCoord(x, y),
+        () -> this.setDestCoord(x, y, true),
         () -> {
         },
         (interrupted) -> {
