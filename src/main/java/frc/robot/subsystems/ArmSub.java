@@ -44,7 +44,7 @@ public class ArmSub extends SubsystemBase {
   private Pair<Double, Double> prevArmTargetPoints;
 
   public ArmSub() {
-    targets.add(0, new Pair<Double, Double>(0.0, cnst.ARM_SWING_THROUGH_HEIGHT));
+    targets.add(0, new Pair<Double, Double>(0.0, 0.0));
     upperArmController.setTolerance(3);
     foreArmController.setTolerance(3);
   }
@@ -258,6 +258,7 @@ public class ArmSub extends SubsystemBase {
     upperArmEncoder.reset();
     foreArmEncoder.reset();
     setAngles(0, 0);
+    
     calibrated = true;
     Logger.info("ArmSub : Calibrated!");
   }

@@ -34,9 +34,9 @@ public final class Constants {
   /** radius of the drive wheels (m) */
   public final double ROBOT_WHEEL_RAD = Units.inchesToMeters(3);
   /** length of the robot frame (m) */
-  public final int ROBOT_LENGTH = (int)(Units.inchesToMeters(28.3));
+  public final double ROBOT_LENGTH = Units.inchesToMeters(28.3);
   /** width of the robot frame (m) @wip check num*/
-  public final int ROBOT_WIDTH = (int)(Units.inchesToMeters(24));
+  public final double ROBOT_WIDTH = Units.inchesToMeters(24);
   /** max reach outside frame perim [x(from frame),y(from floor)] (m) */
   public final double[] ROBOT_REACH_MAX = {(Units.inchesToMeters(48)), 
                                            (Units.inchesToMeters(78))};
@@ -100,13 +100,13 @@ public final class Constants {
   // Gripper + Arm
   /** Information for Upper Arm Master Motor */
   public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-                  .encoder(new int[] { 4, 5 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                  .encoder(new int[] { 4, 5 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the actual
                                                               // arm
   /** Information for Upper Arm Slave Motor */
   public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
   /** Information for Fore Arm Master Motor */
   public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-                  .encoder(new int[] { 6, 7 }, 360. / 2048.); // @wip account for gearing ratios to the actual
+                  .encoder(new int[] { 6, 7 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
                                                               // arm
   /** Information for Fore Arm Slave Motor */
   public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
@@ -133,14 +133,14 @@ public final class Constants {
    * [[x- (behind), x+(in front)], [y-(below), y+(above)]] (m) 
    */
   public final double[][] MAX_ARM_REACH_LEGAL = {
-      {-(ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] - UPPER_ARM_X_OFFSET), 
-          ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] + UPPER_ARM_X_OFFSET},
+      {-(ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] + UPPER_ARM_X_OFFSET), 
+          ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] - UPPER_ARM_X_OFFSET},
       {-UPPER_ARM_AXLE_HEIGHT, ROBOT_REACH_MAX[1] - UPPER_ARM_AXLE_HEIGHT}};
   /** length of the combined 2 segment arm, UPPER_ARM_X_OFFSET should be subtracted to find true x (mm) */
   public final double MAX_ARM_REACH_PHYSICAL = UPPER_ARM_LENGTH + FORE_ARM_LENGTH;
   /** area the arm should never enter (mm)[[x-(behind), x+(in front)], [y (from floor)]] @wip needs right y*/      //wip
   public final double[][] ARM_REACH_EXCLUSION = {
-      {-(ROBOT_LENGTH/2 - UPPER_ARM_X_OFFSET)},
+      {-(ROBOT_LENGTH/2 - UPPER_ARM_X_OFFSET), (ROBOT_LENGTH/2 + UPPER_ARM_X_OFFSET),},
       {200}};
   /** height the arm should seek to hold if moving or stored inside frame perimiter */
   public final double ARM_SWING_THROUGH_HEIGHT = 
