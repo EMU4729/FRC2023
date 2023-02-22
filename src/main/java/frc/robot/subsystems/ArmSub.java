@@ -43,7 +43,7 @@ public class ArmSub extends SubsystemBase {
   private Pair<Double, Double> prevArmTargetPoints;
 
   public ArmSub() {
-    targets.add(0, new Pair<Double,Double>(0.0, 0.0));
+    targets.add(0, new Pair<Double,Double>(0.0, cnst.ARM_SWING_THROUGH_HEIGHT));
     upperArmController.setTolerance(3);
     foreArmController.setTolerance(3);
   }
@@ -122,8 +122,8 @@ public class ArmSub extends SubsystemBase {
       Logger.warn("ArmSub : Arm hasn't been calibrated yet!");
     }
 
-    upperArmTargetAngle = MathUtil.clamp(upperArm, 0, 90);
-    foreArmTargetAngle = MathUtil.clamp(foreArm, 0, 180);
+    upperArmTargetAngle = MathUtil.clamp(upperArm, -90, 90);
+    foreArmTargetAngle = MathUtil.clamp(foreArm, -180, 180);
 
     upperArmController.setSetpoint(upperArmTargetAngle);
     foreArmController.setSetpoint(foreArmTargetAngle);
@@ -137,13 +137,17 @@ public class ArmSub extends SubsystemBase {
    */
   public void setCoord(Pair<Double, Double> coord, double x, double y, boolean invertable) {
     if(!targetIsValid(x, y)) { //if target coord is not allowed stay still
+
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
       y = tmp.getSecond();
     }
-    int inv = invert && invertable ? 1 : -1;
+    int inv = invert && invertable ? -1 : 1;
     targets.set(targets.indexOf(coord), new Pair<Double, Double> (x * inv, y));
+    Pair<Double, Double> tmp = getCurTarget();
+    double[] res = ik(tmp.getFirst(), tmp.getSecond());
+    setAngles(res[0], res[1]);
   }
   public void setDestCoord(double x, double y, boolean invertable){
     setCoord(getFinalTarget(), x, y, invertable);
@@ -169,8 +173,11 @@ public class ArmSub extends SubsystemBase {
       x = tmp.getFirst();
       y = tmp.getSecond();
     }
-    int inv = invert && invertable ? 1 : -1;
+    int inv = invert && invertable ? -1 : 1;
     targets.add(idx, new Pair<Double, Double>(x * inv, y));
+    Pair<Double, Double> tmp = getCurTarget();
+    double[] res = ik(tmp.getFirst(), tmp.getSecond());
+    setAngles(res[0], res[1]);
   }
 
   /** Returns a {@link Command} that moves the arm up indefinitely. */
