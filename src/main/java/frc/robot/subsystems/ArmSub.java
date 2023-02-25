@@ -64,6 +64,19 @@ public class ArmSub extends SubsystemBase {
         foreArmController.getPositionError());
   }
 
+  private Pair<Double, Double> k(double upperArmAngle, double foreArmAngle) {
+    double l1 = cnst.UPPER_ARM_LENGTH;
+    double l2 = cnst.FORE_ARM_LENGTH;
+
+    double x1 = l1 * Math.cos(Math.toRadians(upperArmAngle + 90));
+    double y1 = l1 * Math.sin(Math.toRadians(upperArmAngle + 90));
+
+    double x2 = l2 * Math.cos(Math.toRadians(foreArmAngle - (180 - (upperArmAngle + 90)))) + x1;
+    double y2 = l2 * Math.sin(Math.toRadians(foreArmAngle - (180 - (upperArmAngle + 90)))) + y1;
+
+    return new Pair<Double, Double>(x2, y2);
+  }
+
   /**
    * Calculates the angles of the two arms from a given pose with
    * inverse kinematics.
@@ -272,6 +285,9 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
+    Pair<Double, Double> kinematicsCoords = k(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
+
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
@@ -331,5 +347,18 @@ public class ArmSub extends SubsystemBase {
         (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
             / (2 * a * b));
     return C;
+  }
+
+  Pair<Double, Double> interpolateNext() {
+    // Don't use this function yet
+
+    /**
+     * INPUTS
+     * ------
+     * - current arm position
+     * - destination position
+     */
+
+    return new Pair<Double, Double>(0., 0.);
   }
 }

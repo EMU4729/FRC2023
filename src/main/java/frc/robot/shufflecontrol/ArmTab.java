@@ -17,6 +17,8 @@ public class ArmTab {
   private final GenericEntry foreArmEncoderAngle = tab.add("Fore Arm Encoder Distance", 0).getEntry();
   private final GenericEntry upperArmError = tab.add("Upper Arm Controller Error", 0).getEntry();
   private final GenericEntry foreArmError = tab.add("Fore Arm Controller Error", 0).getEntry();
+  private final GenericEntry kinematicsX = tab.add("Kinematics-Calculated X", 0).getEntry();
+  private final GenericEntry kinematicsY = tab.add("Kinematics-Calculated Y", 0).getEntry();
 
   public void setOutputs(double upperArm, double foreArm) {
     upperArmOutput.setDouble(upperArm);
@@ -41,5 +43,10 @@ public class ArmTab {
   public void setControllerErrors(double upperArm, double foreArm) {
     upperArmError.setDouble(upperArm);
     foreArmError.setDouble(foreArm);
+  }
+
+  public void setKinematicsCoords(double x, double y) {
+    kinematicsX.setDouble(x);
+    kinematicsY.setDouble(y);
   }
 }
