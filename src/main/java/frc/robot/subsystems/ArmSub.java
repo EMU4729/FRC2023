@@ -257,9 +257,8 @@ public class ArmSub extends SubsystemBase {
   public void calibrate() {
     upperArmEncoder.reset();
     foreArmEncoder.reset();
-    setAngles(0, 0);
-    
     calibrated = true;
+    setAngles(0, 0);
     Logger.info("ArmSub : Calibrated!");
   }
 
