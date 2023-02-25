@@ -54,13 +54,19 @@ public class NavigationSub extends SubsystemBase {
   public void periodic() {
     odometry.update(Rotation2d.fromDegrees(imu.getAngle()), drvLeftEncoder.getDistance(),
         drvRightEncoder.getDistance());
-    ShuffleControl.field.setRobotPose(odometry.getPoseMeters());
+    updateShuffleboard();
 
     if (RobotController.getUserButton()) {
       Logger.info("Resetting Odometry (0,0,0)");
       imu.calibrate();
       resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
     }
+  }
+
+  public void updateShuffleboard() {
+    ShuffleControl.navTab.setPose(getPose());
+    ShuffleControl.navTab.setRotation(getHeadingDeg(), getPitch(), getRoll());
+    ShuffleControl.navTab.setEncoderDistances(drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
   }
 
   /** @return The currently-estimated pose of the robot. */
