@@ -119,7 +119,7 @@ public final class Constants {
   /** amount the upper arm axle is offset from the centerline in x (m)(forward pos) @wip value guessed*/           //wip
   public final double UPPER_ARM_X_OFFSET = 0.05;
   /** Velocity of the arm movements */
-  public final double ARM_VELOCITY = 0.001;
+  public final double ARM_VELOCITY = 0.002;
   /** PID Constants for Upper Arm Movement @wip update constants */                                                //wip
   public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
   /** PID Constants for Fore Arm Movement */                                                                       //wip
