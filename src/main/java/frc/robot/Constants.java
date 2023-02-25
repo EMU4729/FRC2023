@@ -120,6 +120,8 @@ public final class Constants {
   public final double UPPER_ARM_X_OFFSET = 0.05;
   /** Velocity of the arm movements */
   public final double ARM_VELOCITY = 0.002;
+  /** Interpolation step of the arm */
+  public final double ARM_INTERPOLATION_STEP = 0.05;
   /** PID Constants for Upper Arm Movement @wip update constants */                                                //wip
   public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
   /** PID Constants for Fore Arm Movement */                                                                       //wip

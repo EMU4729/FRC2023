@@ -64,7 +64,7 @@ public class ArmSub extends SubsystemBase {
         foreArmController.getPositionError());
   }
 
-  private Pair<Double, Double> k(double upperArmAngle, double foreArmAngle) {
+  private Pair<Double, Double> forK(double upperArmAngle, double foreArmAngle) {
     double l1 = cnst.UPPER_ARM_LENGTH;
     double l2 = cnst.FORE_ARM_LENGTH;
 
@@ -77,6 +77,10 @@ public class ArmSub extends SubsystemBase {
     return new Pair<Double, Double>(x2, y2);
   }
 
+  private Pair<Double, Double> forK() {
+    return forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+  }
+
   /**
    * Calculates the angles of the two arms from a given pose with
    * inverse kinematics.
@@ -86,7 +90,7 @@ public class ArmSub extends SubsystemBase {
    *         the robot, and the 2nd element is the angle between the fore arm and
    *         the upper arm. All angles are in degrees.
    */
-  private double[] ik(double x, double y) {
+  private Pair<Double, Double> invK(double x, double y) {
     double xSign = Math.signum(x);
     x = Math.abs(x);
 
@@ -108,10 +112,10 @@ public class ArmSub extends SubsystemBase {
 
     // Return previous results if coordinates are invalid
     if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
-      return new double[] { foreArmTargetAngle, upperArmTargetAngle };
+      return new Pair<Double, Double>(foreArmTargetAngle, upperArmTargetAngle);
     }
 
-    return new double[] { foreArmAngle, upperArmAngle };
+    return new Pair<Double, Double>(foreArmAngle, upperArmAngle);
   }
 
   /** Inverts the arm. */
@@ -159,8 +163,8 @@ public class ArmSub extends SubsystemBase {
     int inv = invert && invertable ? -1 : 1;
     targets.set(targets.indexOf(coord), new Pair<Double, Double>(x * inv, y));
     Pair<Double, Double> tmp = getCurTarget();
-    double[] res = ik(tmp.getFirst(), tmp.getSecond());
-    setAngles(res[0], res[1]);
+    Pair<Double, Double> res = invK(tmp.getFirst(), tmp.getSecond());
+    setAngles(res.getFirst(), res.getSecond());
   }
 
   public void setDestCoord(double x, double y, boolean invertable) {
@@ -192,8 +196,8 @@ public class ArmSub extends SubsystemBase {
     int inv = invert && invertable ? -1 : 1;
     targets.add(idx, new Pair<Double, Double>(x * inv, y));
     Pair<Double, Double> tmp = getCurTarget();
-    double[] res = ik(tmp.getFirst(), tmp.getSecond());
-    setAngles(res[0], res[1]);
+    Pair<Double, Double> res = invK(tmp.getFirst(), tmp.getSecond());
+    setAngles(res.getFirst(), res.getSecond());
   }
 
   /** Returns a {@link Command} that moves the arm up indefinitely. */
@@ -285,7 +289,7 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
-    Pair<Double, Double> kinematicsCoords = k(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+    Pair<Double, Double> kinematicsCoords = forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
     ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
 
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
@@ -293,6 +297,12 @@ public class ArmSub extends SubsystemBase {
 
     upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
     foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+
+    if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {
+      Pair<Double, Double> nextPoint = interpolateNext();
+      Pair<Double, Double> res = invK(nextPoint.getFirst(), nextPoint.getSecond());
+      setAngles(res.getFirst(), res.getSecond());
+    }
 
     if (!upperArmController.atSetpoint()) {
       upperArmMotors.set(upperArmOutput);
@@ -303,8 +313,8 @@ public class ArmSub extends SubsystemBase {
         if (targets.size() > 1)
           targets.remove(0);
         Pair<Double, Double> tmp = getCurTarget();
-        double[] res = ik(tmp.getFirst(), tmp.getSecond());
-        setAngles(res[0], res[1]);
+        Pair<Double, Double> res = invK(tmp.getFirst(), tmp.getSecond());
+        setAngles(res.getFirst(), res.getSecond());
       }
     }
 
@@ -350,15 +360,26 @@ public class ArmSub extends SubsystemBase {
   }
 
   Pair<Double, Double> interpolateNext() {
-    // Don't use this function yet
+    Pair<Double, Double> curPos = forK();
+    double x1 = curPos.getFirst();
+    double y1 = curPos.getSecond();
 
-    /**
-     * INPUTS
-     * ------
-     * - current arm position
-     * - destination position
-     */
+    Pair<Double, Double> destPos = getFinalTarget();
+    double x2 = destPos.getFirst();
+    double y2 = destPos.getSecond();
 
-    return new Pair<Double, Double>(0., 0.);
+    double angle = Math.atan2(y2 - y1, x2 - x1);
+
+    double changeX = cnst.ARM_INTERPOLATION_STEP * Math.cos(angle);
+    double changeY = cnst.ARM_INTERPOLATION_STEP * Math.sin(angle);
+
+    if (Math.hypot(changeX, changeY) < cnst.ARM_INTERPOLATION_STEP) {
+      return destPos;
+    }
+
+    double x = changeX + x1;
+    double y = changeY + y1;
+
+    return new Pair<Double, Double>(x, y);
   }
 }
