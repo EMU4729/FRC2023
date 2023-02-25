@@ -16,7 +16,7 @@ public class NavTab {
   private GenericEntry rightEncoderEntry = nav.add("Right Encoder Distance", 0).getEntry();
   private Field2d field = new Field2d();
 
-  public NavTab() {
+  protected NavTab() {
     nav.add("Field", field);
   }
 
