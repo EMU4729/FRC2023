@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
+import frc.robot.utils.CurveFit;
 import frc.robot.utils.logger.Logger;
 
 public class ArmSub extends SubsystemBase {
@@ -37,6 +38,9 @@ public class ArmSub extends SubsystemBase {
 
   private boolean invert = false;
   private boolean calibrated = false;
+
+  private CurveFit upperCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
+  private CurveFit lowerCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
 
   private List<Pair<Double, Double>> targets = new ArrayList<Pair<Double, Double>>();
   private double upperArmTargetAngle;
@@ -65,6 +69,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   private Pair<Double, Double> k(double upperArmAngle, double foreArmAngle) {
+    foreArmAngle *= -1;
     double l1 = cnst.UPPER_ARM_LENGTH;
     double l2 = cnst.FORE_ARM_LENGTH;
 
@@ -74,7 +79,7 @@ public class ArmSub extends SubsystemBase {
     double x2 = l2 * Math.cos(Math.toRadians(foreArmAngle - (180 - (upperArmAngle + 90)))) + x1;
     double y2 = l2 * Math.sin(Math.toRadians(foreArmAngle - (180 - (upperArmAngle + 90)))) + y1;
 
-    return new Pair<Double, Double>(x2, y2);
+    return new Pair<Double, Double>(-x2, y2);
   }
 
   /**
@@ -227,22 +232,22 @@ public class ArmSub extends SubsystemBase {
   // TODO: Update the coordinates on all the preconfigured methods
   /** @return A {@link Command} that moves the arm to the low field position */
   public Command lowField() {
-    return moveTo(1, 0.5);
+    return moveTo(1, 0.0);
   }
 
   /** @return A {@link Command} that moves the arm to the far field position */
   public Command farField() {
-    return moveTo(2, 0.5);
+    return moveTo(1.5, 0.0);
   }
 
   /** @return a {@link Command} that moves the arm to the lower rung position */
   public Command lowerRung() {
-    return moveTo(1.5, 1);
+    return moveTo(1, 1);
   }
 
   /** @return a {@link Command} that moves the arm to the upper rung position */
   public Command upperRung() {
-    return moveTo(2, 1.5);
+    return moveTo(1.4, 1.4);
   }
 
   public Command moveTo(double x, double y) {
@@ -291,11 +296,11 @@ public class ArmSub extends SubsystemBase {
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
-    upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
-    foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+    //upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
+    //foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
 
     if (!upperArmController.atSetpoint()) {
-      upperArmMotors.set(upperArmOutput);
+      upperArmMotors.set(upperCurve.fit(MathUtil.applyDeadband(upperArmOutput,0.01)));
     } else {
       upperArmMotors.stopMotor();
 
@@ -309,7 +314,7 @@ public class ArmSub extends SubsystemBase {
     }
 
     if (!foreArmController.atSetpoint()) {
-      foreArmMotors.set(foreArmOutput);
+      foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput,0.01)));
     } else {
       foreArmMotors.stopMotor();
     }
