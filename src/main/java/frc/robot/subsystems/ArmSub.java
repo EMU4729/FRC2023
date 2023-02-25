@@ -45,8 +45,8 @@ public class ArmSub extends SubsystemBase {
 
   public ArmSub() {
     targets.add(0, new Pair<Double, Double>(0.0, 0.0));
-    upperArmController.setTolerance(3);
-    foreArmController.setTolerance(3);
+    upperArmController.setTolerance(0);
+    foreArmController.setTolerance(0);
   }
 
   /**
