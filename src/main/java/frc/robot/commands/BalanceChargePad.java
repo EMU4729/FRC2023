@@ -20,13 +20,13 @@ public class BalanceChargePad extends CommandBase {
 
   @Override
   public void execute() {
-    double roll = Subsystems.nav.getRoll();
+    double pitch = Subsystems.nav.getPitch();
 
     // don't move if the angle is correct
-    if (Math.abs(roll) < cnst.BALANCE_CHARGE_PAD_DEADBAND)
+    if (Math.abs(pitch) < cnst.BALANCE_CHARGE_PAD_DEADBAND)
       return;
 
-    double speed = controller.calculate(roll);
+    double speed = controller.calculate(pitch);
     Subsystems.drive.tank(speed, speed);
   }
 
