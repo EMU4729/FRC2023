@@ -179,7 +179,7 @@ public final class Constants {
   public final double SUBARM_ROTATE_UPPER_LIMIT = 180;
   /**
    * Subarm Rotation Encoder Info. <strong>Do not try to create a motor controller
-   * with this.</strong>
+   * with this.</strong> @wip update this.
    */
   public final MotorInfo SUBARM_ROTATE_ENCODER_INFO = new MotorInfo(-1, MotorInfo.Type.Never)
       .encoder(new int[] { 1, 2 }, 360. / 44.4 / 4.);
@@ -190,6 +190,14 @@ public final class Constants {
    */
   public final MotorInfo SUBARM_PIVOT_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
       .encoder(new int[] { 8, 9 }, 360. / 44.4 / 4.);
+  /** PID Constants for the Subarm Pivot */
+  public final PIDControllerConstants SUBARM_PIVOT_PID = new PIDControllerConstants(0.05, 0, 0);
+  /** Subarm Pivot Velocity (degrees per tick) */
+  public final double SUBARM_PIVOT_VELOCITY = 1;
+  /** Subarm Pivot Encoder lower limit */
+  public final double SUBARM_PIVOT_LOWER_LIMIT = 0;
+  /** Subarm Pivot Encoder upper limit */
+  public final double SUBARM_PIVOT_UPPER_LIMIT = 180;
 
   // Controllers
   /** Port Number for Pilot Xbox Controller */
