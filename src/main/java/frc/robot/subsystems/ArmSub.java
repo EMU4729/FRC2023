@@ -145,7 +145,7 @@ public class ArmSub extends SubsystemBase {
       Logger.warn("ArmSub : Arm hasn't been calibrated yet!");
     }
 
-    upperArmTargetAngle = MathUtil.clamp(upperArm, -90, 90);
+    upperArmTargetAngle = MathUtil.clamp(upperArm, -85, 85);
     foreArmTargetAngle = MathUtil.clamp(foreArm, -180, 180);
 
     upperArmController.setSetpoint(upperArmTargetAngle);
@@ -300,8 +300,8 @@ public class ArmSub extends SubsystemBase {
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
-    //upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
-    //foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+    // upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
+    // foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
 
     if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {
       Pair<Double, Double> nextPoint = interpolateNext();
@@ -310,7 +310,7 @@ public class ArmSub extends SubsystemBase {
     }
 
     if (!upperArmController.atSetpoint()) {
-      upperArmMotors.set(upperCurve.fit(MathUtil.applyDeadband(upperArmOutput,0.01)));
+      upperArmMotors.set(upperCurve.fit(MathUtil.applyDeadband(upperArmOutput, 0.01)));
     } else {
       upperArmMotors.stopMotor();
 
@@ -324,7 +324,7 @@ public class ArmSub extends SubsystemBase {
     }
 
     if (!foreArmController.atSetpoint()) {
-      foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput,0.01)));
+      foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput, 0.01)));
     } else {
       foreArmMotors.stopMotor();
     }

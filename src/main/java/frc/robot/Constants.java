@@ -146,7 +146,7 @@ public final class Constants {
       {200}};
   /** height the arm should seek to hold if moving or stored inside frame perimiter */
   public final double ARM_SWING_THROUGH_HEIGHT = 
-      UPPER_ARM_AXLE_HEIGHT + UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
+      UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
 
   // Subarm
   /** Subarm Pivot Servo Channel @wip update servo port */
