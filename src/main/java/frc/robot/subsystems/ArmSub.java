@@ -281,6 +281,7 @@ public class ArmSub extends SubsystemBase {
     foreArmEncoder.reset();
     calibrated = true;
     setAngles(0, 0);
+    addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
     Logger.info("ArmSub : Calibrated!");
   }
 
