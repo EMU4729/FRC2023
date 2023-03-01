@@ -20,14 +20,14 @@ public final class Constants {
   private static Optional<Constants> inst = Optional.empty();
 
   public static Constants getInstance() {
-          if (!inst.isPresent())
-                  inst = Optional.of(new Constants());
-          return inst.get();
+    if (!inst.isPresent())
+      inst = Optional.of(new Constants());
+    return inst.get();
   }
 
   private Constants() {
   }
-  
+
   // Robot features
   /** distance between wheel center side to side (m) */
   public final double ROBOT_WHEEL_WIDTH = 0.870;
@@ -35,11 +35,11 @@ public final class Constants {
   public final double ROBOT_WHEEL_RAD = Units.inchesToMeters(3);
   /** length of the robot frame (m) */
   public final double ROBOT_LENGTH = Units.inchesToMeters(28.3);
-  /** width of the robot frame (m) @wip check num*/
+  /** width of the robot frame (m) @wip check num */
   public final double ROBOT_WIDTH = Units.inchesToMeters(24);
   /** max reach outside frame perim [x(from frame),y(from floor)] (m) */
-  public final double[] ROBOT_REACH_MAX = {(Units.inchesToMeters(48)), 
-                                           (Units.inchesToMeters(78))};
+  public final double[] ROBOT_REACH_MAX = { (Units.inchesToMeters(48)),
+      (Units.inchesToMeters(78)) };
 
   // Envars
   public final Map<String, String> ENV = System.getenv();
@@ -50,25 +50,25 @@ public final class Constants {
    * {invert,brake,connectionSaftey}]
    */
   public final MotorInfo DRIVE_MOTOR_ID_LM = new MotorInfo(1, MotorInfo.Type.TalonSRX)
-                  .withSafety().encoder(new int[] { 0, 1 }, 60.078 / 256. / 1000);
+      .withSafety().encoder(new int[] { 0, 1 }, 60.078 / 256. / 1000);
   /**
-    * Information for right master drive [Port,controller type,
-    * {invert,brake,connectionSaftey}]
-    */
+   * Information for right master drive [Port,controller type,
+   * {invert,brake,connectionSaftey}]
+   */
   public final MotorInfo DRIVE_MOTOR_ID_RM = new MotorInfo(3, MotorInfo.Type.TalonSRX)
-                  .withInvert().withSafety().encoder(new int[] { 2, 3 }, 59.883 / 256. / 1000);
+      .withInvert().withSafety().encoder(new int[] { 2, 3 }, 59.883 / 256. / 1000);
   /**
-    * Information for left slave drive [Port,controller type,
-    * {invert,brake,connectionSaftey}]
-    */
+   * Information for left slave drive [Port,controller type,
+   * {invert,brake,connectionSaftey}]
+   */
   public final MotorInfo DRIVE_MOTOR_ID_LS = new MotorInfo(2, MotorInfo.Type.TalonSRX)
-                  .withSafety();
+      .withSafety();
   /**
-    * Information for right slave drive [Port,controller type,
-    * {invert,brake,connectionSaftey}]
-    */
+   * Information for right slave drive [Port,controller type,
+   * {invert,brake,connectionSaftey}]
+   */
   public final MotorInfo DRIVE_MOTOR_ID_RS = new MotorInfo(4, MotorInfo.Type.TalonSRX)
-                  .withInvert().withSafety();
+      .withInvert().withSafety();
 
   /** KS value from SysId */
   public final double DRIVE_KS_VOLTS = 0.88881;
@@ -80,7 +80,7 @@ public final class Constants {
   public final double DRIVE_TRACK_WIDTH_METERS = 0.55;
   /** Drive kinematics */
   public final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
-                  DRIVE_TRACK_WIDTH_METERS);
+      DRIVE_TRACK_WIDTH_METERS);
   /** Auto max velocity */
   public final double DRIVE_MAX_METERS_PER_SECOND = 2;
   /** Auto max acceleration */
@@ -100,53 +100,75 @@ public final class Constants {
   // Gripper + Arm
   /** Information for Upper Arm Master Motor */
   public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-                  .encoder(new int[] { 4, 5 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the actual
-                                                              // arm
+      .encoder(new int[] { 4, 5 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the actual
+  // arm
   /** Information for Upper Arm Slave Motor */
   public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
   /** Information for Fore Arm Master Motor */
   public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-                  .encoder(new int[] { 6, 7 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
-                                                              // arm
+      .encoder(new int[] { 6, 7 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
+  // arm
   /** Information for Fore Arm Slave Motor */
   public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
-  /** Length of the forearm (second segment)(between axles), in (mm) @wip update arm length */                                      //wip
+  /**
+   * Length of the forearm (second segment)(between axles), in (mm) @wip update
+   * arm length
+   */ // wip
   public final double FORE_ARM_LENGTH = 1; // UPDATE
-  /** Length of the upper arm (first segment)(between axles), in (mm) @wip update arm length */                                    //wip
+  /**
+   * Length of the upper arm (first segment)(between axles), in (mm) @wip update
+   * arm length
+   */ // wip
   public final double UPPER_ARM_LENGTH = 1; // UPDATE
-  /** height off the carpet of the Upper rm axle (m) @wip value just a guess */                                    //wip
+  /** height off the carpet of the Upper rm axle (m) @wip value just a guess */ // wip
   public final double UPPER_ARM_AXLE_HEIGHT = 0.2;
-  /** amount the upper arm axle is offset from the centerline in x (m)(forward pos) @wip value guessed*/           //wip
+  /**
+   * amount the upper arm axle is offset from the centerline in x (m)(forward
+   * pos) @wip value guessed
+   */ // wip
   public final double UPPER_ARM_X_OFFSET = 0.05;
   /** Velocity of the arm movements */
   public final double ARM_VELOCITY = 0.01;
   /** Interpolation step of the arm */
   public final double ARM_INTERPOLATION_STEP = 0.05;
-  /** PID Constants for Upper Arm Movement @wip update constants */                                                //wip
+  /** PID Constants for Upper Arm Movement @wip update constants */ // wip
   public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
-  /** PID Constants for Fore Arm Movement */                                                                       //wip
+  /** PID Constants for Fore Arm Movement */ // wip
   public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.02, 0, 0); // UPDATE
-  /** Gripper Grip Servo 1 Channel @wip update servo port */                                                       //wip
+  /** Gripper Grip Servo 1 Channel @wip update servo port */ // wip
   public final int GRIPPER_GRIP_SERVO_1 = 0; // UPDATE
-  /** Gripper Grip Servo 2 Channel @wip update servo port */                                                       //wip
+  /** Gripper Grip Servo 2 Channel @wip update servo port */ // wip
   public final int GRIPPER_GRIP_SERVO_2 = 1; // UPDATE
   /**
-   * distance in x and y from the upper arm axle to the max distance the robot is allowed to reach
-   * [[x- (behind), x+(in front)], [y-(below), y+(above)]] (m) 
+   * distance in x and y from the upper arm axle to the max distance the robot is
+   * allowed to reach
+   * [[x- (behind), x+(in front)], [y-(below), y+(above)]] (m)
    */
   public final double[][] MAX_ARM_REACH_LEGAL = {
-      {-(ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] + UPPER_ARM_X_OFFSET), 
-          ROBOT_LENGTH/2 + ROBOT_REACH_MAX[0] - UPPER_ARM_X_OFFSET},
-      {-UPPER_ARM_AXLE_HEIGHT, ROBOT_REACH_MAX[1] - UPPER_ARM_AXLE_HEIGHT}};
-  /** length of the combined 2 segment arm, UPPER_ARM_X_OFFSET should be subtracted to find true x (mm) */
+      { -(ROBOT_LENGTH / 2 + ROBOT_REACH_MAX[0] + UPPER_ARM_X_OFFSET),
+          ROBOT_LENGTH / 2 + ROBOT_REACH_MAX[0] - UPPER_ARM_X_OFFSET },
+      { -UPPER_ARM_AXLE_HEIGHT, ROBOT_REACH_MAX[1] - UPPER_ARM_AXLE_HEIGHT } };
+  /**
+   * length of the combined 2 segment arm, UPPER_ARM_X_OFFSET should be subtracted
+   * to find true x (mm)
+   */
   public final double MAX_ARM_REACH_PHYSICAL = UPPER_ARM_LENGTH + FORE_ARM_LENGTH;
-  /** area the arm should never enter (mm)[[x-(behind), x+(in front)], [y (from floor)]] @wip needs right y*/      //wip
+  /**
+   * area the arm should never enter (mm)[[x-(behind), x+(in front)], [y (from
+   * floor)]] @wip needs right y
+   */ // wip
   public final double[][] ARM_REACH_EXCLUSION = {
-      {-(ROBOT_LENGTH/2 - UPPER_ARM_X_OFFSET), (ROBOT_LENGTH/2 + UPPER_ARM_X_OFFSET),},
-      {200}};
-  /** height the arm should seek to hold if moving or stored inside frame perimiter */
-  public final double ARM_SWING_THROUGH_HEIGHT = 
-      UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
+      { -(ROBOT_LENGTH / 2 - UPPER_ARM_X_OFFSET), (ROBOT_LENGTH / 2 + UPPER_ARM_X_OFFSET), },
+      { 200 } };
+  /** Dimensions (width, height) of the robot that the arm should never reach. */
+  public final double[][] ARM_REACH_ROBOT_EXCLUSION = {
+      { -(ROBOT_LENGTH / 2), ROBOT_LENGTH / 2 },
+      { -ROBOT_WIDTH, 0 }
+  };
+  /**
+   * height the arm should seek to hold if moving or stored inside frame perimiter
+   */
+  public final double ARM_SWING_THROUGH_HEIGHT = UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
 
   // Subarm
   /** Subarm Pivot Servo Channel @wip update servo port */
@@ -156,12 +178,12 @@ public final class Constants {
   /** Subarm Pivot Endoer Upper Bound */
   public final double SUBARM_PIVOT_UPPER_LIMIT = 180;
   /**
-    * Information for Subarm Rotation Motor
-    * 
-    * @wip update everything but the encoder steps, that's fine
-    */
+   * Information for Subarm Rotation Motor
+   * 
+   * @wip update everything but the encoder steps, that's fine
+   */
   public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
-                  .encoder(new int[] { 8, 9 }, 360. / 44.4 / 4.);
+      .encoder(new int[] { 8, 9 }, 360. / 44.4 / 4.);
 
   // Controllers
   /** Port Number for Pilot Xbox Controller */
@@ -193,8 +215,8 @@ public final class Constants {
   /** LED string port num */
   public final int LED_STRING_PORT = 9;
   /**
-    * Max number of colour changes/s (red -> black -> red -> black = 4) for leds
-    */
+   * Max number of colour changes/s (red -> black -> red -> black = 4) for leds
+   */
   public final int LED_MAX_FLASH_RATE = 8;
   /**  */
   public final int[] LED_ZONES = { 0, 3, 39, 42 };

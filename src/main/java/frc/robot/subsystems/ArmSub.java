@@ -345,15 +345,29 @@ public class ArmSub extends SubsystemBase {
   }
 
   boolean targetIsValid(double x, double y) {
+    // check legal reach limits
     if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
       return false;
     if (y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1])
       return false;
+
     // max arm reach is around the axle x is around robot center x is adjusted to be
-    // around axle
-    // before checking
+    // around axle before checking
     if (Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL)
       return false;
+
+    // check arm swing-through bounds
+    if (x > cnst.ARM_REACH_EXCLUSION[0][0] && x < cnst.ARM_REACH_EXCLUSION[0][1]
+        && !(y > cnst.ARM_SWING_THROUGH_HEIGHT * 0.95 && y < cnst.ARM_SWING_THROUGH_HEIGHT * 1.05)) {
+      return false;
+    }
+
+    // check robot limits
+    if (x > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] && x < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1]
+        && y > cnst.ARM_REACH_ROBOT_EXCLUSION[1][0] && y < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1]) {
+      return false;
+    }
+
     return true;
   }
 
