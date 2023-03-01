@@ -12,8 +12,8 @@ import frc.robot.utils.logger.Logger;
 public class SubArmPivotSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
 
-  private final MotorController motor = cnst.SUBARM_ROTATE_MOTOR_ID.createMotorController();
-  private final Encoder encoder = cnst.SUBARM_ROTATE_MOTOR_ID.createEncoder();
+  private final MotorController motor = cnst.SUBARM_PIVOT_MOTOR_ID.createMotorController();
+  private final Encoder encoder = cnst.SUBARM_PIVOT_MOTOR_ID.createEncoder();
 
   /**
    * Calibrates the subarm.
@@ -35,7 +35,7 @@ public class SubArmPivotSub extends SubsystemBase {
             Logger.info("SubArmPivotSub::up : In simulation, skipping...");
             return true;
           }
-          return encoder.getDistance() >= cnst.SUBARM_PIVOT_UPPER_LIMIT;
+          return encoder.getDistance() >= cnst.SUBARM_ROTATE_UPPER_LIMIT;
         },
         this);
   }
@@ -53,7 +53,7 @@ public class SubArmPivotSub extends SubsystemBase {
             return true;
           }
 
-          return encoder.getDistance() <= cnst.SUBARM_PIVOT_LOWER_LIMIT;
+          return encoder.getDistance() <= cnst.SUBARM_ROTATE_LOWER_LIMIT;
         },
         this);
   }

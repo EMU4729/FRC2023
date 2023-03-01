@@ -171,18 +171,24 @@ public final class Constants {
   public final double ARM_SWING_THROUGH_HEIGHT = UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
 
   // Subarm
-  /** Subarm Pivot Servo Channel @wip update servo port */
-  public final int SUBARM_PIVOT_SERVO = 2;
-  /** Subarm Pivot Encoder Lower Limit */
-  public final double SUBARM_PIVOT_LOWER_LIMIT = -5;
-  /** Subarm Pivot Endoer Upper Bound */
-  public final double SUBARM_PIVOT_UPPER_LIMIT = 180;
+  /** Subarm Rotation Servo Channel @wip update servo port */
+  public final int SUBARM_ROTATE_SERVO = 2;
+  /** Subarm Rotation Encoder Lower Limit */
+  public final double SUBARM_ROTATE_LOWER_LIMIT = -5;
+  /** Subarm Rotation Encoder Upper Bound */
+  public final double SUBARM_ROTATE_UPPER_LIMIT = 180;
   /**
-   * Information for Subarm Rotation Motor
+   * Subarm Rotation Encoder Info. <strong>Do not try to create a motor controller
+   * with this.</strong>
+   */
+  public final MotorInfo SUBARM_ROTATE_ENCODER_INFO = new MotorInfo(-1, MotorInfo.Type.Never)
+      .encoder(new int[] { 1, 2 }, 360. / 44.4 / 4.);
+  /**
+   * Information for Subarm Pivot Motor
    * 
    * @wip update everything but the encoder steps, that's fine
    */
-  public final MotorInfo SUBARM_ROTATE_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
+  public final MotorInfo SUBARM_PIVOT_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
       .encoder(new int[] { 8, 9 }, 360. / 44.4 / 4.);
 
   // Controllers
