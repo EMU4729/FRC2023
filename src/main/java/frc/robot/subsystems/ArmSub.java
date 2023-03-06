@@ -391,6 +391,14 @@ public class ArmSub extends SubsystemBase {
     return true;
   }
 
+  /**
+   * Inverse cosine rule.
+   * 
+   * @param a Length of side a
+   * @param b Length of side b
+   * @param c Length of side c
+   * @return The included angle C
+   */
   double invCosRule(double a, double b, double c) {
     double C = Math.acos(
         (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
