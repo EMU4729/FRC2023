@@ -40,6 +40,11 @@ public class SubArmPivotSub extends SubsystemBase {
     }
   }
 
+  /**
+   * Updates shuffleboard. Call this function regularly.
+   * 
+   * @param output The pivot motor's output.
+   */
   private void updateShuffleboard(double output) {
     ShuffleControl.subArmTab.setOutput(output);
     ShuffleControl.subArmTab.setEncoderAngle(encoder.getDistance());
@@ -47,10 +52,16 @@ public class SubArmPivotSub extends SubsystemBase {
     ShuffleControl.subArmTab.setControllerError(controller.getPositionError());
   }
 
+  /** @return If a provided angle is within the bounds of the pivot limits. */
   private boolean angleIsValid(double angle) {
     return angle >= cnst.SUBARM_PIVOT_LOWER_LIMIT && angle <= cnst.SUBARM_PIVOT_UPPER_LIMIT;
   }
 
+  /**
+   * Sets the destination angle of the subarm pivot.
+   * 
+   * @param angle The desired angle
+   */
   private void setAngle(double angle) {
     calibrationCheck();
     if (!angleIsValid(angle)) {
@@ -60,10 +71,16 @@ public class SubArmPivotSub extends SubsystemBase {
     targetAngle = angle;
   }
 
+  /**
+   * Shifts the destination angle by a specified angle.
+   * 
+   * @param angle The amount to shift the destination by.
+   */
   private void shiftAngle(double angle) {
     setAngle(targetAngle + angle);
   }
 
+  /** @return a {@link Command} that pivots the subarm to a specified angle. */
   private Command turnTo(double angle) {
     return new FunctionalCommand(
         () -> setAngle(angle),
@@ -91,10 +108,12 @@ public class SubArmPivotSub extends SubsystemBase {
     return this.run(() -> shiftAngle(-cnst.SUBARM_PIVOT_VELOCITY));
   }
 
+  /** @return a {@link Command} to move the subarm to the forward position. */
   public Command pointForward() {
     return turnTo(90);
   }
 
+  /** @return a {@link Command} to move the subarm to the downwards position. */
   public Command pointDown() {
     return turnTo(0);
   }

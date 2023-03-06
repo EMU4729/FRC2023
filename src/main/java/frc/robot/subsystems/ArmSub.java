@@ -68,6 +68,13 @@ public class ArmSub extends SubsystemBase {
         foreArmController.getPositionError());
   }
 
+  /**
+   * Forward kinematics.
+   * 
+   * @param upperArmAngle The angle of the upper arm
+   * @param foreArmAngle  The angle of the fore arm
+   * @return The calculated coordinates of the end of the arm.
+   */
   private Pair<Double, Double> forK(double upperArmAngle, double foreArmAngle) {
     foreArmAngle *= -1;
     double l1 = cnst.UPPER_ARM_LENGTH;
@@ -82,6 +89,12 @@ public class ArmSub extends SubsystemBase {
     return new Pair<Double, Double>(-x2, y2);
   }
 
+  /**
+   * Forward kinematics. When run without arguments, this uses the arms' encoder
+   * values.
+   * 
+   * @return The calculated coordinates of the end of the arm.
+   */
   private Pair<Double, Double> forK() {
     return forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
   }
@@ -385,6 +398,11 @@ public class ArmSub extends SubsystemBase {
     return C;
   }
 
+  /**
+   * Interpolates the path to the destination point.
+   * 
+   * @return The next interpolated point to move to.
+   */
   Pair<Double, Double> interpolateNext() {
     Pair<Double, Double> curPos = forK();
     double x1 = curPos.getFirst();

@@ -16,9 +16,16 @@ import frc.robot.Constants;
 import frc.robot.Subsystems;
 import frc.robot.utils.logger.Logger;
 
+/** Command that runs a PathWeaver path. */
 public class PathWeaverCommand extends SequentialCommandGroup {
   public final Constants cnst = Constants.getInstance();
 
+  /**
+   * Constructs a new {@link PathWeaverCommand}.
+   * 
+   * @param pathweaverPath The path of the pathweaver file, relative to the
+   *                       robot's deploy directory.
+   */
   public PathWeaverCommand(String pathweaverPath) {
     Trajectory trajectory = new Trajectory();
     try {

@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems;
 import frc.robot.utils.logger.Logger;
 
+/**
+ * Moves the arm to far field position then retracts backwards as the pilot
+ * moves the robot forwards.
+ */
 public class ArmPickUp extends CommandBase {
   Pose2d startPose = Subsystems.nav.getPose();
 

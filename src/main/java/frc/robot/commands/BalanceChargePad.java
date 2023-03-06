@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems;
 
+/** Automatically balances the robot on the charge pad using the IMU's gyro. */
 public class BalanceChargePad extends CommandBase {
   public final Constants cnst = Constants.getInstance();
   public final PIDController controller = cnst.BALANCE_CHARGE_PAD_PID.createPIDController();
