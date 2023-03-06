@@ -89,8 +89,6 @@ public class NavigationSub extends SubsystemBase {
     return getPose().getRotation();
   }
 
-  // TODO: Check if the getRoll() and getPitch() methods are correct
-
   /** @return The roll angle of the robot */
   public double getRoll() {
     return imu.getXComplementaryAngle();
