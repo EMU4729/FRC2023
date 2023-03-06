@@ -304,54 +304,6 @@ public class ArmSub extends SubsystemBase {
     Logger.info("ArmSub : Calibrated!");
   }
 
-  @Override
-  public void periodic() {
-    // PRAY TO GOD THAT THIS CODE WORKS.
-
-    if (!calibrated) {
-      // Don't do anything if no calibration has happened.
-      updateShuffleboard(0, 0);
-      return;
-    }
-
-    Pair<Double, Double> kinematicsCoords = forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
-    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
-
-    double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
-    double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
-
-    // upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
-    // foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
-
-    if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {
-      Pair<Double, Double> nextPoint = interpolateNext();
-      Pair<Double, Double> res = invK(nextPoint.getFirst(), nextPoint.getSecond());
-      setAngles(res.getFirst(), res.getSecond());
-    }
-
-    if (!upperArmController.atSetpoint()) {
-      upperArmMotors.set(upperCurve.fit(MathUtil.applyDeadband(upperArmOutput, 0.01)));
-    } else {
-      upperArmMotors.stopMotor();
-
-      if (foreArmController.atSetpoint() && prevArmTargetPoints != getFinalTarget()) { // if at both setpoints
-        if (targets.size() > 1)
-          targets.remove(0);
-        Pair<Double, Double> tmp = getCurTarget();
-        Pair<Double, Double> res = invK(tmp.getFirst(), tmp.getSecond());
-        setAngles(res.getFirst(), res.getSecond());
-      }
-    }
-
-    if (!foreArmController.atSetpoint()) {
-      foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput, 0.01)));
-    } else {
-      foreArmMotors.stopMotor();
-    }
-
-    updateShuffleboard(upperArmOutput, foreArmOutput);
-  }
-
   Pair<Double, Double> getFinalTarget() {
     if (targets.isEmpty())
       return new Pair<Double, Double>(0.0, 0.0);
@@ -364,6 +316,13 @@ public class ArmSub extends SubsystemBase {
     return targets.get(0);
   }
 
+  /**
+   * Checks if the given coordinates are valid for the arm.
+   * 
+   * @param x The coordinate x
+   * @param y The coordinate y
+   * @return True if valid, false if not
+   */
   boolean targetIsValid(double x, double y) {
     // check legal reach limits
     if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
@@ -433,5 +392,53 @@ public class ArmSub extends SubsystemBase {
     double y = changeY + y1;
 
     return new Pair<Double, Double>(x, y);
+  }
+
+  @Override
+  public void periodic() {
+    // PRAY TO GOD THAT THIS CODE WORKS.
+
+    if (!calibrated) {
+      // Don't do anything if no calibration has happened.
+      updateShuffleboard(0, 0);
+      return;
+    }
+
+    Pair<Double, Double> kinematicsCoords = forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
+
+    double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
+    double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
+
+    // upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
+    // foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+
+    if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {
+      Pair<Double, Double> nextPoint = interpolateNext();
+      Pair<Double, Double> res = invK(nextPoint.getFirst(), nextPoint.getSecond());
+      setAngles(res.getFirst(), res.getSecond());
+    }
+
+    if (!upperArmController.atSetpoint()) {
+      upperArmMotors.set(upperCurve.fit(MathUtil.applyDeadband(upperArmOutput, 0.01)));
+    } else {
+      upperArmMotors.stopMotor();
+
+      if (foreArmController.atSetpoint() && prevArmTargetPoints != getFinalTarget()) { // if at both setpoints
+        if (targets.size() > 1)
+          targets.remove(0);
+        Pair<Double, Double> tmp = getCurTarget();
+        Pair<Double, Double> res = invK(tmp.getFirst(), tmp.getSecond());
+        setAngles(res.getFirst(), res.getSecond());
+      }
+    }
+
+    if (!foreArmController.atSetpoint()) {
+      foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput, 0.01)));
+    } else {
+      foreArmMotors.stopMotor();
+    }
+
+    updateShuffleboard(upperArmOutput, foreArmOutput);
   }
 }
