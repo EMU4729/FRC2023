@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Subsystems;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
@@ -107,14 +108,16 @@ public class SubArmPivotSub extends SubsystemBase {
     }
 
     if (!calibrated) {
+      updateShuffleboard(0);
       return;
     }
 
-    double armOffset = 0; // TODO get the arm angle offset
+    // This should make the subarm's angle independent of the arm's angle
+    double armOffset = -Subsystems.arm.getEndAngle();
 
     double output = controller.calculate(encoder.getDistance() + armOffset);
 
-    output = MathUtil.clamp(output, -0.5, 0.5); // This is a safety measure
+    output = MathUtil.clamp(output, -0.2, 0.2); // This is a safety measure, will be increased to -1 and 1 when stable
 
     motor.set(output);
 

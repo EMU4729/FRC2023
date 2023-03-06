@@ -86,6 +86,12 @@ public class ArmSub extends SubsystemBase {
     return forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
   }
 
+  /** @return The angle that the end of the arm makes with the robot horizontal */
+  public double getEndAngle() {
+    Pair<Double, Double> endPoint = forK();
+    return Math.toDegrees(Math.atan2(endPoint.getSecond(), endPoint.getFirst()));
+  }
+
   /**
    * Calculates the angles of the two arms from a given pose with
    * inverse kinematics.
