@@ -17,4 +17,11 @@ public class Subsystems {
   public static final SubArmPivotSub subArmPivot = new SubArmPivotSub();
   public static final SubArmRotateSub subArmRotate = new SubArmRotateSub();
   public static final ArmSub arm = new ArmSub();
+
+  /** Calibrates all subsystems. */
+  public static void calibrate() {
+    subArmPivot.calibrate();
+    subArmRotate.calibrate();
+    arm.calibrate();
+  }
 }
