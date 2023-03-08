@@ -316,6 +316,18 @@ public class ArmSub extends SubsystemBase {
     return targets.get(0);
   }
 
+  /** Kills the robot if an illegal arm angle is reached. */
+  private void killCheck() {
+    double upperArmAngle = upperArmEncoder.getDistance();
+    double foreArmAngle = foreArmEncoder.getDistance();
+
+    if (Math.abs(upperArmAngle) > 90 || Math.abs(foreArmAngle) > 185) {
+      throw new IllegalStateException(
+          String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (foreArm: %d, upperArm: %d)",
+              foreArmAngle, upperArmAngle));
+    }
+  }
+
   /**
    * Checks if the given coordinates are valid for the arm.
    * 
@@ -397,6 +409,8 @@ public class ArmSub extends SubsystemBase {
   @Override
   public void periodic() {
     // PRAY TO GOD THAT THIS CODE WORKS.
+
+    killCheck();
 
     if (!calibrated) {
       // Don't do anything if no calibration has happened.
