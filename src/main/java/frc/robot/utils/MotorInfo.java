@@ -54,7 +54,7 @@ public class MotorInfo {
     return this;
   }
 
-  public MotorInfo withInvertedEncodor(){
+  public MotorInfo withInvertedEncodor() {
     invertEncoder = !invertEncoder;
     return this;
   }
@@ -123,7 +123,7 @@ public class MotorInfo {
 
     Encoder encoder = new Encoder(encoderPort.get()[0], encoderPort.get()[1], invertEncoder, Encoder.EncodingType.k2X);
     encoder.setDistancePerPulse(encoderSteps.get());
-    encoder.setMinRate(0.1 * encoderSteps.get()); // TODO: Check if this works lol
+    encoder.setMinRate(0.1 * encoderSteps.get());
     encoder.setMinRate(10);
     encoder.setSamplesToAverage(5);
     return encoder;

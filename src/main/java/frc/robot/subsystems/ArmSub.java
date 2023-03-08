@@ -304,6 +304,96 @@ public class ArmSub extends SubsystemBase {
     Logger.info("ArmSub : Calibrated!");
   }
 
+  Pair<Double, Double> getFinalTarget() {
+    if (targets.isEmpty())
+      return new Pair<Double, Double>(0.0, 0.0);
+    return targets.get(targets.size() - 1);
+  }
+
+  Pair<Double, Double> getCurTarget() {
+    if (targets.isEmpty())
+      return new Pair<Double, Double>(0.0, 0.0);
+    return targets.get(0);
+  }
+
+  /**
+   * Checks if the given coordinates are valid for the arm.
+   * 
+   * @param x The coordinate x
+   * @param y The coordinate y
+   * @return True if valid, false if not
+   */
+  boolean targetIsValid(double x, double y) {
+    // check legal reach limits
+    if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
+      return false;
+    if (y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1])
+      return false;
+
+    // max arm reach is around the axle x is around robot center x is adjusted to be
+    // around axle before checking
+    if (Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL)
+      return false;
+
+    // check arm swing-through bounds
+    if (x > cnst.ARM_REACH_EXCLUSION[0][0] && x < cnst.ARM_REACH_EXCLUSION[0][1]
+        && !(y > cnst.ARM_SWING_THROUGH_HEIGHT * 0.95 && y < cnst.ARM_SWING_THROUGH_HEIGHT * 1.05)) {
+      return false;
+    }
+
+    // check robot limits
+    if (x > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] && x < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1]
+        && y > cnst.ARM_REACH_ROBOT_EXCLUSION[1][0] && y < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1]) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Inverse cosine rule.
+   * 
+   * @param a Length of side a
+   * @param b Length of side b
+   * @param c Length of side c
+   * @return The included angle C
+   */
+  double invCosRule(double a, double b, double c) {
+    double C = Math.acos(
+        (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
+            / (2 * a * b));
+    return C;
+  }
+
+  /**
+   * Interpolates the path to the destination point.
+   * 
+   * @return The next interpolated point to move to.
+   */
+  Pair<Double, Double> interpolateNext() {
+    Pair<Double, Double> curPos = forK();
+    double x1 = curPos.getFirst();
+    double y1 = curPos.getSecond();
+
+    Pair<Double, Double> destPos = getFinalTarget();
+    double x2 = destPos.getFirst();
+    double y2 = destPos.getSecond();
+
+    double angle = Math.atan2(y2 - y1, x2 - x1);
+
+    double changeX = cnst.ARM_INTERPOLATION_STEP * Math.cos(angle);
+    double changeY = cnst.ARM_INTERPOLATION_STEP * Math.sin(angle);
+
+    if (Math.hypot(changeX, changeY) < cnst.ARM_INTERPOLATION_STEP) {
+      return destPos;
+    }
+
+    double x = changeX + x1;
+    double y = changeY + y1;
+
+    return new Pair<Double, Double>(x, y);
+  }
+
   @Override
   public void periodic() {
     // PRAY TO GOD THAT THIS CODE WORKS.
@@ -350,80 +440,5 @@ public class ArmSub extends SubsystemBase {
     }
 
     updateShuffleboard(upperArmOutput, foreArmOutput);
-  }
-
-  Pair<Double, Double> getFinalTarget() {
-    if (targets.isEmpty())
-      return new Pair<Double, Double>(0.0, 0.0);
-    return targets.get(targets.size() - 1);
-  }
-
-  Pair<Double, Double> getCurTarget() {
-    if (targets.isEmpty())
-      return new Pair<Double, Double>(0.0, 0.0);
-    return targets.get(0);
-  }
-
-  boolean targetIsValid(double x, double y) {
-    // check legal reach limits
-    if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
-      return false;
-    if (y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1])
-      return false;
-
-    // max arm reach is around the axle x is around robot center x is adjusted to be
-    // around axle before checking
-    if (Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL)
-      return false;
-
-    // check arm swing-through bounds
-    if (x > cnst.ARM_REACH_EXCLUSION[0][0] && x < cnst.ARM_REACH_EXCLUSION[0][1]
-        && !(y > cnst.ARM_SWING_THROUGH_HEIGHT * 0.95 && y < cnst.ARM_SWING_THROUGH_HEIGHT * 1.05)) {
-      return false;
-    }
-
-    // check robot limits
-    if (x > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] && x < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1]
-        && y > cnst.ARM_REACH_ROBOT_EXCLUSION[1][0] && y < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1]) {
-      return false;
-    }
-
-    return true;
-  }
-
-  double invCosRule(double a, double b, double c) {
-    double C = Math.acos(
-        (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
-            / (2 * a * b));
-    return C;
-  }
-
-  /**
-   * Interpolates the path to the destination point.
-   * 
-   * @return The next interpolated point to move to.
-   */
-  Pair<Double, Double> interpolateNext() {
-    Pair<Double, Double> curPos = forK();
-    double x1 = curPos.getFirst();
-    double y1 = curPos.getSecond();
-
-    Pair<Double, Double> destPos = getFinalTarget();
-    double x2 = destPos.getFirst();
-    double y2 = destPos.getSecond();
-
-    double angle = Math.atan2(y2 - y1, x2 - x1);
-
-    double changeX = cnst.ARM_INTERPOLATION_STEP * Math.cos(angle);
-    double changeY = cnst.ARM_INTERPOLATION_STEP * Math.sin(angle);
-
-    if (Math.hypot(changeX, changeY) < cnst.ARM_INTERPOLATION_STEP) {
-      return destPos;
-    }
-
-    double x = changeX + x1;
-    double y = changeY + y1;
-
-    return new Pair<Double, Double>(x, y);
   }
 }

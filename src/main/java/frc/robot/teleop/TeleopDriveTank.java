@@ -1,7 +1,6 @@
 package frc.robot.teleop;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
@@ -13,7 +12,6 @@ import frc.robot.utils.CurveFit;
  */
 public class TeleopDriveTank extends CommandBase {
   private final Variables vars = Variables.getInstance();
-  private final Constants cnst = Constants.getInstance();
   private final OI oi = OI.getInstance();
 
   private final CurveFit throtFit;
