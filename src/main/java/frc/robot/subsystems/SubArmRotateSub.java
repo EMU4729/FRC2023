@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
 public class SubArmRotateSub extends SubsystemBase {
@@ -27,6 +28,12 @@ public class SubArmRotateSub extends SubsystemBase {
     if (!calibrated) {
       Logger.warn("SubArmRotateSub : Uncalibrated! Be careful!");
     }
+  }
+
+  /** Updates shuffleboard. Call this function regularly. */
+  private void updateShuffleboard() {
+    ShuffleControl.subArmTab.setRotationAngle(encoder.getDistance());
+    ShuffleControl.calibrationTab.setSubArmRotateCalibrated(calibrated);
   }
 
   /**
@@ -114,5 +121,6 @@ public class SubArmRotateSub extends SubsystemBase {
   @Override
   public void periodic() {
     checkLimit(true);
+    updateShuffleboard();
   }
 }

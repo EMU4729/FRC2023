@@ -66,6 +66,7 @@ public class ArmSub extends SubsystemBase {
     ShuffleControl.armTab.setEncoderAngles(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
     ShuffleControl.armTab.setControllerErrors(upperArmController.getPositionError(),
         foreArmController.getPositionError());
+    ShuffleControl.calibrationTab.setArmCalibrated(calibrated);
   }
 
   /**
