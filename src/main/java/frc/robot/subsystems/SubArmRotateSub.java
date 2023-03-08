@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.logger.Logger;
@@ -27,6 +29,42 @@ public class SubArmRotateSub extends SubsystemBase {
     }
   }
 
+  /**
+   * Checks if the subarm has rotated beyond its limits.
+   * 
+   * @param stop Whether to stop the subarm if the limits have been surpassed or
+   *             not.
+   * @return True if limits have been surpassed, false if not
+   */
+  private boolean checkLimit(boolean stop) {
+    double turnDegrees = encoder.getDistance();
+
+    if (turnDegrees < cnst.SUBARM_ROTATE_LOWER_LIMIT) {
+      if (stop) {
+        stop();
+      }
+      Logger.warn("SubArmRotateSub : Lower limit reached! Stopping...");
+      return true;
+    } else if (turnDegrees > cnst.SUBARM_ROTATE_UPPER_LIMIT) {
+      if (stop) {
+        stop();
+      }
+      Logger.warn("SubArmRotateSub : Upper limit reached! Stopping...");
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Checks if the subarm has rotated beyond its limits.
+   * 
+   * @return True if limits have been surpassed, false if not
+   */
+  private boolean checkLimit() {
+    return checkLimit(false);
+  }
+
   /** Stops the servo. */
   public void stop() {
     calibrationCheck();
@@ -45,16 +83,36 @@ public class SubArmRotateSub extends SubsystemBase {
     servo.set(0);
   }
 
+  /**
+   * Makes a {@link Command} that rotates the servo to the specified value.
+   * 
+   * @param value The specified value.
+   * @return The constructed {@link Command}
+   */
+  private Command turnCommand(double value) {
+    return new FunctionalCommand(
+        () -> {
+          calibrationCheck();
+          servo.set(value);
+        }, () -> {
+        },
+        (interrupted) -> stop(),
+        this::checkLimit,
+        this);
+  }
+
+  /** @return a {@link Command} to rotate the subarm clockwise */
+  public Command turnClockwise() {
+    return turnCommand(1);
+  }
+
+  /** @return a {@link Command} to rotate the subarm anticlockwise */
+  public Command turnAnticlockwise() {
+    return turnCommand(0);
+  }
+
   @Override
   public void periodic() {
-    double turnDegrees = encoder.getDistance();
-
-    if (turnDegrees < cnst.SUBARM_ROTATE_LOWER_LIMIT) {
-      stop();
-      Logger.warn("SubArmRotateSub : Lower limit reached! Stopping...");
-    } else if (turnDegrees > cnst.SUBARM_ROTATE_UPPER_LIMIT) {
-      stop();
-      Logger.warn("SubArmRotateSub : Upper limit reached! Stopping...");
-    }
+    checkLimit(true);
   }
 }

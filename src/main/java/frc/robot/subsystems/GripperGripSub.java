@@ -18,8 +18,13 @@ public class GripperGripSub extends SubsystemBase {
     servos.set(1);
   }
 
-  /** Closes the gripper */
-  public void close() {
+  /** Closes the gripper for cone game objects. */
+  public void closeCone() {
     servos.set(0);
+  }
+
+  /** Closes the gripper for cube game objects. */
+  public void closeCube() {
+    servos.set(0.4);
   }
 }

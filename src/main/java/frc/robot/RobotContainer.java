@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.AutoProvider;
+import frc.robot.commands.ArmPickUp;
 import frc.robot.teleop.TeleopProvider;
 
 /**
@@ -41,34 +42,52 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // +----------------+
+    // | PILOT CONTROLS |
+    // +----------------+
+
     // Invert Drive
-
-    // oi.pilot.start().onTrue(new InstantCommand(() -> {
-    // vars.invertDriveDirection = !vars.invertDriveDirection;
-    // // LEDPattern.runDirLEDS();
-    // }));
-
-    // Calibration
-    oi.pilot.start().onTrue(new InstantCommand(Subsystems.arm::calibrate, Subsystems.arm));
-
-    // D-Pad Arm Bindings
-    oi.pilot.povUp().onTrue(Subsystems.arm.farField());
-    oi.pilot.povRight().onTrue(Subsystems.arm.lowField());
-    oi.pilot.povDown().onTrue(Subsystems.arm.lowerRung());
-    oi.pilot.povLeft().onTrue(Subsystems.arm.upperRung());
-
-    // Fine arm movement bindings @wip should get proportional control like drive has                              //wip
-    oi.pilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
-    oi.pilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
-    oi.pilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());
-    oi.pilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveDown());
-
-    // Arm Invert - DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS
-    // DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE THIS DO NOT USE
-    // THIS DO NOT USE THIS DO NOT USE THIS
-    oi.pilot.b().onTrue(new InstantCommand(Subsystems.arm::invert, Subsystems.arm));
+    oi.pilot.start().onTrue(new InstantCommand(() -> {
+      vars.invertDriveDirection = !vars.invertDriveDirection;
+      // LEDPattern.runDirLEDS();
+    }));
 
     // Drive bindings handled in teleop command
+
+    // +------------------+
+    // | COPILOT CONTROLS |
+    // +------------------+
+
+    // Calibration
+    oi.copilot.start().onTrue(new InstantCommand(Subsystems::calibrate, Subsystems.arm));
+
+    // Preprogrammed arm positions
+    oi.copilot.povUp().onTrue(new ArmPickUp());
+    oi.copilot.povRight().onTrue(Subsystems.arm.lowField());
+    oi.copilot.povDown().onTrue(Subsystems.arm.lowerRung());
+    oi.copilot.povLeft().onTrue(Subsystems.arm.upperRung());
+
+    // Fine arm movement bindings @wip should get proportional control like drive
+    oi.copilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
+    oi.copilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
+    oi.copilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());
+    oi.copilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveDown());
+
+    // Arm Invert
+    oi.copilot.x().onTrue(new InstantCommand(Subsystems.arm::invert, Subsystems.arm));
+
+    // Subarm Control
+    oi.copilot.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.8).whileTrue(Subsystems.subArmPivot.moveUp());
+    oi.copilot.axisLessThan(XboxController.Axis.kLeftY.value, -0.8).whileTrue(Subsystems.subArmPivot.moveDown());
+    oi.copilot.axisGreaterThan(XboxController.Axis.kLeftX.value, 0.8)
+        .whileTrue(Subsystems.subArmRotate.turnClockwise());
+    oi.copilot.axisLessThan(XboxController.Axis.kLeftX.value, -0.8)
+        .whileTrue(Subsystems.subArmRotate.turnAnticlockwise());
+
+    // Gripper Control
+    oi.copilot.a().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
+    oi.copilot.b().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCube, Subsystems.gripperGrip));
+    oi.copilot.y().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCone, Subsystems.gripperGrip));
   }
 
   /**
