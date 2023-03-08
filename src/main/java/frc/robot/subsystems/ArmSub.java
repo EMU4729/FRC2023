@@ -323,7 +323,7 @@ public class ArmSub extends SubsystemBase {
 
     if (Math.abs(upperArmAngle) > 90 || Math.abs(foreArmAngle) > 185) {
       throw new IllegalStateException(
-          String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (foreArm: %d, upperArm: %d)",
+          String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (foreArm: %f, upperArm: %f)",
               foreArmAngle, upperArmAngle));
     }
   }
