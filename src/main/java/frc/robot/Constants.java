@@ -50,13 +50,13 @@ public final class Constants {
      * {invert,brake,connectionSaftey}]
      */
     public final MotorInfo DRIVE_MOTOR_ID_LM = new MotorInfo(1, MotorInfo.Type.TalonSRX)
-            .withSafety().encoder(new int[] { 0, 1 }, 60.078 / 256. / 1000);
+            .withSafety().encoder(new int[] { 4, 5 }, 60.078 / 256. / 1000);
     /**
      * Information for right master drive [Port,controller type,
      * {invert,brake,connectionSaftey}]
      */
     public final MotorInfo DRIVE_MOTOR_ID_RM = new MotorInfo(3, MotorInfo.Type.TalonSRX)
-            .withInvert().withSafety().encoder(new int[] { 2, 3 }, 59.883 / 256. / 1000);
+            .withInvert().withSafety().encoder(new int[] { 6, 7 }, 59.883 / 256. / 1000);
     /**
      * Information for left slave drive [Port,controller type,
      * {invert,brake,connectionSaftey}]
@@ -98,13 +98,13 @@ public final class Constants {
     // Gripper + Arm
     /** Information for Upper Arm Master Motor */
     public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-            .encoder(new int[] { 4, 5 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the actual
+            .encoder(new int[] { 10, 11 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the actual
     // arm
     /** Information for Upper Arm Slave Motor */
     public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
     /** Information for Fore Arm Master Motor */
     public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-            .encoder(new int[] { 6, 7 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
+            .encoder(new int[] { 8, 9 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
     // arm
     /** Information for Fore Arm Slave Motor */
     public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
@@ -134,7 +134,7 @@ public final class Constants {
     /** PID Constants for Fore Arm Movement */ // wip
     public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.02, 0, 0); // UPDATE
     /** Gripper Grip Servo 1 Channel @wip update servo port */ // wip
-    public final int GRIPPER_GRIP_SERVOS_ID = 0; // UPDATE
+    public final int GRIPPER_GRIP_SERVOS_ID = 1;
     /**
      * distance in x and y from the upper arm axle to the max distance the robot is
      * allowed to reach
@@ -167,8 +167,8 @@ public final class Constants {
     public final double ARM_SWING_THROUGH_HEIGHT = UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
 
     // Subarm
-    /** Subarm Rotation Servo Channel @wip update servo port */
-    public final int SUBARM_ROTATE_SERVO = 1;
+    /** Subarm Rotation Servo Channel */
+    public final int SUBARM_ROTATE_SERVO = 0;
     /** Subarm Rotation Encoder Lower Limit */
     public final double SUBARM_ROTATE_LOWER_LIMIT = -5;
     /** Subarm Rotation Encoder Upper Bound */
@@ -178,14 +178,14 @@ public final class Constants {
      * with this.</strong> @wip update this.
      */
     public final MotorInfo SUBARM_ROTATE_ENCODER_INFO = new MotorInfo(-1, MotorInfo.Type.Never)
-            .encoder(new int[] { 10, 11 }, 360. / 44.4 / 4.);
+            .encoder(new int[] { 2, 3 }, 360. / 44.4 / 4.);
     /**
      * Information for Subarm Pivot Motor
      * 
      * @wip update everything but the encoder steps, that's fine
      */
     public final MotorInfo SUBARM_PIVOT_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
-            .encoder(new int[] { 8, 9 }, 360. / 44.4 / 4.);
+            .encoder(new int[] { 0, 1 }, 360. / 44.4 / 4.);
     /** PID Constants for the Subarm Pivot */
     public final PIDControllerConstants SUBARM_PIVOT_PID = new PIDControllerConstants(0.05, 0, 0);
     /** Subarm Pivot Velocity (degrees per tick) */
