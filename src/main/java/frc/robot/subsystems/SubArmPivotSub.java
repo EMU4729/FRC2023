@@ -50,6 +50,7 @@ public class SubArmPivotSub extends SubsystemBase {
     ShuffleControl.subArmTab.setEncoderAngle(encoder.getDistance());
     ShuffleControl.subArmTab.setTargetAngle(targetAngle);
     ShuffleControl.subArmTab.setControllerError(controller.getPositionError());
+    ShuffleControl.calibrationTab.setSubArmPivotCalibrated(calibrated);
   }
 
   /** @return If a provided angle is within the bounds of the pivot limits. */

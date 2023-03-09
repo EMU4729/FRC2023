@@ -23,7 +23,7 @@ public class MiddleAuto extends SequentialCommandGroup {
 
         // Pick up game object
         Subsystems.arm.farField(),
-        new InstantCommand(Subsystems.gripperGrip::close, Subsystems.gripperGrip),
+        new InstantCommand(Subsystems.gripperGrip::closeCone, Subsystems.gripperGrip),
         new WaitCommand(1),
 
         Commands.sequence(
