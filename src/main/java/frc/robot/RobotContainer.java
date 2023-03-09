@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.AutoProvider;
 import frc.robot.commands.ArmPickUp;
 import frc.robot.teleop.TeleopProvider;
+import frc.robot.utils.LEDControl.LEDControl;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -47,9 +48,18 @@ public class RobotContainer {
     // +----------------+
 
     // Invert Drive
+    LEDControl.getInstance().runDirectionLights();
     oi.pilot.start().onTrue(new InstantCommand(() -> {
       vars.invertDriveDirection = !vars.invertDriveDirection;
+      LEDControl.getInstance().runDirectionLights();
       // LEDPattern.runDirLEDS();
+    }));
+
+    oi.pilot.rightBumper().onTrue(new InstantCommand(() -> {
+      LEDControl.getInstance().runConeLights();
+    }));
+    oi.pilot.leftBumper().onTrue(new InstantCommand(() -> {
+      LEDControl.getInstance().runCubeLights();
     }));
 
     // Drive bindings handled in teleop command
