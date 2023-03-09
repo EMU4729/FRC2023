@@ -410,8 +410,8 @@ public class ArmSub extends SubsystemBase {
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
-    // upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
-    // foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+    upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
+    foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
 
     if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {
       Pair<Double, Double> nextPoint = interpolateNext();
