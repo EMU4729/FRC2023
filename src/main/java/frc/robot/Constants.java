@@ -89,8 +89,6 @@ public final class Constants {
     public final double DRIVE_RAMSETE_B = 2;
     /** Auto ramsete zeta variable */
     public final double DRIVE_RAMSETE_ZETA = 0.7;
-    /** Path to the auto pathweaver json, relative to the robot deploy directory */
-    public final String PATHWEAVER_PATH = "paths/GoToGameObject.wpilib.json";
 
     /** PID Constants for Charge Pad Balance Command */
     public final PIDControllerConstants BALANCE_CHARGE_PAD_PID = new PIDControllerConstants(0.1, 0, 0); // UPDATE
