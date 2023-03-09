@@ -143,8 +143,15 @@ public class ArmSub extends SubsystemBase {
     return new Pair<Double, Double>(foreArmAngle, upperArmAngle);
   }
 
-  /** Inverts the arm. */
+  /**
+   * Inverts the arm.
+   * @apiNote Disabled until further notice.
+   */
   public void invert() {
+    // Disable inversion until confirmed to be good
+    if (true) {
+      return;
+    }
     invert = !invert;
     double tmp1 = invert ? cnst.ARM_REACH_EXCLUSION[0][0] : cnst.ARM_REACH_EXCLUSION[0][1];
     double tmp2 = invert ? cnst.ARM_REACH_EXCLUSION[0][1] : cnst.ARM_REACH_EXCLUSION[0][0];
