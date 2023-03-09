@@ -170,7 +170,7 @@ public final class Constants {
 
     // Subarm
     /** Subarm Rotation Servo Channel @wip update servo port */
-    public final int SUBARM_ROTATE_SERVO = 2;
+    public final int SUBARM_ROTATE_SERVO = 1;
     /** Subarm Rotation Encoder Lower Limit */
     public final double SUBARM_ROTATE_LOWER_LIMIT = -5;
     /** Subarm Rotation Encoder Upper Bound */
@@ -180,7 +180,7 @@ public final class Constants {
      * with this.</strong> @wip update this.
      */
     public final MotorInfo SUBARM_ROTATE_ENCODER_INFO = new MotorInfo(-1, MotorInfo.Type.Never)
-            .encoder(new int[] { 1, 2 }, 360. / 44.4 / 4.);
+            .encoder(new int[] { 10, 11 }, 360. / 44.4 / 4.);
     /**
      * Information for Subarm Pivot Motor
      * 

@@ -31,8 +31,13 @@
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/Victor SPX [7]": "Motor Controller",
+      "/Shuffleboard/Calibration/Calibrate All": "Command",
+      "/Shuffleboard/Calibration/Calibrate Arm": "Command",
+      "/Shuffleboard/Calibration/Calibrate SubArm Pivot": "Command",
+      "/Shuffleboard/Calibration/Calibrate SubArm Rotation": "Command",
       "/Shuffleboard/Drive/DriveOutput": "DifferentialDrive",
       "/Shuffleboard/Drive/TeleopType": "String Chooser",
+      "/Shuffleboard/Nav/Field": "Field2d",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
