@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NavTab {
   private ShuffleboardTab nav = Shuffleboard.getTab("Nav");
@@ -18,6 +19,7 @@ public class NavTab {
 
   protected NavTab() {
     nav.add("Field", field);
+    SmartDashboard.putData(field);
   }
 
   public void setRotation(double yaw, double pitch, double roll) {
