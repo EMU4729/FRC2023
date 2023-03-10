@@ -101,9 +101,10 @@ public class ArmSub extends SubsystemBase {
   }
 
   /** @return The angle that the end of the arm makes with the robot horizontal */
-  public double getEndAngle() {
-    Pair<Double, Double> endPoint = forK();
-    return Math.toDegrees(Math.atan2(endPoint.getSecond(), endPoint.getFirst()));
+  public double getEndAngle() {    
+    double upperArmAngle = upperArmEncoder.getDistance();
+    double foreArmAngle  = foreArmEncoder.getDistance();
+    return foreArmAngle - (180 - (upperArmAngle + 90));
   }
 
   /**
