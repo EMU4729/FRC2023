@@ -7,11 +7,11 @@
 - 3: Drive Right Master
 - 4: Drive Right Slave
 
-- 5: Upper Arm Master
-- 6: Upper Arm Slave
+- 7: Upper Arm Master
+- 8: Upper Arm Slave
 
-- 7: Fore Arm Master
-- 8: Fore Arm Slave
+- 5: Fore Arm Master
+- 6: Fore Arm Slave
 
 - 9: Subarm Pivot
 
