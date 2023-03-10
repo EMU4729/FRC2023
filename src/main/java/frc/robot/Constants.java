@@ -96,65 +96,65 @@ public final class Constants {
     public final double BALANCE_CHARGE_PAD_DEADBAND = 2;
 
     // Gripper + Arm
-    /** Information for Upper Arm Master Motor */
-    public final MotorInfo UPPER_ARM_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
+    /** Information for Arm Seg1 Master Motor */
+    public final MotorInfo ARM_SEG1_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
             .encoder(new int[] { 10, 11 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the actual
     // arm
-    /** Information for Upper Arm Slave Motor */
-    public final MotorInfo UPPER_ARM_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
-    /** Information for Fore Arm Master Motor */
-    public final MotorInfo FORE_ARM_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
+    /** Information for Arm Seg1 Slave Motor */
+    public final MotorInfo ARM_SEG1_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
+    /** Information for Arm Seg2 Master Motor */
+    public final MotorInfo ARM_SEG2_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
             .encoder(new int[] { 8, 9 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
     // arm
-    /** Information for Fore Arm Slave Motor */
-    public final MotorInfo FORE_ARM_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
+    /** Information for Arm Seg2 Slave Motor */
+    public final MotorInfo ARM_SEG2_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
     /**
-     * Length of the forearm (second segment)(between axles), in (mm) @wip update
+     * Length of the armseg2 (second segment)(between axles), in (mm) @wip update
      * arm length
      */ // wip
-    public final double FORE_ARM_LENGTH = 1; // UPDATE
+    public final double ARM_SEG2_LENGTH = 1; // UPDATE
     /**
-     * Length of the upper arm (first segment)(between axles), in (mm) @wip update
+     * Length of the arm seg1 (first segment)(between axles), in (mm) @wip update
      * arm length
      */ // wip
-    public final double UPPER_ARM_LENGTH = 1; // UPDATE
-    /** height off the carpet of the Upper rm axle (m) @wip value just a guess */ // wip
-    public final double UPPER_ARM_AXLE_HEIGHT = 0.2;
+    public final double ARM_SEG1_LENGTH = 1; // UPDATE
+    /** height off the carpet of the seg1 rm axle (m) @wip value just a guess */ // wip
+    public final double ARM_SEG1_AXLE_HEIGHT = 0.2;
     /**
-     * amount the upper arm axle is offset from the centerline in x (m)(forward
+     * amount the arm seg1 axle is offset from the centerline in x (m)(forward
      * pos) @wip value guessed
      */ // wip
-    public final double UPPER_ARM_X_OFFSET = 0.05;
+    public final double ARM_SEG1_X_OFFSET = 0.05;
     /** Velocity of the arm movements */
     public final double ARM_VELOCITY = 0.002;
     /** Interpolation step of the arm */
     public final double ARM_INTERPOLATION_STEP = 0.05;
-    /** PID Constants for Upper Arm Movement @wip update constants */ // wip
-    public final PIDControllerConstants UPPER_ARM_PID = new PIDControllerConstants(0.03, 0, 0); // UPDATE
-    /** PID Constants for Fore Arm Movement */ // wip
-    public final PIDControllerConstants FORE_ARM_PID = new PIDControllerConstants(0.02, 0, 0); // UPDATE
+    /** PID Constants for Arm Seg1 Movement @wip update constants */ // wip
+    public final PIDControllerConstants ARM_SEG1_PID = new PIDControllerConstants(0.03, 0.01, 0); // UPDATE
+    /** PID Constants for Arm Seg2 Movement */ // wip
+    public final PIDControllerConstants ARM_SEG2_PID = new PIDControllerConstants(0.02, 0.007, 0); // UPDATE
     /** Gripper Grip Servo 1 Channel @wip update servo port */ // wip
     public final int GRIPPER_GRIP_SERVOS_ID = 1;
     /**
-     * distance in x and y from the upper arm axle to the max distance the robot is
+     * distance in x and y from the arm seg1 axle to the max distance the robot is
      * allowed to reach
      * [[x- (behind), x+(in front)], [y-(below), y+(above)]] (m)
      */
     public final double[][] MAX_ARM_REACH_LEGAL = {
-            { -(ROBOT_LENGTH / 2 + ROBOT_REACH_MAX[0] + UPPER_ARM_X_OFFSET),
-                    ROBOT_LENGTH / 2 + ROBOT_REACH_MAX[0] - UPPER_ARM_X_OFFSET },
-            { -UPPER_ARM_AXLE_HEIGHT, ROBOT_REACH_MAX[1] - UPPER_ARM_AXLE_HEIGHT } };
+            { -(ROBOT_LENGTH / 2 + ROBOT_REACH_MAX[0] + ARM_SEG1_X_OFFSET),
+                    ROBOT_LENGTH / 2 + ROBOT_REACH_MAX[0] - ARM_SEG1_X_OFFSET },
+            { -ARM_SEG1_AXLE_HEIGHT, ROBOT_REACH_MAX[1] - ARM_SEG1_AXLE_HEIGHT } };
     /**
-     * length of the combined 2 segment arm, UPPER_ARM_X_OFFSET should be subtracted
+     * length of the combined 2 segment arm, ARM_SEG1_X_OFFSET should be subtracted
      * to find true x (mm)
      */
-    public final double MAX_ARM_REACH_PHYSICAL = UPPER_ARM_LENGTH + FORE_ARM_LENGTH;
+    public final double MAX_ARM_REACH_PHYSICAL = ARM_SEG1_LENGTH + ARM_SEG2_LENGTH;
     /**
      * area the arm should never enter (mm)[[x-(behind), x+(in front)], [y (from
      * floor)]] @wip needs right y
      */ // wip
     public final double[][] ARM_REACH_EXCLUSION = {
-            { -(ROBOT_LENGTH / 2 - UPPER_ARM_X_OFFSET), (ROBOT_LENGTH / 2 + UPPER_ARM_X_OFFSET), },
+            { -(ROBOT_LENGTH / 2 - ARM_SEG1_X_OFFSET), (ROBOT_LENGTH / 2 + ARM_SEG1_X_OFFSET), },
             { 0.200 } };
     /** Dimensions (width, height) of the robot that the arm should never reach. */
     public final double[][] ARM_REACH_ROBOT_EXCLUSION = {
@@ -164,7 +164,7 @@ public final class Constants {
     /**
      * height the arm should seek to hold if moving or stored inside frame perimiter
      */
-    public final double ARM_SWING_THROUGH_HEIGHT = UPPER_ARM_LENGTH - FORE_ARM_LENGTH;
+    public final double ARM_SWING_THROUGH_HEIGHT = ARM_SEG1_LENGTH - ARM_SEG2_LENGTH;
 
     // Subarm
     /** Subarm Rotation Servo Channel */

@@ -21,71 +21,71 @@ import frc.robot.utils.logger.Logger;
 public class ArmSub extends SubsystemBase {
   private final Constants cnst = Constants.getInstance();
 
-  private final PIDController upperArmController = cnst.UPPER_ARM_PID.createPIDController();
-  private final PIDController foreArmController = cnst.FORE_ARM_PID.createPIDController();
+  private final PIDController armSeg1Controller = cnst.ARM_SEG1_PID.createPIDController();
+  private final PIDController ArmSeg2Controller = cnst.ARM_SEG2_PID.createPIDController();
 
-  private final MotorController upperArmMasterMotor = cnst.UPPER_ARM_MASTER_MOTOR_ID.createMotorController();
-  private final MotorController upperArmSlaveMotor = cnst.UPPER_ARM_SLAVE_MOTOR_ID.createMotorController();
+  private final MotorController armSeg1MasterMotor = cnst.ARM_SEG1_MASTER_MOTOR_ID.createMotorController();
+  private final MotorController armSeg1SlaveMotor = cnst.ARM_SEG1_SLAVE_MOTOR_ID.createMotorController();
 
-  private final MotorController foreArmMasterMotor = cnst.FORE_ARM_MASTER_MOTOR_ID.createMotorController();
-  private final MotorController foreArmSlaveMotor = cnst.FORE_ARM_SLAVE_MOTOR_ID.createMotorController();
+  private final MotorController armSeg2MasterMotor = cnst.ARM_SEG2_MASTER_MOTOR_ID.createMotorController();
+  private final MotorController armSeg2SlaveMotor = cnst.ARM_SEG2_SLAVE_MOTOR_ID.createMotorController();
 
-  private final MotorControllerGroup upperArmMotors = new MotorControllerGroup(upperArmMasterMotor, upperArmSlaveMotor);
-  private final MotorControllerGroup foreArmMotors = new MotorControllerGroup(foreArmMasterMotor, foreArmSlaveMotor);
+  private final MotorControllerGroup armSeg1Motors = new MotorControllerGroup(armSeg1MasterMotor, armSeg1SlaveMotor);
+  private final MotorControllerGroup armSeg2Motors = new MotorControllerGroup(armSeg2MasterMotor, armSeg2SlaveMotor);
 
-  private final Encoder upperArmEncoder = cnst.UPPER_ARM_MASTER_MOTOR_ID.createEncoder();
-  private final Encoder foreArmEncoder = cnst.FORE_ARM_MASTER_MOTOR_ID.createEncoder();
+  private final Encoder armSeg1Encoder = cnst.ARM_SEG1_MASTER_MOTOR_ID.createEncoder();
+  private final Encoder armSeg2Encoder = cnst.ARM_SEG2_MASTER_MOTOR_ID.createEncoder();
 
   private boolean invert = false;
   private boolean calibrated = false;
 
-  private CurveFit upperCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
-  private CurveFit lowerCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
+  private CurveFit seg1Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
+  private CurveFit seg2Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
 
   private List<Pair<Double, Double>> targets = new ArrayList<Pair<Double, Double>>();
-  private double upperArmTargetAngle;
-  private double foreArmTargetAngle;
+  private double armSeg1TargetAngle;
+  private double armSeg2TargetAngle;
   private Pair<Double, Double> prevArmTargetPoints;
 
   public ArmSub() {
     targets.add(0, new Pair<Double, Double>(0.0, 0.0));
-    upperArmController.setTolerance(0);
-    foreArmController.setTolerance(0);
+    armSeg1Controller.setTolerance(0);
+    ArmSeg2Controller.setTolerance(0);
   }
 
   /**
    * Updates the arm tab in shuffleboard. Call this function regularly.
    * 
-   * @param upperArmOutput The speed of the upper arm motors
-   * @param foreArmOutput  The speed of the fore arm motors
+   * @param armSeg1Output The speed of the upper arm motors
+   * @param armSeg2Output  The speed of the fore arm motors
    */
-  private void updateShuffleboard(double upperArmOutput, double foreArmOutput) {
-    ShuffleControl.armTab.setOutputs(upperArmOutput, foreArmOutput);
+  private void updateShuffleboard(double armSeg1Output, double armSeg2Output) {
+    ShuffleControl.armTab.setOutputs(armSeg1Output, armSeg2Output);
     ShuffleControl.armTab.setTargetCoords(getFinalTarget().getFirst(), getFinalTarget().getSecond());
-    ShuffleControl.armTab.setTargetAngles(upperArmTargetAngle, foreArmTargetAngle);
-    ShuffleControl.armTab.setEncoderAngles(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
-    ShuffleControl.armTab.setControllerErrors(upperArmController.getPositionError(),
-        foreArmController.getPositionError());
+    ShuffleControl.armTab.setTargetAngles(armSeg1TargetAngle, armSeg2TargetAngle);
+    ShuffleControl.armTab.setEncoderAngles(armSeg1Encoder.getDistance(), armSeg2Encoder.getDistance());
+    ShuffleControl.armTab.setControllerErrors(armSeg1Controller.getPositionError(),
+        ArmSeg2Controller.getPositionError());
     ShuffleControl.calibrationTab.setArmCalibrated(calibrated);
   }
 
   /**
    * Forward kinematics.
    * 
-   * @param upperArmAngle The angle of the upper arm
-   * @param foreArmAngle  The angle of the fore arm
+   * @param armSeg1Angle The angle of the upper arm
+   * @param armSeg2Angle  The angle of the fore arm
    * @return The calculated coordinates of the end of the arm.
    */
-  private Pair<Double, Double> forK(double upperArmAngle, double foreArmAngle) {
-    foreArmAngle *= -1;
-    double l1 = cnst.UPPER_ARM_LENGTH;
-    double l2 = cnst.FORE_ARM_LENGTH;
+  private Pair<Double, Double> forK(double armSeg1Angle, double armSeg2Angle) {
+    armSeg2Angle *= -1;
+    double l1 = cnst.ARM_SEG1_LENGTH;
+    double l2 = cnst.ARM_SEG2_LENGTH;
 
-    double x1 = l1 * Math.cos(Math.toRadians(upperArmAngle + 90));
-    double y1 = l1 * Math.sin(Math.toRadians(upperArmAngle + 90));
+    double x1 = l1 * Math.cos(Math.toRadians(armSeg1Angle + 90));
+    double y1 = l1 * Math.sin(Math.toRadians(armSeg1Angle + 90));
 
-    double x2 = l2 * Math.cos(Math.toRadians(foreArmAngle - 90)) + x1;
-    double y2 = l2 * Math.sin(Math.toRadians(foreArmAngle - 90)) + y1;
+    double x2 = l2 * Math.cos(Math.toRadians(armSeg2Angle - 90)) + x1;
+    double y2 = l2 * Math.sin(Math.toRadians(armSeg2Angle - 90)) + y1;
 
     return new Pair<Double, Double>(-x2, y2);
   }
@@ -97,14 +97,13 @@ public class ArmSub extends SubsystemBase {
    * @return The calculated coordinates of the end of the arm.
    */
   private Pair<Double, Double> forK() {
-    return forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+    return forK(armSeg1Encoder.getDistance(), armSeg2Encoder.getDistance());
   }
 
   /** @return The angle that the end of the arm makes with the robot horizontal */
   public double getEndAngle() {
-    double upperArmAngle = upperArmEncoder.getDistance();
-    double foreArmAngle = foreArmEncoder.getDistance();
-    return foreArmAngle - (180 - (upperArmAngle + 90));
+    double armSeg2Angle = armSeg2Encoder.getDistance();
+    return armSeg2Angle - 90;
   }
 
   /**
@@ -120,8 +119,8 @@ public class ArmSub extends SubsystemBase {
     double xSign = Math.signum(x);
     x = Math.abs(x);
 
-    double L1 = cnst.UPPER_ARM_LENGTH;
-    double L2 = cnst.FORE_ARM_LENGTH;
+    double L1 = cnst.ARM_SEG1_LENGTH;
+    double L2 = cnst.ARM_SEG2_LENGTH;
 
     double r = Math.hypot(x, y);
 
@@ -133,15 +132,15 @@ public class ArmSub extends SubsystemBase {
     beta = Math.toDegrees(beta);
     theta = Math.toDegrees(theta);
 
-    double upperArmAngle = xSign * (alpha + theta - 90);
-    double foreArmAngle = xSign * beta + upperArmAngle;
+    double armSeg1Angle = xSign * (alpha + theta - 90);
+    double armSeg2Angle = xSign * beta + armSeg1Angle;
 
     // Return previous results if coordinates are invalid
-    if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
-      return new Pair<Double, Double>(upperArmTargetAngle, foreArmTargetAngle);
+    if (Double.isNaN(armSeg2Angle) || Double.isNaN(armSeg1Angle)) {
+      return new Pair<Double, Double>(armSeg1TargetAngle, armSeg2TargetAngle);
     }
 
-    return new Pair<Double, Double>(upperArmAngle, foreArmAngle);
+    return new Pair<Double, Double>(armSeg1Angle, armSeg2Angle);
   }
 
   /**
@@ -166,19 +165,19 @@ public class ArmSub extends SubsystemBase {
   /**
    * Sets the target angles for the arm
    * 
-   * @param upperArm The target angle for the upper arm
-   * @param foreArm  The target angle for the fore arm
+   * @param armSeg1 The target angle for the upper arm
+   * @param armSeg2  The target angle for the fore arm
    */
-  private void setAngles(double upperArm, double foreArm) {
+  private void setAngles(double armSeg1, double armSeg2) {
     if (!calibrated) {
       Logger.warn("ArmSub : Arm hasn't been calibrated yet!");
     }
 
-    upperArmTargetAngle = MathUtil.clamp(upperArm, -85, 85);
-    foreArmTargetAngle = MathUtil.clamp(foreArm, -180, 180);
+    armSeg1TargetAngle = MathUtil.clamp(armSeg1, -85, 85);
+    armSeg2TargetAngle = MathUtil.clamp(armSeg2, -180, 180);
 
-    upperArmController.setSetpoint(upperArmTargetAngle);
-    foreArmController.setSetpoint(foreArmTargetAngle);
+    armSeg1Controller.setSetpoint(armSeg1TargetAngle);
+    ArmSeg2Controller.setSetpoint(armSeg2TargetAngle);
   }
 
   /**
@@ -296,7 +295,7 @@ public class ArmSub extends SubsystemBase {
             return true;
           }
 
-          return foreArmController.atSetpoint() && upperArmController.atSetpoint();
+          return ArmSeg2Controller.atSetpoint() && armSeg1Controller.atSetpoint();
         }, this);
   }
 
@@ -306,8 +305,8 @@ public class ArmSub extends SubsystemBase {
    * down.
    */
   public void calibrate() {
-    upperArmEncoder.reset();
-    foreArmEncoder.reset();
+    armSeg1Encoder.reset();
+    armSeg2Encoder.reset();
     calibrated = true;
     setAngles(0, 0);
     // addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT,
@@ -330,13 +329,13 @@ public class ArmSub extends SubsystemBase {
 
   /** Kills the robot if an illegal arm angle is reached. */
   private void killCheck() {
-    double upperArmAngle = upperArmEncoder.getDistance();
-    double foreArmAngle = foreArmEncoder.getDistance();
+    double armSeg1Angle = armSeg1Encoder.getDistance();
+    double armSeg2Angle = armSeg2Encoder.getDistance();
 
-    if (Math.abs(upperArmAngle) > 90 || Math.abs(foreArmAngle) > 185) {
+    if (Math.abs(armSeg1Angle) > 90 || Math.abs(armSeg2Angle) > 185) {
       throw new IllegalStateException(
-          String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (foreArm: %f, upperArm: %f)",
-              foreArmAngle, upperArmAngle));
+          String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (armSeg2: %f, armSeg1: %f)",
+              armSeg2Angle, armSeg1Angle));
     }
   }
 
@@ -375,8 +374,8 @@ public class ArmSub extends SubsystemBase {
 
     // max arm reach is around the axle x is around robot center x is adjusted to be
     // around axle before checking
-    if (Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) > cnst.MAX_ARM_REACH_PHYSICAL &&
-        Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) >= Math.hypot(atX + cnst.UPPER_ARM_X_OFFSET, atY)) {
+    if (Math.hypot(toX + cnst.ARM_SEG1_X_OFFSET, toY) > cnst.MAX_ARM_REACH_PHYSICAL &&
+        Math.hypot(toX + cnst.ARM_SEG1_X_OFFSET, toY) >= Math.hypot(atX + cnst.ARM_SEG1_X_OFFSET, atY)) {
       ShuffleControl.armTab.setCheckThree(false);
       return false;
     }
@@ -468,27 +467,27 @@ public class ArmSub extends SubsystemBase {
 
     // killCheck();
 
-    Pair<Double, Double> kinematicsCoords = forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
+    Pair<Double, Double> kinematicsCoords = forK(armSeg1Encoder.getDistance(), armSeg2Encoder.getDistance());
     ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
 
-    double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
-    double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
+    double armSeg1Output = armSeg1Controller.calculate(armSeg1Encoder.getDistance() * -1);
+    double armSeg2Output = ArmSeg2Controller.calculate(armSeg2Encoder.getDistance());
 
-    upperArmOutput = MathUtil.clamp(upperArmOutput, -0.3, 0.3);
-    foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
+    armSeg1Output = MathUtil.clamp(armSeg1Output, -0.3, 0.3);
+    armSeg2Output = MathUtil.clamp(armSeg2Output, -0.2, 0.2);
 
-    if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {
+    if (!(armSeg1Controller.atSetpoint() && ArmSeg2Controller.atSetpoint())) {
       Pair<Double, Double> nextPoint = interpolateNext();
       Pair<Double, Double> res = invK(nextPoint.getFirst(), nextPoint.getSecond());
       setAngles(res.getFirst(), res.getSecond());
     }
 
-    if (!upperArmController.atSetpoint()) {
-      upperArmMotors.set(upperCurve.fit(MathUtil.applyDeadband(upperArmOutput, 0.01)));
+    if (!armSeg1Controller.atSetpoint()) {
+      armSeg1Motors.set(seg1Curve.fit(MathUtil.applyDeadband(armSeg1Output, 0.01)));
     } else {
-      upperArmMotors.stopMotor();
+      armSeg1Motors.stopMotor();
 
-      if (foreArmController.atSetpoint() && prevArmTargetPoints != getFinalTarget()) { // if at both setpoints
+      if (ArmSeg2Controller.atSetpoint() && prevArmTargetPoints != getFinalTarget()) { // if at both setpoints
         if (targets.size() > 1)
           targets.remove(0);
         Pair<Double, Double> tmp = getCurTarget();
@@ -497,12 +496,12 @@ public class ArmSub extends SubsystemBase {
       }
     }
 
-    if (!foreArmController.atSetpoint()) {
-      foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput, 0.01)));
+    if (!ArmSeg2Controller.atSetpoint()) {
+      armSeg2Motors.set(seg2Curve.fit(MathUtil.applyDeadband(armSeg2Output, 0.01)));
     } else {
-      foreArmMotors.stopMotor();
+      armSeg2Motors.stopMotor();
     }
 
-    updateShuffleboard(upperArmOutput, foreArmOutput);
+    updateShuffleboard(armSeg1Output, armSeg2Output);
   }
 }
