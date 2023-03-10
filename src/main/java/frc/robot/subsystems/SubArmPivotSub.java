@@ -130,12 +130,6 @@ public class SubArmPivotSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // DO NOT USE THIS CODE IT WILL BREAK SUBARM AND I DONT WANT TO MAKE KEITH SAD
-
-    if (true) {
-      return;
-    }
-
     if (!calibrated) {
       updateShuffleboard(0);
       return;
