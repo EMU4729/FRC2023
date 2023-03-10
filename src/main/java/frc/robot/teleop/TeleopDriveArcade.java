@@ -17,9 +17,6 @@ public class TeleopDriveArcade extends CommandBase {
   private final CurveFit throtFit;
   private final CurveFit steerFit;
 
-  private final CurveFit copilotThrotFit;
-  private final CurveFit copilotSteerFit;
-
   public TeleopDriveArcade() {
     this(Variables.getInstance().pilotDriveSettings);
   }
@@ -27,9 +24,6 @@ public class TeleopDriveArcade extends CommandBase {
   public TeleopDriveArcade(double[][] settings) {
     throtFit = CurveFit.throtFromDriveSettings(settings);
     steerFit = CurveFit.steerFromDriveSettings(settings);
-
-    copilotThrotFit = CurveFit.throtFromDriveSettings(vars.copilotDriveSettings);
-    copilotSteerFit = CurveFit.steerFromDriveSettings(vars.copilotDriveSettings);
 
     addRequirements(Subsystems.drive);
   }
@@ -43,19 +37,8 @@ public class TeleopDriveArcade extends CommandBase {
     double throttle = 0;
     double steering = 0;
 
-    // If pilot is moving the robot
-    if (oi.pilotIsActive()) {
-      // take input from the pilot
-      throttle = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
-      steering = steerFit.fit(oi.applyAxisDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
-      // throttle
-    } else {
-      // take input from the copilot
-      throttle = copilotThrotFit.fit(oi.applyAxisDeadband(oi.copilot.getLeftY()));
-      steering = copilotSteerFit.fit(oi.applyAxisDeadband(oi.copilot.getRightX()), throttle);// limiting max steering
-                                                                                             // based
-      // on throttle
-    }
+    throttle = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
+    steering = steerFit.fit(oi.applyAxisDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
 
     // flips the direction of forward based on controller button
     if (vars.invertDriveDirection) {
