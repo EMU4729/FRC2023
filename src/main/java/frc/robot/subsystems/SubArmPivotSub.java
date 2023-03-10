@@ -59,6 +59,15 @@ public class SubArmPivotSub extends SubsystemBase {
   }
 
   /**
+   * Clamps the angle to the valid range.
+   * @param angle The angle to clamp.
+   * @return The clamped angle.
+   */
+  private double clampAngle(double angle) {
+    return MathUtil.clamp(angle, cnst.SUBARM_PIVOT_LOWER_LIMIT, cnst.SUBARM_PIVOT_UPPER_LIMIT);
+  }
+
+  /**
    * Sets the destination angle of the subarm pivot.
    * 
    * @param angle The desired angle
@@ -135,7 +144,7 @@ public class SubArmPivotSub extends SubsystemBase {
     // This should make the subarm's angle independent of the arm's angle
     double armOffset = -Subsystems.arm.getEndAngle();
 
-    double output = controller.calculate(encoder.getDistance() + armOffset);
+    double output = controller.calculate(clampAngle(encoder.getDistance() + armOffset));
 
     output = MathUtil.clamp(output, -0.2, 0.2); // This is a safety measure, will be increased to -1 and 1 when stable
 
