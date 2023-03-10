@@ -17,7 +17,10 @@ public class SubArmRotateSub extends SubsystemBase {
 
   private boolean calibrated = false;
 
-  /** Zeroes the encoder. */
+  /**
+   * Zeroes the encoder. Use this method when the subarm is rotated as
+   * anticlockwise as possible.
+   */
   public void calibrate() {
     encoder.reset();
     calibrated = true;
