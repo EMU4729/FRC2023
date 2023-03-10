@@ -42,6 +42,6 @@ public class AutoProvider {
   }
 
   public Command getMiddleAuto() {
-    return chooser.getSelected();
+    return new InstantCommand();
   }
 }
