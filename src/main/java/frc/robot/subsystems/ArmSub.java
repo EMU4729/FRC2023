@@ -84,8 +84,8 @@ public class ArmSub extends SubsystemBase {
     double x1 = l1 * Math.cos(Math.toRadians(upperArmAngle + 90));
     double y1 = l1 * Math.sin(Math.toRadians(upperArmAngle + 90));
 
-    double x2 = l2 * Math.cos(Math.toRadians(foreArmAngle - (180 - (upperArmAngle + 90)))) + x1;
-    double y2 = l2 * Math.sin(Math.toRadians(foreArmAngle - (180 - (upperArmAngle + 90)))) + y1;
+    double x2 = l2 * Math.cos(Math.toRadians(foreArmAngle - 90)) + x1;
+    double y2 = l2 * Math.sin(Math.toRadians(foreArmAngle - 90)) + y1;
 
     return new Pair<Double, Double>(-x2, y2);
   }
@@ -133,8 +133,8 @@ public class ArmSub extends SubsystemBase {
     beta = Math.toDegrees(beta);
     theta = Math.toDegrees(theta);
 
-    double foreArmAngle = xSign * (alpha + theta - 90);
-    double upperArmAngle = xSign * beta;
+    double upperArmAngle = xSign * (alpha + theta - 90);
+    double foreArmAngle = xSign * beta + upperArmAngle;
 
     // Return previous results if coordinates are invalid
     if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
