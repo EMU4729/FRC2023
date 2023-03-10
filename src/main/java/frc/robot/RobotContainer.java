@@ -69,7 +69,7 @@ public class RobotContainer {
     // +------------------+
 
     // Calibration
-    oi.copilot.start().onTrue(new InstantCommand(Subsystems::calibrate, Subsystems.arm));
+    oi.copilot.start().onTrue(new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
     // Preprogrammed arm positions
     oi.copilot.povUp().onTrue(new ArmPickUp());
