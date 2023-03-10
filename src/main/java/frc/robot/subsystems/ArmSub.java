@@ -38,7 +38,6 @@ public class ArmSub extends SubsystemBase {
 
   private boolean invert = false;
   private boolean calibrated = false;
-  private boolean justCalibrated = false;
 
   private CurveFit upperCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
   private CurveFit lowerCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
@@ -188,7 +187,7 @@ public class ArmSub extends SubsystemBase {
    * @param y The target y
    */
   public void setCoord(Pair<Double, Double> coord, double x, double y, boolean invertable) {
-    if (!targetIsValid(x, y, justCalibrated)) { // if target coord is not allowed stay still
+    if (!targetIsValid(new Pair<Double, Double>(x, y))) { // if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
@@ -221,7 +220,7 @@ public class ArmSub extends SubsystemBase {
     if (idx < 0)
       idx = targets.size();
 
-    if (!targetIsValid(x, y, justCalibrated)) { // if target coord is not allowed stay still
+    if (!targetIsValid(new Pair<Double, Double>(x, y))) { // if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
@@ -309,7 +308,6 @@ public class ArmSub extends SubsystemBase {
     upperArmEncoder.reset();
     foreArmEncoder.reset();
     calibrated = true;
-    justCalibrated = true;
     setAngles(0, 0);
     //addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
     setDestCoord(-0.5, 0, false);
@@ -338,6 +336,10 @@ public class ArmSub extends SubsystemBase {
           String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (foreArm: %f, upperArm: %f)",
               foreArmAngle, upperArmAngle));
     }
+  }
+
+  boolean targetIsValid(Pair<Double, Double> to) {
+    return targetIsValid(to, forK());
   }
 
   boolean targetIsValid(Pair<Double, Double> to, Pair<Double, Double> at){
@@ -482,12 +484,6 @@ public class ArmSub extends SubsystemBase {
       foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput, 0.01)));
     } else {
       foreArmMotors.stopMotor();
-    }
-
-    //once arm has left robot frame re-enable full limits 
-    if (targetIsValid(upperArmEncoder.getDistance(), foreArmEncoder.getDistance(), false) &&
-        targetIsValid(upperArmTargetAngle, foreArmTargetAngle, false)){
-      justCalibrated = false;
     }
 
     updateShuffleboard(upperArmOutput, foreArmOutput);
