@@ -3,13 +3,10 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
 
 public class LeftAuto extends SequentialCommandGroup {
-  public final Constants cnst = Constants.getInstance();
-
-  public LeftAuto() {
+  protected LeftAuto() {
     addCommands(
         // Drop preloaded game object
         Subsystems.arm.upperRung(),

@@ -18,7 +18,7 @@ import frc.robot.utils.logger.Logger;
 
 /** Command that runs a PathWeaver path. */
 public class PathWeaverCommand extends SequentialCommandGroup {
-  public final Constants cnst = Constants.getInstance();
+  private final Constants cnst = Constants.getInstance();
 
   /**
    * Constructs a new {@link PathWeaverCommand}.

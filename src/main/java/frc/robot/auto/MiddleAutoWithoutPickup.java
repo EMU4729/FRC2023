@@ -3,14 +3,11 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
 import frc.robot.commands.BalanceChargePad;
 
 public class MiddleAutoWithoutPickup extends SequentialCommandGroup {
-  public final Constants cnst = Constants.getInstance();
-
-  public MiddleAutoWithoutPickup() {
+  protected MiddleAutoWithoutPickup() {
     addCommands(
         // Drop off preloaded game object
         Subsystems.arm.upperRung(),

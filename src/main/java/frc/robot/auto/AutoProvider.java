@@ -14,6 +14,7 @@ import frc.robot.commands.BalanceChargePad;
 public class AutoProvider {
   private static Optional<AutoProvider> inst = Optional.empty();
 
+  private final Command naiveAuto = new NaiveAuto();
   private final Command middleAuto = new MiddleAuto();
   private final Command middleAutoWithoutPickup = new MiddleAutoWithoutPickup();
   private final Command leftAuto = new LeftAuto();
@@ -23,7 +24,8 @@ public class AutoProvider {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   private AutoProvider() {
-    chooser.setDefaultOption("Middle Auto", middleAuto);
+    chooser.setDefaultOption("Naive Auto", naiveAuto);
+    chooser.addOption("Middle Auto", middleAuto);
     chooser.addOption("Middle Auto Without Pickup", middleAutoWithoutPickup);
     chooser.addOption("Left Auto", leftAuto);
     chooser.addOption("Right Auto", rightAuto);

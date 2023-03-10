@@ -3,13 +3,10 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
 
 public class RightAuto extends SequentialCommandGroup {
-  public final Constants cnst = Constants.getInstance();
-
-  public RightAuto() {
+  protected RightAuto() {
     addCommands(
         // Drop off preloaded game object
         Subsystems.arm.upperRung(),
