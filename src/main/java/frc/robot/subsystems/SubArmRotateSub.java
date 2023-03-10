@@ -123,7 +123,10 @@ public class SubArmRotateSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    checkLimit(true);
     updateShuffleboard();
+    if (!calibrated) {
+      return;
+    }
+    checkLimit(true);
   }
 }

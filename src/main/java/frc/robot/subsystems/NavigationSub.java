@@ -56,7 +56,7 @@ public class NavigationSub extends SubsystemBase {
         drvRightEncoder.getDistance());
     updateShuffleboard();
 
-    if (RobotController.getUserButton()) {
+    if (RobotController.getUserButton() && false) {
       Logger.info("Resetting Odometry (0,0,0)");
       imu.calibrate();
       resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));

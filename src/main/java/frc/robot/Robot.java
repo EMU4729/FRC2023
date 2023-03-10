@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -67,6 +69,9 @@ public class Robot extends TimedRobot {
     // LEDControl.getInstance().updatePeriodic();
     CommandScheduler.getInstance().run();
     LEDControl.getInstance().updatePeriodic();
+    if (RobotController.getUserButton()) {
+      Subsystems.calibrate();
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

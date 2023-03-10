@@ -137,10 +137,10 @@ public class ArmSub extends SubsystemBase {
 
     // Return previous results if coordinates are invalid
     if (Double.isNaN(foreArmAngle) || Double.isNaN(upperArmAngle)) {
-      return new Pair<Double, Double>(foreArmTargetAngle, upperArmTargetAngle);
+      return new Pair<Double, Double>(upperArmTargetAngle, foreArmTargetAngle);
     }
 
-    return new Pair<Double, Double>(foreArmAngle, upperArmAngle);
+    return new Pair<Double, Double>(upperArmAngle, foreArmAngle);
   }
 
   /**
@@ -308,7 +308,8 @@ public class ArmSub extends SubsystemBase {
     foreArmEncoder.reset();
     calibrated = true;
     setAngles(0, 0);
-    addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
+    //addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
+    setDestCoord(0.5, 0, false);
     Logger.info("ArmSub : Calibrated!");
   }
 
@@ -418,13 +419,13 @@ public class ArmSub extends SubsystemBase {
   public void periodic() {
     // PRAY TO GOD THAT THIS CODE WORKS.
 
-    killCheck();
-
     if (!calibrated) {
       // Don't do anything if no calibration has happened.
       updateShuffleboard(0, 0);
       return;
     }
+
+    //killCheck();
 
     Pair<Double, Double> kinematicsCoords = forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
     ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
