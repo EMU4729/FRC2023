@@ -40,6 +40,11 @@ public class TeleopDriveArcade extends CommandBase {
     throttle = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
     steering = steerFit.fit(oi.applyAxisDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
 
+    // Invert steering when throttle < 0 to mimic car controls
+    if (throttle < 0) {
+      steering *= -1;
+    }
+
     // flips the direction of forward based on controller button
     if (vars.invertDriveDirection) {
       throttle *= -1;
