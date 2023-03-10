@@ -38,6 +38,7 @@ public class ArmSub extends SubsystemBase {
 
   private boolean invert = false;
   private boolean calibrated = false;
+  private boolean justCalibrated = false;
 
   private CurveFit upperCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
   private CurveFit lowerCurve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
@@ -187,7 +188,7 @@ public class ArmSub extends SubsystemBase {
    * @param y The target y
    */
   public void setCoord(Pair<Double, Double> coord, double x, double y, boolean invertable) {
-    if (!targetIsValid(x, y)) { // if target coord is not allowed stay still
+    if (!targetIsValid(x, y, justCalibrated)) { // if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
@@ -220,7 +221,7 @@ public class ArmSub extends SubsystemBase {
     if (idx < 0)
       idx = targets.size();
 
-    if (!targetIsValid(x, y)) { // if target coord is not allowed stay still
+    if (!targetIsValid(x, y, justCalibrated)) { // if target coord is not allowed stay still
       Logger.warn("ArmSub : setCoords : dest is not allowed");
       Pair<Double, Double> tmp = getCurTarget();
       x = tmp.getFirst();
@@ -308,6 +309,7 @@ public class ArmSub extends SubsystemBase {
     upperArmEncoder.reset();
     foreArmEncoder.reset();
     calibrated = true;
+    justCalibrated = true;
     setAngles(0, 0);
     //addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
     setDestCoord(-0.5, 0, false);
@@ -343,9 +345,11 @@ public class ArmSub extends SubsystemBase {
    * 
    * @param x The coordinate x
    * @param y The coordinate y
+   * @param strict true prevents the robot from entering illegal space,
+   *               false prevents the robot reaching too far but not from hitting itself
    * @return True if valid, false if not
    */
-  boolean targetIsValid(double x, double y) {
+  boolean targetIsValid(double x, double y, boolean strict) {
     // check legal reach limits
     if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
       return false;
@@ -358,13 +362,13 @@ public class ArmSub extends SubsystemBase {
       return false;
 
     // check arm swing-through bounds
-    if (x > cnst.ARM_REACH_EXCLUSION[0][0] && x < cnst.ARM_REACH_EXCLUSION[0][1]
+    if (strict && x > cnst.ARM_REACH_EXCLUSION[0][0] && x < cnst.ARM_REACH_EXCLUSION[0][1]
         && !(y > cnst.ARM_SWING_THROUGH_HEIGHT * 0.95 && y < cnst.ARM_SWING_THROUGH_HEIGHT * 1.05)) {
       return false;
     }
 
     // check robot limits
-    if (x > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] && x < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1]
+    if (strict && x > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] && x < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1]
         && y > cnst.ARM_REACH_ROBOT_EXCLUSION[1][0] && y < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1]) {
       return false;
     }
@@ -461,6 +465,10 @@ public class ArmSub extends SubsystemBase {
       foreArmMotors.set(lowerCurve.fit(MathUtil.applyDeadband(foreArmOutput, 0.01)));
     } else {
       foreArmMotors.stopMotor();
+    }
+
+    if (targetIsValid(upperArmEncoder.getDistance(), foreArmEncoder.getDistance(), false)){
+      justCalibrated = false;
     }
 
     updateShuffleboard(upperArmOutput, foreArmOutput);

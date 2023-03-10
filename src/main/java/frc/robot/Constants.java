@@ -126,7 +126,7 @@ public final class Constants {
      */ // wip
     public final double UPPER_ARM_X_OFFSET = 0.05;
     /** Velocity of the arm movements */
-    public final double ARM_VELOCITY = 0.005;
+    public final double ARM_VELOCITY = 0.00002;
     /** Interpolation step of the arm */
     public final double ARM_INTERPOLATION_STEP = 0.05;
     /** PID Constants for Upper Arm Movement @wip update constants */ // wip
@@ -159,7 +159,7 @@ public final class Constants {
     /** Dimensions (width, height) of the robot that the arm should never reach. */
     public final double[][] ARM_REACH_ROBOT_EXCLUSION = {
             { -(ROBOT_LENGTH / 2), ROBOT_LENGTH / 2 },
-            { -ROBOT_WIDTH, 0 }
+            { -UPPER_ARM_AXLE_HEIGHT, 0 }
     };
     /**
      * height the arm should seek to hold if moving or stored inside frame perimiter
