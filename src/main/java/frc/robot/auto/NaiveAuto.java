@@ -16,6 +16,6 @@ public class NaiveAuto extends SequentialCommandGroup {
         // Reverse for 2 seconds
         new InstantCommand(() -> Subsystems.drive.tank(-0.5, -0.5), Subsystems.drive),
         new WaitCommand(2),
-        new InstantCommand(() -> Subsystems.drive.off(), Subsystems.drive));
+        new InstantCommand(Subsystems.drive::off, Subsystems.drive));
   }
 }
