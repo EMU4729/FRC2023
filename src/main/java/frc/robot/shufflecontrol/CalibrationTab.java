@@ -17,13 +17,6 @@ public class CalibrationTab {
   private final GenericEntry subArmRotateEntry = tab.add("SubArm Rotation Calibrated", false)
       .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
-  protected CalibrationTab() {
-    tab.add("Calibrate Arm", new InstantCommand(Subsystems.arm::calibrate));
-    tab.add("Calibrate SubArm Pivot", new InstantCommand(Subsystems.subArmPivot::calibrate));
-    tab.add("Calibrate SubArm Rotation", new InstantCommand(Subsystems.subArmRotate::calibrate));
-    tab.add("Calibrate All", new InstantCommand(Subsystems::calibrate));
-  }
-
   public void setArmCalibrated(boolean calibrated) {
     armEntry.setBoolean(calibrated);
   }

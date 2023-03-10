@@ -101,9 +101,9 @@ public class ArmSub extends SubsystemBase {
   }
 
   /** @return The angle that the end of the arm makes with the robot horizontal */
-  public double getEndAngle() {    
+  public double getEndAngle() {
     double upperArmAngle = upperArmEncoder.getDistance();
-    double foreArmAngle  = foreArmEncoder.getDistance();
+    double foreArmAngle = foreArmEncoder.getDistance();
     return foreArmAngle - (180 - (upperArmAngle + 90));
   }
 
@@ -146,6 +146,7 @@ public class ArmSub extends SubsystemBase {
 
   /**
    * Inverts the arm.
+   * 
    * @apiNote Disabled until further notice.
    */
   public void invert() {
@@ -309,8 +310,9 @@ public class ArmSub extends SubsystemBase {
     foreArmEncoder.reset();
     calibrated = true;
     setAngles(0, 0);
-    //addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
-    setDestCoord(-0.5, 0, false);
+    // addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT,
+    // false);
+    setDestCoord(0, 0, false);
     Logger.info("ArmSub : Calibrated!");
   }
 
@@ -342,55 +344,70 @@ public class ArmSub extends SubsystemBase {
     return targetIsValid(to, forK());
   }
 
-  boolean targetIsValid(Pair<Double, Double> to, Pair<Double, Double> at){
+  boolean targetIsValid(Pair<Double, Double> to, Pair<Double, Double> at) {
     return targetIsValid(to.getFirst(), to.getSecond(), at.getFirst(), at.getSecond());
   }
+
   /**
    * Checks if the given coordinates are valid for the arm.
    * 
-   * @param toX The coordinate x
-   * @param toY The coordinate y
+   * @param toX    The coordinate x
+   * @param toY    The coordinate y
    * @param strict true prevents the robot from entering illegal space,
-   *               false prevents the robot reaching too far but not from hitting itself
+   *               false prevents the robot reaching too far but not from hitting
+   *               itself
    * @return True if valid, false if not
    */
   boolean targetIsValid(double toX, double toY, double atX, double atY) {
     // check legal reach limits (target is outside lim and not improving)
-    if ((toX < cnst.MAX_ARM_REACH_LEGAL[0][0] && toX <= atX) || 
-        (toX > cnst.MAX_ARM_REACH_LEGAL[0][1] && toX >= atX))
+    if ((toX < cnst.MAX_ARM_REACH_LEGAL[0][0] && toX <= atX) ||
+        (toX > cnst.MAX_ARM_REACH_LEGAL[0][1] && toX >= atX)) {
+      ShuffleControl.armTab.setCheckOne(false);
       return false;
+    }
+    ShuffleControl.armTab.setCheckOne(true);
     if ((toY < cnst.MAX_ARM_REACH_LEGAL[1][0] && toY <= atY) ||
-        (toY > cnst.MAX_ARM_REACH_LEGAL[1][1] && toY >= atY))
+        (toY > cnst.MAX_ARM_REACH_LEGAL[1][1] && toY >= atY)) {
+      ShuffleControl.armTab.setCheckTwo(false);
       return false;
+    }
+    ShuffleControl.armTab.setCheckTwo(true);
 
     // max arm reach is around the axle x is around robot center x is adjusted to be
     // around axle before checking
     if (Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) > cnst.MAX_ARM_REACH_PHYSICAL &&
-        Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) >= Math.hypot(atX + cnst.UPPER_ARM_X_OFFSET, atY))
+        Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) >= Math.hypot(atX + cnst.UPPER_ARM_X_OFFSET, atY)) {
+      ShuffleControl.armTab.setCheckThree(false);
       return false;
+    }
+    ShuffleControl.armTab.setCheckThree(true);
 
     // check arm swing-through bounds
-    double upperPas = cnst.ARM_SWING_THROUGH_HEIGHT*1.05;
-    double lowerPas = cnst.ARM_SWING_THROUGH_HEIGHT*0.95;
-    if (toX > cnst.ARM_REACH_EXCLUSION[0][0] && 
+    double upperPas = cnst.ARM_SWING_THROUGH_HEIGHT * 1.05;
+    double lowerPas = cnst.ARM_SWING_THROUGH_HEIGHT * 0.95;
+    if (toX > cnst.ARM_REACH_EXCLUSION[0][0] &&
         toX < cnst.ARM_REACH_EXCLUSION[0][1] &&
-        Math.abs(toX) >= Math.abs(atX)       && // further from 0 than cur (can cross 0)
-        ( (atY > upperPas && toY < lowerPas)   || //dont cross into the lower exclusion
-          (atY < lowerPas && atY > upperPas)   || //dont cross into the upper exclusion
-          (toY > upperPas && toY >= atY)       ||
-          (atY < lowerPas && toY <= atY))){
-      
-            return false;
+        Math.abs(toX) >= Math.abs(atX) && // further from 0 than cur (can cross 0)
+        ((atY > upperPas && toY < lowerPas) || // dont cross into the lower exclusion
+            (atY < lowerPas && atY > upperPas) || // dont cross into the upper exclusion
+            (toY > upperPas && toY >= atY) ||
+            (atY < lowerPas && toY <= atY))) {
+
+      ShuffleControl.armTab.setCheckFour(false);
+      return false;
     }
+    ShuffleControl.armTab.setCheckFour(true);
 
     // check robot limits
     if (toX > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] &&
         toX < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1] &&
         toY < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1] &&
-        Math.abs(toX) >= Math.abs(atX)             && // further from 0 than cur (can cross 0)
-        toY >= atY){
+        Math.abs(toX) >= Math.abs(atX) && // further from 0 than cur (can cross 0)
+        toY >= atY) {
+      ShuffleControl.armTab.setCheckFive(false);
       return false;
     }
+    ShuffleControl.armTab.setCheckFive(true);
 
     return true;
   }
@@ -449,7 +466,7 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
-    //killCheck();
+    // killCheck();
 
     Pair<Double, Double> kinematicsCoords = forK(upperArmEncoder.getDistance(), foreArmEncoder.getDistance());
     ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
@@ -457,7 +474,7 @@ public class ArmSub extends SubsystemBase {
     double upperArmOutput = upperArmController.calculate(upperArmEncoder.getDistance() * -1);
     double foreArmOutput = foreArmController.calculate(foreArmEncoder.getDistance());
 
-    upperArmOutput = MathUtil.clamp(upperArmOutput, -0.2, 0.2);
+    upperArmOutput = MathUtil.clamp(upperArmOutput, -0.3, 0.3);
     foreArmOutput = MathUtil.clamp(foreArmOutput, -0.2, 0.2);
 
     if (!(upperArmController.atSetpoint() && foreArmController.atSetpoint())) {

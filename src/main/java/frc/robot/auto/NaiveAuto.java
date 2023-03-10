@@ -8,14 +8,9 @@ import frc.robot.Subsystems;
 public class NaiveAuto extends SequentialCommandGroup {
   protected NaiveAuto() {
     addCommands(
-        // Drop preloaded game object
-        Subsystems.arm.upperRung(),
-        new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip),
-        new WaitCommand(1),
-
         // Reverse for 2 seconds
         new InstantCommand(() -> Subsystems.drive.tank(-0.5, -0.5), Subsystems.drive),
-        new WaitCommand(2),
+        new WaitCommand(2.5),
         new InstantCommand(Subsystems.drive::off, Subsystems.drive));
   }
 }
