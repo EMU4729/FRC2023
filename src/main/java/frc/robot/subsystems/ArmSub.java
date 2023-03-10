@@ -310,7 +310,7 @@ public class ArmSub extends SubsystemBase {
     calibrated = true;
     setAngles(0, 0);
     //addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT, false);
-    setDestCoord(0.5, 0, false);
+    setDestCoord(-0.5, 0, false);
     Logger.info("ArmSub : Calibrated!");
   }
 

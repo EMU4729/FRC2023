@@ -136,11 +136,21 @@ public class SubArmPivotSub extends SubsystemBase {
     }
 
     // This should make the subarm's angle independent of the arm's angle
-    double armOffset = -Subsystems.arm.getEndAngle();
+    double armOffset = -Subsystems.arm.getEndAngle() - 90;
 
-    double output = controller.calculate(clampAngle(encoder.getDistance() + armOffset)) * -1;
+    double currentAngle = encoder.getDistance();
+    double output;
+
+    if (!angleIsValid(currentAngle)) {
+      output = clampAngle(currentAngle) + armOffset;
+    } else {
+      output = clampAngle(currentAngle + armOffset);
+    }
+
+    output = controller.calculate(output) * -1;
 
     output = MathUtil.clamp(output, -0.2, 0.2); // This is a safety measure, will be increased to -1 and 1 when stable
+    
     motor.set(output);
 
     updateShuffleboard(output);

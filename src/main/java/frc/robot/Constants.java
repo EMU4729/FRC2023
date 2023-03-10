@@ -126,7 +126,7 @@ public final class Constants {
      */ // wip
     public final double UPPER_ARM_X_OFFSET = 0.05;
     /** Velocity of the arm movements */
-    public final double ARM_VELOCITY = 0.01;
+    public final double ARM_VELOCITY = 0.005;
     /** Interpolation step of the arm */
     public final double ARM_INTERPOLATION_STEP = 0.05;
     /** PID Constants for Upper Arm Movement @wip update constants */ // wip
