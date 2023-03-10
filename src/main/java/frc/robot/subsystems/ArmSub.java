@@ -467,7 +467,9 @@ public class ArmSub extends SubsystemBase {
       foreArmMotors.stopMotor();
     }
 
-    if (targetIsValid(upperArmEncoder.getDistance(), foreArmEncoder.getDistance(), false)){
+    //once arm has left robot frame re-enable full limits 
+    if (targetIsValid(upperArmEncoder.getDistance(), foreArmEncoder.getDistance(), false) &&
+        targetIsValid(upperArmTargetAngle, foreArmTargetAngle, false)){
       justCalibrated = false;
     }
 
