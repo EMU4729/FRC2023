@@ -340,36 +340,53 @@ public class ArmSub extends SubsystemBase {
     }
   }
 
+  boolean targetIsValid(Pair<Double, Double> to, Pair<Double, Double> at){
+    return targetIsValid(to.getFirst(), to.getSecond(), at.getFirst(), at.getSecond());
+  }
   /**
    * Checks if the given coordinates are valid for the arm.
    * 
-   * @param x The coordinate x
-   * @param y The coordinate y
+   * @param toX The coordinate x
+   * @param toY The coordinate y
    * @param strict true prevents the robot from entering illegal space,
    *               false prevents the robot reaching too far but not from hitting itself
    * @return True if valid, false if not
    */
-  boolean targetIsValid(double x, double y, boolean strict) {
-    // check legal reach limits
-    if (x < cnst.MAX_ARM_REACH_LEGAL[0][0] || x > cnst.MAX_ARM_REACH_LEGAL[0][1])
+  boolean targetIsValid(double toX, double toY, double atX, double atY) {
+    // check legal reach limits (target is outside lim and not improving)
+    if ((toX < cnst.MAX_ARM_REACH_LEGAL[0][0] && toX <= atX) || 
+        (toX > cnst.MAX_ARM_REACH_LEGAL[0][1] && toX >= atX))
       return false;
-    if (y < cnst.MAX_ARM_REACH_LEGAL[1][0] || y > cnst.MAX_ARM_REACH_LEGAL[1][1])
+    if ((toY < cnst.MAX_ARM_REACH_LEGAL[1][0] && toY <= atY) ||
+        (toY > cnst.MAX_ARM_REACH_LEGAL[1][1] && toY >= atY))
       return false;
 
     // max arm reach is around the axle x is around robot center x is adjusted to be
     // around axle before checking
-    if (Math.hypot(x + cnst.UPPER_ARM_X_OFFSET, y) > cnst.MAX_ARM_REACH_PHYSICAL)
+    if (Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) > cnst.MAX_ARM_REACH_PHYSICAL &&
+        Math.hypot(toX + cnst.UPPER_ARM_X_OFFSET, toY) >= Math.hypot(atX + cnst.UPPER_ARM_X_OFFSET, atY))
       return false;
 
     // check arm swing-through bounds
-    if (strict && x > cnst.ARM_REACH_EXCLUSION[0][0] && x < cnst.ARM_REACH_EXCLUSION[0][1]
-        && !(y > cnst.ARM_SWING_THROUGH_HEIGHT * 0.95 && y < cnst.ARM_SWING_THROUGH_HEIGHT * 1.05)) {
-      return false;
+    double upperPas = cnst.ARM_SWING_THROUGH_HEIGHT*1.05;
+    double lowerPas = cnst.ARM_SWING_THROUGH_HEIGHT*0.95;
+    if (toX > cnst.ARM_REACH_EXCLUSION[0][0] && 
+        toX < cnst.ARM_REACH_EXCLUSION[0][1] &&
+        Math.abs(toX) >= Math.abs(atX)       && // further from 0 than cur (can cross 0)
+        ( (atY > upperPas && toY < lowerPas)   || //dont cross into the lower exclusion
+          (atY < lowerPas && atY > upperPas)   || //dont cross into the upper exclusion
+          (toY > upperPas && toY >= atY)       ||
+          (atY < lowerPas && toY <= atY))){
+      
+            return false;
     }
 
     // check robot limits
-    if (strict && x > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] && x < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1]
-        && y > cnst.ARM_REACH_ROBOT_EXCLUSION[1][0] && y < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1]) {
+    if (toX > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] &&
+        toX < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1] &&
+        toY < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1] &&
+        Math.abs(toX) >= Math.abs(atX)             && // further from 0 than cur (can cross 0)
+        toY >= atY){
       return false;
     }
 
