@@ -9,7 +9,7 @@ public class NaiveAuto extends CommandBase {
   }
 
   @Override
-  public void initialize() {
+  public void execute() {
     Subsystems.drive.tank(-0.75, -0.75);
   }
 
