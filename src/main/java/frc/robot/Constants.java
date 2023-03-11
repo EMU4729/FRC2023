@@ -112,19 +112,19 @@ public final class Constants {
      * Length of the armseg2 (second segment)(between axles), in (mm) @wip update
      * arm length
      */ // wip
-    public final double ARM_SEG2_LENGTH = 1; // UPDATE
+    public final double ARM_SEG2_LENGTH = 0.8; // UPDATE
     /**
      * Length of the arm seg1 (first segment)(between axles), in (mm) @wip update
      * arm length
      */ // wip
-    public final double ARM_SEG1_LENGTH = 1; // UPDATE
+    public final double ARM_SEG1_LENGTH = 0.91; // UPDATE
     /** height off the carpet of the seg1 rm axle (m) @wip value just a guess */ // wip
     public final double ARM_SEG1_AXLE_HEIGHT = 0.2;
     /**
      * amount the arm seg1 axle is offset from the centerline in x (m)(forward
      * pos) @wip value guessed
      */ // wip
-    public final double ARM_SEG1_X_OFFSET = 0.05;
+    public final double ARM_SEG1_X_OFFSET = 0.01;
     /** Velocity of the arm movements */
     public final double ARM_VELOCITY = 0.002;
     /** Interpolation step of the arm */
