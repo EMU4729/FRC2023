@@ -132,7 +132,7 @@ public final class Constants {
     /** PID Constants for Arm Seg1 Movement @wip update constants */ // wip
     public final PIDControllerConstants ARM_SEG1_PID = new PIDControllerConstants(0.03, 0.01, 0); // UPDATE
     /** PID Constants for Arm Seg2 Movement */ // wip
-    public final PIDControllerConstants ARM_SEG2_PID = new PIDControllerConstants(0.02, 0.007, 0); // UPDATE
+    public final PIDControllerConstants ARM_SEG2_PID = new PIDControllerConstants(0.01, 0.007, 0); // UPDATE
     /** Gripper Grip Servo 1 Channel @wip update servo port */ // wip
     public final int GRIPPER_GRIP_SERVOS_ID = 1;
     /**
