@@ -106,8 +106,8 @@ public class SubArmRotateSub extends SubsystemBase {
     return new FunctionalCommand(
         () -> {
           calibrationCheck();
-          servo.set(value);
         }, () -> {
+          servo.set(value);
         },
         (interrupted) -> stop(),
         this::checkLimit,
