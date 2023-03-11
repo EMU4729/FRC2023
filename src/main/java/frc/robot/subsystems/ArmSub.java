@@ -6,6 +6,7 @@ import java.util.List;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.CurveFit;
 import frc.robot.utils.logger.Logger;
@@ -308,7 +310,7 @@ public class ArmSub extends SubsystemBase {
     armSeg1Encoder.reset();
     armSeg2Encoder.reset();
     calibrated = true;
-    setAngles(0, 0);
+    setAngles(cnst.ARM_REACH_EXCLUSION[0][1], 0);
     // addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT,
     // false);
     setDestCoord(0, 0, false);
@@ -340,7 +342,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   boolean targetIsValid(Pair<Double, Double> to) {
-    return targetIsValid(to, forK());
+    return targetIsValid(to, getCurTarget());
   }
 
   boolean targetIsValid(Pair<Double, Double> to, Pair<Double, Double> at) {
@@ -464,6 +466,9 @@ public class ArmSub extends SubsystemBase {
       updateShuffleboard(0, 0);
       return;
     }
+    if(DriverStation.isDisabled()){//clear intergral when disabled
+      armSeg1Controller.reset();
+    }
 
     // killCheck();
 
@@ -501,7 +506,6 @@ public class ArmSub extends SubsystemBase {
     } else {
       armSeg2Motors.stopMotor();
     }
-
     updateShuffleboard(armSeg1Output, armSeg2Output);
   }
 }
