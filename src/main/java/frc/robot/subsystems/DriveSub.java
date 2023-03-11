@@ -85,13 +85,13 @@ public class DriveSub extends SubsystemBase {
   public void arcade(double throttle, double steering) {
     throttle = MathUtil.clamp(throttle, -1, 1);
     steering = -MathUtil.clamp(steering, -1, 1);
-    drive.arcadeDrive(throttle, steering, true); //squared input fix later
+    drive.arcadeDrive(throttle, steering, true); // squared input fix later
 
   }
 
   /** Stops all motors. */
   public void off() {
-    drive.stopMotor();
+    tank(0, 0);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
