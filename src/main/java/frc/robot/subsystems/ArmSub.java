@@ -468,16 +468,16 @@ public class ArmSub extends SubsystemBase {
     // killCheck();
 
     Pair<Double, Double> kinematicsCoords = forK(armSeg1Encoder.getDistance(), armSeg2Encoder.getDistance());
-    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
+    ShuffleControl.armTab.setKinematicsCoords(-kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
 
     double armSeg1Output = armSeg1Controller.calculate(armSeg1Encoder.getDistance() * -1);
     double armSeg2Output = ArmSeg2Controller.calculate(armSeg2Encoder.getDistance());
 
     armSeg1Output = MathUtil.clamp(armSeg1Output, -0.3, 0.3);
-    armSeg2Output = MathUtil.clamp(armSeg2Output, -0.2, 0.2);
+    armSeg2Output = MathUtil.clamp(armSeg2Output, -0.3, 0.3);
 
     if (!(armSeg1Controller.atSetpoint() && ArmSeg2Controller.atSetpoint())) {
-      Pair<Double, Double> nextPoint = interpolateNext();
+      Pair<Double, Double> nextPoint = getCurTarget();//interpolateNext();
       Pair<Double, Double> res = invK(nextPoint.getFirst(), nextPoint.getSecond());
       setAngles(res.getFirst(), res.getSecond());
     }
