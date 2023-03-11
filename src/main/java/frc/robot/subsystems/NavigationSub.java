@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -114,6 +115,17 @@ public class NavigationSub extends SubsystemBase {
   public void resetEncoders() {
     drvLeftEncoder.reset();
     drvRightEncoder.reset();
+  }
+
+  /** @return the reported drive encoder distances */
+  public Pair<Double, Double> getEncoderDistances() {
+    return new Pair<Double, Double>(drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
+  }
+
+  /** @return the average reported drive encoder distance */
+  public double getAvgEncoderDistance() {
+    Pair<Double, Double> encoderDistances = getEncoderDistances();
+    return (encoderDistances.getFirst() + encoderDistances.getSecond()) / 2.0;
   }
 
   /**
