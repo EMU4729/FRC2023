@@ -18,8 +18,8 @@ public class NavTab {
   private Field2d field = new Field2d();
 
   protected NavTab() {
-    nav.add("Field", field);
-    SmartDashboard.putData(field);
+    nav.add("Field", field); 
+    SmartDashboard.putData("Field", field);
   }
 
   public void setRotation(double yaw, double pitch, double roll) {
