@@ -77,7 +77,6 @@ public class ArmSub extends SubsystemBase {
    * @return The calculated coordinates of the end of the arm.
    */
   private Pair<Double, Double> forK(double armSeg1Angle, double armSeg2Angle) {
-    armSeg2Angle *= -1;
     double l1 = cnst.ARM_SEG1_LENGTH;
     double l2 = cnst.ARM_SEG2_LENGTH;
 
@@ -87,7 +86,7 @@ public class ArmSub extends SubsystemBase {
     double x2 = l2 * Math.cos(Math.toRadians(armSeg2Angle - 90)) + x1;
     double y2 = l2 * Math.sin(Math.toRadians(armSeg2Angle - 90)) + y1;
 
-    return new Pair<Double, Double>(-x2, y2);
+    return new Pair<Double, Double>(x2, y2);
   }
 
   /**
