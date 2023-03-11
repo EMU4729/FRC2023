@@ -79,6 +79,7 @@ public class ArmSub extends SubsystemBase {
    * @return The calculated coordinates of the end of the arm.
    */
   private Pair<Double, Double> forK(double armSeg1Angle, double armSeg2Angle) {
+    armSeg2Angle *= -1;
     double l1 = cnst.ARM_SEG1_LENGTH;
     double l2 = cnst.ARM_SEG2_LENGTH;
 

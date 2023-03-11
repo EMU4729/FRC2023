@@ -69,11 +69,12 @@ public class RobotContainer {
     // +------------------+
 
     // Calibration
-    oi.copilot.start().onTrue(new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
+    oi.copilot.start().onTrue(
+        new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
     // Preprogrammed arm positions
-    oi.copilot.povUp().onTrue(new ArmPickUp());
-    oi.copilot.povRight().onTrue(Subsystems.arm.lowField());
+    oi.copilot.povUp().onTrue(Subsystems.arm.farField());
+    oi.copilot.povRight().onTrue(new ArmPickUp());
     oi.copilot.povDown().onTrue(Subsystems.arm.lowerRung());
     oi.copilot.povLeft().onTrue(Subsystems.arm.upperRung());
 
