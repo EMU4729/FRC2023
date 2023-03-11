@@ -54,15 +54,18 @@ public class SubArmRotateSub extends SubsystemBase {
         stop();
       }
       Logger.warn("SubArmRotateSub : Lower limit reached! Stopping...");
+      ShuffleControl.subArmTab.setRotationInBounds(false);
       return true;
     } else if (turnDegrees > cnst.SUBARM_ROTATE_UPPER_LIMIT) {
       if (stop) {
         stop();
       }
       Logger.warn("SubArmRotateSub : Upper limit reached! Stopping...");
+      ShuffleControl.subArmTab.setRotationInBounds(false);
       return true;
     }
 
+    ShuffleControl.subArmTab.setRotationInBounds(true);
     return false;
   }
 
