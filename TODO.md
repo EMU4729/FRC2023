@@ -1,6 +1,6 @@
 # Code TODO List
 
-- [ ] Make everything static. No singletons.
+- [x] Make everything static. No singletons.
 - [ ] Separate MotorInfo into MotorBuilder and EncoderBuilder
 - [ ] Talking of naming, use better naming.
   - [ ] MotorInfo -> MotorBuilder
