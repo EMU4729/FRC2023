@@ -22,7 +22,6 @@ import frc.robot.utils.LEDControl.LEDControl;
  */
 public class RobotContainer {
   private final Variables vars = Variables.getInstance();
-  private final Constants cnst = Constants.getInstance();
   private final AutoProvider autoProvider = AutoProvider.getInstance();
   private final TeleopProvider teleopProvider = TeleopProvider.getInstance();
   private final OI oi = OI.getInstance();

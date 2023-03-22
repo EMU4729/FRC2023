@@ -12,14 +12,12 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
+import frc.robot.constants.Constants;
 import frc.robot.utils.logger.Logger;
 
 /** Command that runs a PathWeaver path. */
 public class PathWeaverCommand extends SequentialCommandGroup {
-  private final Constants cnst = Constants.getInstance();
-
   /**
    * Constructs a new {@link PathWeaverCommand}.
    * 
@@ -40,13 +38,13 @@ public class PathWeaverCommand extends SequentialCommandGroup {
         trajectory,
         Subsystems.nav::getPose,
         new RamseteController(
-            cnst.DRIVE_RAMSETE_B,
-            cnst.DRIVE_RAMSETE_ZETA),
+            Constants.drive.RAMSETE_B,
+            Constants.drive.RAMSETE_ZETA),
         new SimpleMotorFeedforward(
-            cnst.DRIVE_KS_VOLTS,
-            cnst.DRIVE_KV_VOLT_SECONDS_PER_METER,
-            cnst.DRIVE_KA_VOLT_SECONDS_SQUARED_PER_METER),
-        cnst.DRIVE_KINEMATICS,
+            Constants.drive.KS_VOLTS,
+            Constants.drive.KV_VOLT_SECONDS_PER_METER,
+            Constants.drive.KA_VOLT_SECONDS_SQUARED_PER_METER),
+        Constants.drive.KINEMATICS,
         Subsystems.nav::getWheelSpeeds,
         new PIDController(0, 0, 0),
         new PIDController(0, 0, 0),

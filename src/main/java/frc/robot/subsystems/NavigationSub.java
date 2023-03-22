@@ -13,21 +13,19 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
+import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
 public class NavigationSub extends SubsystemBase {
-  private final Constants cnst = Constants.getInstance();
-
   public final ADIS16470_IMU imu = new ADIS16470_IMU();
   private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
       Rotation2d.fromDegrees(imu.getAngle()),
       0., 0.);
 
-  public final Encoder drvLeftEncoder = cnst.DRIVE_MOTOR_ID_LM.createEncoder();
-  public final Encoder drvRightEncoder = cnst.DRIVE_MOTOR_ID_RM.createEncoder();
+  public final Encoder drvLeftEncoder = Constants.drive.MOTOR_ID_LM.createEncoder();
+  public final Encoder drvRightEncoder = Constants.drive.MOTOR_ID_RM.createEncoder();
 
   public Field2d field = new Field2d();
 

@@ -2,11 +2,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 
 public class GripperGripSub extends SubsystemBase {
-  private final Constants cnst = Constants.getInstance();
-  private final Servo servos = new Servo(cnst.GRIPPER_GRIP_SERVOS_ID);
+  private final Servo servos = new Servo(Constants.gripper.SERVOS_ID);
 
   public GripperGripSub() {
     // https://cdn.andymark.com/media/W1siZiIsIjIwMTkvMDMvMjIvMTAvMjYvNDMvZjQzZTk3NzMtN2MxNi00MDIwLWE5YTgtMTA4MDliMTMxZDExL1VzaW5nIEwxNiBMaW5lYXIgU2Vydm8gMDMtMjAxOS5wZGYiXV0/Using%20L16%20Linear%20Servo%2003-2019.pdf?sha=7b43b981c4f1c13d

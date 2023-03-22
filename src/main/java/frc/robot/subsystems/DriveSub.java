@@ -11,24 +11,19 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.simulation.SimConstants;
+import frc.robot.constants.Constants;
 
 /**
  * Drive Subsystem.
  * Handles all drive functionality.
  */
 public class DriveSub extends SubsystemBase {
-  private final Constants cnst = Constants.getInstance();
-  private final SimConstants simCnst = SimConstants.getInstance();
-  // private final Variables vars = Variables.getInstance();
-
-  private final MotorController leftMaster = cnst.DRIVE_MOTOR_ID_LM.createMotorController();
-  private final MotorController leftSlave = cnst.DRIVE_MOTOR_ID_LS.createMotorController();
+  private final MotorController leftMaster = Constants.drive.MOTOR_ID_LM.createMotorController();
+  private final MotorController leftSlave = Constants.drive.MOTOR_ID_LS.createMotorController();
   private final MotorControllerGroup leftMotors = new MotorControllerGroup(leftMaster, leftSlave);
 
-  private final MotorController rightMaster = cnst.DRIVE_MOTOR_ID_RM.createMotorController();
-  private final MotorController rightSlave = cnst.DRIVE_MOTOR_ID_RS.createMotorController();
+  private final MotorController rightMaster = Constants.drive.MOTOR_ID_RM.createMotorController();
+  private final MotorController rightSlave = Constants.drive.MOTOR_ID_RS.createMotorController();
   private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightMaster, rightSlave);
 
   public final DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors); // pub for shuffleboard
@@ -38,12 +33,13 @@ public class DriveSub extends SubsystemBase {
 
   /** @wip add corrected values */
   private final LinearSystem<N2, N2, N2> drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(
-      simCnst.KV_LINEAR,
-      simCnst.KA_LINEAR,
-      simCnst.KV_ANGULAR,
-      simCnst.KA_ANGULAR);
+      Constants.sim.KV_LINEAR,
+      Constants.sim.KA_LINEAR,
+      Constants.sim.KV_ANGULAR,
+      Constants.sim.KA_ANGULAR);
   public final DifferentialDrivetrainSim drivetrainSimulator = new DifferentialDrivetrainSim(
-      drivetrainSystem, DCMotor.getCIM(2), 10.71, cnst.ROBOT_WHEEL_WIDTH, cnst.ROBOT_WHEEL_RAD, null);
+      drivetrainSystem, DCMotor.getCIM(2), 10.71, Constants.features.ROBOT_WHEEL_WIDTH,
+      Constants.features.ROBOT_WHEEL_RAD, null);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

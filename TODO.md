@@ -1,14 +1,15 @@
-# To Do List
+# Code TODO List
 
-- [ ] Limit absolutely *everything*
-- [ ] Finish building the robot
-- [ ] Test Calibration Routine
-- [ ] Test Individual Components
-    - [ ] Arm Movement
-    - [ ] Arm Preprogrammed Positions
-    - [ ] Subarm Pivot
-    - [ ] Subarm Rotate
-    - [ ] Combinations of the above
-- [ ] SysId
-- [ ] Test Autonomous Commands (BalanceChargePad, etc.)
-- [ ] Hopefully fix any zero-days that pop up along the way
+- [ ] Make everything static. No singletons.
+- [ ] Separate MotorInfo into MotorBuilder and EncoderBuilder
+- [ ] Talking of naming, use better naming.
+  - [ ] MotorInfo -> MotorBuilder
+  - [ ] PIDControllerConstants -> PIDControllerBuilder
+  - [ ] ShuffleControl -> Something not cringe
+  - [ ] UpperArm and ForeArm -> ArmOne and ArmTwo
+- [ ] Move SimConstants into Constants
+- [ ] Split Constants into multiple files for easier navigation
+- [ ] Move constants in the Variables file (drive settings) into the Constants
+- [ ] Make LEDControl a subsystem, for gods sake
+- [ ] Custom ShuffleBoard component for visualizing arm (2D plotter,
+      desmos-style)

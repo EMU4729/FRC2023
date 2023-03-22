@@ -5,15 +5,13 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
 public class SubArmRotateSub extends SubsystemBase {
-  private final Constants cnst = Constants.getInstance();
-
-  private final Servo servo = new Servo(cnst.SUBARM_ROTATE_SERVO);
-  private final Encoder encoder = cnst.SUBARM_ROTATE_ENCODER_INFO.createEncoder();
+  private final Servo servo = new Servo(Constants.subarm.ROTATE_SERVO);
+  private final Encoder encoder = Constants.subarm.ROTATE_ENCODER_INFO.createEncoder();
 
   private boolean calibrated = false;
 
@@ -49,14 +47,14 @@ public class SubArmRotateSub extends SubsystemBase {
   private boolean checkLimit(boolean stop) {
     double turnDegrees = encoder.getDistance();
 
-    if (turnDegrees < cnst.SUBARM_ROTATE_LOWER_LIMIT) {
+    if (turnDegrees < Constants.subarm.ROTATE_LOWER_LIMIT) {
       if (stop) {
         stop();
       }
       Logger.warn("SubArmRotateSub : Lower limit reached! Stopping...");
       ShuffleControl.subArmTab.setRotationInBounds(false);
       return true;
-    } else if (turnDegrees > cnst.SUBARM_ROTATE_UPPER_LIMIT) {
+    } else if (turnDegrees > Constants.subarm.ROTATE_UPPER_LIMIT) {
       if (stop) {
         stop();
       }

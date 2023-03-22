@@ -8,17 +8,15 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
+import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
 public class SubArmPivotSub extends SubsystemBase {
-  private final Constants cnst = Constants.getInstance();
-
-  private final MotorController motor = cnst.SUBARM_PIVOT_MOTOR_ID.createMotorController();
-  private final Encoder encoder = cnst.SUBARM_PIVOT_MOTOR_ID.createEncoder();
-  private final PIDController controller = cnst.SUBARM_PIVOT_PID.createPIDController();
+  private final MotorController motor = Constants.subarm.PIVOT_MOTOR_ID.createMotorController();
+  private final Encoder encoder = Constants.subarm.PIVOT_MOTOR_ID.createEncoder();
+  private final PIDController controller = Constants.subarm.PIVOT_PID.build();
 
   private boolean calibrated = false;
   private double targetAngle = 0;
@@ -55,16 +53,17 @@ public class SubArmPivotSub extends SubsystemBase {
 
   /** @return If a provided angle is within the bounds of the pivot limits. */
   private boolean angleIsValid(double angle) {
-    return angle >= cnst.SUBARM_PIVOT_LOWER_LIMIT && angle <= cnst.SUBARM_PIVOT_UPPER_LIMIT;
+    return angle >= Constants.subarm.PIVOT_LOWER_LIMIT && angle <= Constants.subarm.PIVOT_UPPER_LIMIT;
   }
 
   /**
    * Clamps the angle to the valid range.
+   * 
    * @param angle The angle to clamp.
    * @return The clamped angle.
    */
   private double clampAngle(double angle) {
-    return MathUtil.clamp(angle, cnst.SUBARM_PIVOT_LOWER_LIMIT, cnst.SUBARM_PIVOT_UPPER_LIMIT);
+    return MathUtil.clamp(angle, Constants.subarm.PIVOT_LOWER_LIMIT, Constants.subarm.PIVOT_UPPER_LIMIT);
   }
 
   /**
@@ -110,12 +109,12 @@ public class SubArmPivotSub extends SubsystemBase {
 
   /** @return a {@link Command} to pivot the subarm upwards */
   public Command moveUp() {
-    return this.run(() -> shiftAngle(cnst.SUBARM_PIVOT_VELOCITY));
+    return this.run(() -> shiftAngle(Constants.subarm.PIVOT_VELOCITY));
   }
 
   /** @return a {@link Command} to pivot the subarm downwards */
   public Command moveDown() {
-    return this.run(() -> shiftAngle(-cnst.SUBARM_PIVOT_VELOCITY));
+    return this.run(() -> shiftAngle(-Constants.subarm.PIVOT_VELOCITY));
   }
 
   /** @return a {@link Command} to move the subarm to the forward position. */
@@ -150,7 +149,7 @@ public class SubArmPivotSub extends SubsystemBase {
     output = controller.calculate(output) * -1;
 
     output = MathUtil.clamp(output, -0.2, 0.2); // This is a safety measure, will be increased to -1 and 1 when stable
-    
+
     motor.set(output);
 
     updateShuffleboard(output);

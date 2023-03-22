@@ -2,13 +2,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Subsystems;
 
 /** Automatically balances the robot on the charge pad using the IMU's gyro. */
 public class BalanceChargePad extends CommandBase {
-  public final Constants cnst = Constants.getInstance();
-  public final PIDController controller = cnst.BALANCE_CHARGE_PAD_PID.createPIDController();
+  private final double DEADBAND = 2;
+  private final PIDController controller = new PIDController(0.1, 0, 0); // UPDATE
 
   public BalanceChargePad() {
     addRequirements(Subsystems.drive);
@@ -24,7 +23,7 @@ public class BalanceChargePad extends CommandBase {
     double pitch = Subsystems.nav.getPitch();
 
     // don't move if the angle is correct
-    if (Math.abs(pitch) < cnst.BALANCE_CHARGE_PAD_DEADBAND)
+    if (Math.abs(pitch) < DEADBAND)
       return;
 
     double speed = controller.calculate(pitch);

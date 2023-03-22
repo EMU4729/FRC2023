@@ -14,29 +14,26 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Robot;
+import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.CurveFit;
 import frc.robot.utils.logger.Logger;
 
 public class ArmSub extends SubsystemBase {
-  private final Constants cnst = Constants.getInstance();
+  private final PIDController armSeg1Controller = Constants.arm.SEG1_PID.build();
+  private final PIDController ArmSeg2Controller = Constants.arm.SEG2_PID.build();
 
-  private final PIDController armSeg1Controller = cnst.ARM_SEG1_PID.createPIDController();
-  private final PIDController ArmSeg2Controller = cnst.ARM_SEG2_PID.createPIDController();
+  private final MotorController armSeg1MasterMotor = Constants.arm.SEG1_MASTER_MOTOR_ID.createMotorController();
+  private final MotorController armSeg1SlaveMotor = Constants.arm.SEG1_SLAVE_MOTOR_ID.createMotorController();
 
-  private final MotorController armSeg1MasterMotor = cnst.ARM_SEG1_MASTER_MOTOR_ID.createMotorController();
-  private final MotorController armSeg1SlaveMotor = cnst.ARM_SEG1_SLAVE_MOTOR_ID.createMotorController();
-
-  private final MotorController armSeg2MasterMotor = cnst.ARM_SEG2_MASTER_MOTOR_ID.createMotorController();
-  private final MotorController armSeg2SlaveMotor = cnst.ARM_SEG2_SLAVE_MOTOR_ID.createMotorController();
+  private final MotorController armSeg2MasterMotor = Constants.arm.SEG2_MASTER_MOTOR_ID.createMotorController();
+  private final MotorController armSeg2SlaveMotor = Constants.arm.SEG2_SLAVE_MOTOR_ID.createMotorController();
 
   private final MotorControllerGroup armSeg1Motors = new MotorControllerGroup(armSeg1MasterMotor, armSeg1SlaveMotor);
   private final MotorControllerGroup armSeg2Motors = new MotorControllerGroup(armSeg2MasterMotor, armSeg2SlaveMotor);
 
-  private final Encoder armSeg1Encoder = cnst.ARM_SEG1_MASTER_MOTOR_ID.createEncoder();
-  private final Encoder armSeg2Encoder = cnst.ARM_SEG2_MASTER_MOTOR_ID.createEncoder();
+  private final Encoder armSeg1Encoder = Constants.arm.SEG1_MASTER_MOTOR_ID.createEncoder();
+  private final Encoder armSeg2Encoder = Constants.arm.SEG2_MASTER_MOTOR_ID.createEncoder();
 
   private boolean invert = false;
   private boolean calibrated = false;
@@ -59,7 +56,7 @@ public class ArmSub extends SubsystemBase {
    * Updates the arm tab in shuffleboard. Call this function regularly.
    * 
    * @param armSeg1Output The speed of the upper arm motors
-   * @param armSeg2Output  The speed of the fore arm motors
+   * @param armSeg2Output The speed of the fore arm motors
    */
   private void updateShuffleboard(double armSeg1Output, double armSeg2Output) {
     ShuffleControl.armTab.setOutputs(armSeg1Output, armSeg2Output);
@@ -75,13 +72,13 @@ public class ArmSub extends SubsystemBase {
    * Forward kinematics.
    * 
    * @param armSeg1Angle The angle of the upper arm
-   * @param armSeg2Angle  The angle of the fore arm
+   * @param armSeg2Angle The angle of the fore arm
    * @return The calculated coordinates of the end of the arm.
    */
   private Pair<Double, Double> forK(double armSeg1Angle, double armSeg2Angle) {
     armSeg2Angle *= -1;
-    double l1 = cnst.ARM_SEG1_LENGTH;
-    double l2 = cnst.ARM_SEG2_LENGTH;
+    double l1 = Constants.arm.SEG1_LENGTH;
+    double l2 = Constants.arm.SEG2_LENGTH;
 
     double x1 = l1 * Math.cos(Math.toRadians(armSeg1Angle + 90));
     double y1 = l1 * Math.sin(Math.toRadians(armSeg1Angle + 90));
@@ -121,8 +118,8 @@ public class ArmSub extends SubsystemBase {
     double xSign = Math.signum(x);
     x = Math.abs(x);
 
-    double L1 = cnst.ARM_SEG1_LENGTH;
-    double L2 = cnst.ARM_SEG2_LENGTH;
+    double L1 = Constants.arm.SEG1_LENGTH;
+    double L2 = Constants.arm.SEG2_LENGTH;
 
     double r = Math.hypot(x, y);
 
@@ -156,10 +153,10 @@ public class ArmSub extends SubsystemBase {
       return;
     }
     invert = !invert;
-    double tmp1 = invert ? cnst.ARM_REACH_EXCLUSION[0][0] : cnst.ARM_REACH_EXCLUSION[0][1];
-    double tmp2 = invert ? cnst.ARM_REACH_EXCLUSION[0][1] : cnst.ARM_REACH_EXCLUSION[0][0];
-    addCoord(0, tmp1, cnst.ARM_SWING_THROUGH_HEIGHT, false);
-    addCoord(1, tmp2, cnst.ARM_SWING_THROUGH_HEIGHT, false);
+    double tmp1 = invert ? Constants.arm.REACH_EXCLUSION[0][0] : Constants.arm.REACH_EXCLUSION[0][1];
+    double tmp2 = invert ? Constants.arm.REACH_EXCLUSION[0][1] : Constants.arm.REACH_EXCLUSION[0][0];
+    addCoord(0, tmp1, Constants.arm.SWING_THROUGH_HEIGHT, false);
+    addCoord(1, tmp2, Constants.arm.SWING_THROUGH_HEIGHT, false);
     Pair<Double, Double> tmp = getCurTarget();
     setDestCoord(-tmp.getFirst(), tmp.getSecond(), true);
   }
@@ -168,7 +165,7 @@ public class ArmSub extends SubsystemBase {
    * Sets the target angles for the arm
    * 
    * @param armSeg1 The target angle for the upper arm
-   * @param armSeg2  The target angle for the fore arm
+   * @param armSeg2 The target angle for the fore arm
    */
   private void setAngles(double armSeg1, double armSeg2) {
     if (!calibrated) {
@@ -238,28 +235,28 @@ public class ArmSub extends SubsystemBase {
   /** Returns a {@link Command} that moves the arm up indefinitely. */
   public Command moveUp() {
     return this.run(() -> {
-      shiftDestCoord(0, cnst.ARM_VELOCITY, true);
+      shiftDestCoord(0, Constants.arm.VELOCITY, true);
     });
   }
 
   /** Returns a {@link Command} that moves the arm down indefinitely. */
   public Command moveDown() {
     return this.run(() -> {
-      shiftDestCoord(0, -cnst.ARM_VELOCITY, true);
+      shiftDestCoord(0, -Constants.arm.VELOCITY, true);
     });
   }
 
   /** Returns a {@link Command} that moves the arm forward indefinitely. */
   public Command moveForward() {
     return this.run(() -> {
-      shiftDestCoord(cnst.ARM_VELOCITY, 0, true);
+      shiftDestCoord(Constants.arm.VELOCITY, 0, true);
     });
   }
 
   /** Returns a {@link Command} that moves the arm backward indefinitely. */
   public Command moveBack() {
     return this.run(() -> {
-      shiftDestCoord(-cnst.ARM_VELOCITY, 0, true);
+      shiftDestCoord(-Constants.arm.VELOCITY, 0, true);
     });
   }
 
@@ -310,8 +307,9 @@ public class ArmSub extends SubsystemBase {
     armSeg1Encoder.reset();
     armSeg2Encoder.reset();
     calibrated = true;
-    setAngles(cnst.ARM_REACH_EXCLUSION[0][1], 0);
-    // addCoord(0, cnst.ARM_REACH_EXCLUSION[0][0], cnst.ARM_SWING_THROUGH_HEIGHT,
+    setAngles(Constants.arm.REACH_EXCLUSION[0][1], 0);
+    // addCoord(0, Constants.arm.ARM_REACH_EXCLUSION[0][0],
+    // cnst.ARM_SWING_THROUGH_HEIGHT,
     // false);
     setDestCoord(0, 0, false);
     Logger.info("ArmSub : Calibrated!");
@@ -361,14 +359,14 @@ public class ArmSub extends SubsystemBase {
    */
   boolean targetIsValid(double toX, double toY, double atX, double atY) {
     // check legal reach limits (target is outside lim and not improving)
-    if ((toX < cnst.MAX_ARM_REACH_LEGAL[0][0] && toX <= atX) ||
-        (toX > cnst.MAX_ARM_REACH_LEGAL[0][1] && toX >= atX)) {
+    if ((toX < Constants.arm.MAX_REACH_LEGAL[0][0] && toX <= atX) ||
+        (toX > Constants.arm.MAX_REACH_LEGAL[0][1] && toX >= atX)) {
       ShuffleControl.armTab.setCheckOne(false);
       return false;
     }
     ShuffleControl.armTab.setCheckOne(true);
-    if ((toY < cnst.MAX_ARM_REACH_LEGAL[1][0] && toY <= atY) ||
-        (toY > cnst.MAX_ARM_REACH_LEGAL[1][1] && toY >= atY)) {
+    if ((toY < Constants.arm.MAX_REACH_LEGAL[1][0] && toY <= atY) ||
+        (toY > Constants.arm.MAX_REACH_LEGAL[1][1] && toY >= atY)) {
       ShuffleControl.armTab.setCheckTwo(false);
       return false;
     }
@@ -376,18 +374,19 @@ public class ArmSub extends SubsystemBase {
 
     // max arm reach is around the axle x is around robot center x is adjusted to be
     // around axle before checking
-    if (Math.hypot(toX + cnst.ARM_SEG1_X_OFFSET, toY) > cnst.MAX_ARM_REACH_PHYSICAL &&
-        Math.hypot(toX + cnst.ARM_SEG1_X_OFFSET, toY) >= Math.hypot(atX + cnst.ARM_SEG1_X_OFFSET, atY)) {
+    if (Math.hypot(toX + Constants.arm.SEG1_X_OFFSET, toY) > Constants.arm.MAX_REACH_PHYSICAL &&
+        Math.hypot(toX + Constants.arm.SEG1_X_OFFSET, toY) >= Math.hypot(atX + Constants.arm.SEG1_X_OFFSET,
+            atY)) {
       ShuffleControl.armTab.setCheckThree(false);
       return false;
     }
     ShuffleControl.armTab.setCheckThree(true);
 
     // check arm swing-through bounds
-    double upperPas = cnst.ARM_SWING_THROUGH_HEIGHT * 1.05;
-    double lowerPas = cnst.ARM_SWING_THROUGH_HEIGHT * 0.95;
-    if (toX > cnst.ARM_REACH_EXCLUSION[0][0] &&
-        toX < cnst.ARM_REACH_EXCLUSION[0][1] &&
+    double upperPas = Constants.arm.SWING_THROUGH_HEIGHT * 1.05;
+    double lowerPas = Constants.arm.SWING_THROUGH_HEIGHT * 0.95;
+    if (toX > Constants.arm.REACH_EXCLUSION[0][0] &&
+        toX < Constants.arm.REACH_EXCLUSION[0][1] &&
         Math.abs(toX) >= Math.abs(atX) && // further from 0 than cur (can cross 0)
         ((atY > upperPas && toY < lowerPas) || // dont cross into the lower exclusion
             (atY < lowerPas && atY > upperPas) || // dont cross into the upper exclusion
@@ -400,9 +399,9 @@ public class ArmSub extends SubsystemBase {
     ShuffleControl.armTab.setCheckFour(true);
 
     // check robot limits
-    if (toX > cnst.ARM_REACH_ROBOT_EXCLUSION[0][0] &&
-        toX < cnst.ARM_REACH_ROBOT_EXCLUSION[0][1] &&
-        toY < cnst.ARM_REACH_ROBOT_EXCLUSION[1][1] &&
+    if (toX > Constants.arm.REACH_ROBOT_EXCLUSION[0][0] &&
+        toX < Constants.arm.REACH_ROBOT_EXCLUSION[0][1] &&
+        toY < Constants.arm.REACH_ROBOT_EXCLUSION[1][1] &&
         Math.abs(toX) >= Math.abs(atX) && // further from 0 than cur (can cross 0)
         toY >= atY) {
       ShuffleControl.armTab.setCheckFive(false);
@@ -444,10 +443,10 @@ public class ArmSub extends SubsystemBase {
 
     double angle = Math.atan2(y2 - y1, x2 - x1);
 
-    double changeX = cnst.ARM_INTERPOLATION_STEP * Math.cos(angle);
-    double changeY = cnst.ARM_INTERPOLATION_STEP * Math.sin(angle);
+    double changeX = Constants.arm.INTERPOLATION_STEP * Math.cos(angle);
+    double changeY = Constants.arm.INTERPOLATION_STEP * Math.sin(angle);
 
-    if (Math.hypot(changeX, changeY) < cnst.ARM_INTERPOLATION_STEP) {
+    if (Math.hypot(changeX, changeY) < Constants.arm.INTERPOLATION_STEP) {
       return destPos;
     }
 
@@ -466,7 +465,7 @@ public class ArmSub extends SubsystemBase {
       updateShuffleboard(0, 0);
       return;
     }
-    if(DriverStation.isDisabled()){//clear intergral when disabled
+    if (DriverStation.isDisabled()) {// clear intergral when disabled
       armSeg1Controller.reset();
     }
 
@@ -482,7 +481,7 @@ public class ArmSub extends SubsystemBase {
     armSeg2Output = MathUtil.clamp(armSeg2Output, -0.3, 0.3);
 
     if (!(armSeg1Controller.atSetpoint() && ArmSeg2Controller.atSetpoint())) {
-      Pair<Double, Double> nextPoint = getCurTarget();//interpolateNext();
+      Pair<Double, Double> nextPoint = getCurTarget();// interpolateNext();
       Pair<Double, Double> res = invK(nextPoint.getFirst(), nextPoint.getSecond());
       setAngles(res.getFirst(), res.getSecond());
     }
