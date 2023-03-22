@@ -11,25 +11,18 @@ import frc.robot.utils.CurveFit;
  * The Teleop Command.
  */
 public class TeleopDriveTank extends CommandBase {
-  private final Variables vars = Variables.getInstance();
-  private final OI oi = OI.getInstance();
-
   private final CurveFit throtFit;
   private final CurveFit copilotThrotFit;
 
   public TeleopDriveTank() {
-    this(Variables.getInstance().pilotDriveSettings);
+    this(Variables.pilotDriveSettings);
   }
 
   public TeleopDriveTank(double[][] settings) {
     throtFit = CurveFit.throtFromDriveSettings(settings);
-    copilotThrotFit = CurveFit.throtFromDriveSettings(vars.copilotDriveSettings);
+    copilotThrotFit = CurveFit.throtFromDriveSettings(Variables.copilotDriveSettings);
 
     addRequirements(Subsystems.drive);
-  }
-
-  @Override
-  public void initialize() {
   }
 
   @Override
@@ -38,23 +31,23 @@ public class TeleopDriveTank extends CommandBase {
     double throttleR = 0;
 
     // if the pilot is moving the robot
-    if (oi.pilotIsActive()) {
+    if (OI.pilotIsActive()) {
       // take input from the pilot
-      throttleL = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
-      throttleR = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getRightY()));
+      throttleL = throtFit.fit(OI.applyAxisDeadband(OI.pilot.getLeftY()));
+      throttleR = throtFit.fit(OI.applyAxisDeadband(OI.pilot.getRightY()));
     } else {
       // take input from the copilot
-      throttleL = copilotThrotFit.fit(oi.applyAxisDeadband(oi.copilot.getLeftY()));
-      throttleR = copilotThrotFit.fit(oi.applyAxisDeadband(oi.copilot.getRightY()));
+      throttleL = copilotThrotFit.fit(OI.applyAxisDeadband(OI.copilot.getLeftY()));
+      throttleR = copilotThrotFit.fit(OI.applyAxisDeadband(OI.copilot.getRightY()));
     }
 
     // flips the direction of forward based on controller button
-    if (vars.invertDriveDirection) {
+    if (Variables.invertDriveDirection) {
       throttleL *= -1;
       throttleR *= -1;
     }
 
-    ShuffleControl.driveTab.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightY());
+    ShuffleControl.driveTab.setControlAxis(-OI.pilot.getLeftY(), OI.pilot.getRightY());
 
     Subsystems.drive.tank(throttleL, throttleR);
   }

@@ -15,10 +15,10 @@ public class TeleopProvider {
   private static Optional<TeleopProvider> inst = Optional.empty();
 
   private final Command teleop = new TeleopDriveArcade();
-  private final Command demoTeleop = new TeleopDriveArcade(Variables.getInstance().demoDriveSettings);
+  private final Command demoTeleop = new TeleopDriveArcade(Variables.demoDriveSettings);
 
   private final Command teleopTank = new TeleopDriveTank();
-  private final Command demoTeleopTank = new TeleopDriveTank(Variables.getInstance().demoDriveSettings);
+  private final Command demoTeleopTank = new TeleopDriveTank(Variables.demoDriveSettings);
 
   public final SendableChooser<Command> chooser = new SendableChooser<>(); // pub for shuffle board
 
@@ -42,7 +42,7 @@ public class TeleopProvider {
     return inst.get();
   }
 
-  public Command getTeleop() {
+  public Command getSelected() {
     return chooser.getSelected();
   }
 }

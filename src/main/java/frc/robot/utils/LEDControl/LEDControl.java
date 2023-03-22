@@ -19,8 +19,6 @@ public class LEDControl {
     return inst.get();
   }
 
-  private Variables vars = Variables.getInstance();
-
   private AddressableLED leds = new AddressableLED(Constants.led.STRING_PORT);
   private AddressableLEDBuffer ledsBuff = new AddressableLEDBuffer(Constants.led.STRING_LENGTH);
   /** lednum< queue< [r,g,b,endTime,priority]>> */
@@ -180,8 +178,8 @@ public class LEDControl {
   public void runDirectionLights() {
     int[] front = { 0, 2 };
     int[] back = { Constants.led.STRING_LENGTH - 3, Constants.led.STRING_LENGTH - 1 };
-    set(vars.invertDriveDirection ? front : back, Colour.Green, -1, 5);
-    set(vars.invertDriveDirection ? back : front, Colour.Red, -1, 5);
+    set(Variables.invertDriveDirection ? front : back, Colour.Green, -1, 5);
+    set(Variables.invertDriveDirection ? back : front, Colour.Red, -1, 5);
   }
 
   public void runCubeLights() {

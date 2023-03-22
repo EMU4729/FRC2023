@@ -21,10 +21,8 @@ import frc.robot.utils.LEDControl.LEDControl;
  * Subsystemsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Variables vars = Variables.getInstance();
   private final AutoProvider autoProvider = AutoProvider.getInstance();
   private final TeleopProvider teleopProvider = TeleopProvider.getInstance();
-  private final OI oi = OI.getInstance();
 
   /**
    * The container for the robot. Contains Subsystemsystems, OI devices, and
@@ -48,16 +46,16 @@ public class RobotContainer {
 
     // Invert Drive
     LEDControl.getInstance().runDirectionLights();
-    oi.pilot.start().onTrue(new InstantCommand(() -> {
-      vars.invertDriveDirection = !vars.invertDriveDirection;
+    OI.pilot.start().onTrue(new InstantCommand(() -> {
+      Variables.invertDriveDirection = !Variables.invertDriveDirection;
       LEDControl.getInstance().runDirectionLights();
       // LEDPattern.runDirLEDS();
     }));
 
-    oi.pilot.rightBumper().onTrue(new InstantCommand(() -> {
+    OI.pilot.rightBumper().onTrue(new InstantCommand(() -> {
       LEDControl.getInstance().runConeLights();
     }));
-    oi.pilot.leftBumper().onTrue(new InstantCommand(() -> {
+    OI.pilot.leftBumper().onTrue(new InstantCommand(() -> {
       LEDControl.getInstance().runCubeLights();
     }));
 
@@ -68,36 +66,36 @@ public class RobotContainer {
     // +------------------+
 
     // Calibration
-    oi.copilot.start().onTrue(
+    OI.copilot.start().onTrue(
         new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
     // Preprogrammed arm positions
-    oi.copilot.povUp().onTrue(Subsystems.arm.farField());
-    oi.copilot.povRight().onTrue(new ArmPickUp());
-    oi.copilot.povDown().onTrue(Subsystems.arm.lowerRung());
-    oi.copilot.povLeft().onTrue(Subsystems.arm.upperRung());
+    OI.copilot.povUp().onTrue(Subsystems.arm.farField());
+    OI.copilot.povRight().onTrue(new ArmPickUp());
+    OI.copilot.povDown().onTrue(Subsystems.arm.lowerRung());
+    OI.copilot.povLeft().onTrue(Subsystems.arm.upperRung());
 
     // Fine arm movement bindings @wip should get proportional control like drive
-    oi.copilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
-    oi.copilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
-    oi.copilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());
-    oi.copilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveDown());
+    OI.copilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
+    OI.copilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
+    OI.copilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());
+    OI.copilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveDown());
 
     // Arm Invert
-    oi.copilot.x().onTrue(new InstantCommand(Subsystems.arm::invert, Subsystems.arm));
+    OI.copilot.x().onTrue(new InstantCommand(Subsystems.arm::invert, Subsystems.arm));
 
     // Subarm Control
-    oi.copilot.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.8).whileTrue(Subsystems.subArmPivot.moveUp());
-    oi.copilot.axisLessThan(XboxController.Axis.kLeftY.value, -0.8).whileTrue(Subsystems.subArmPivot.moveDown());
-    oi.copilot.axisGreaterThan(XboxController.Axis.kLeftX.value, 0.8)
+    OI.copilot.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.8).whileTrue(Subsystems.subArmPivot.moveUp());
+    OI.copilot.axisLessThan(XboxController.Axis.kLeftY.value, -0.8).whileTrue(Subsystems.subArmPivot.moveDown());
+    OI.copilot.axisGreaterThan(XboxController.Axis.kLeftX.value, 0.8)
         .whileTrue(Subsystems.subArmRotate.turnClockwise());
-    oi.copilot.axisLessThan(XboxController.Axis.kLeftX.value, -0.8)
+    OI.copilot.axisLessThan(XboxController.Axis.kLeftX.value, -0.8)
         .whileTrue(Subsystems.subArmRotate.turnAnticlockwise());
 
     // Gripper Control
-    oi.copilot.a().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
-    oi.copilot.b().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCube, Subsystems.gripperGrip));
-    oi.copilot.y().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCone, Subsystems.gripperGrip));
+    OI.copilot.a().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
+    OI.copilot.b().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCube, Subsystems.gripperGrip));
+    OI.copilot.y().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCone, Subsystems.gripperGrip));
   }
 
   /**
@@ -106,7 +104,7 @@ public class RobotContainer {
    * @return the command to run in teleop
    */
   public Command getTeleopCommand() {
-    return teleopProvider.getTeleop();
+    return teleopProvider.getSelected();
   }
 
   /**
@@ -115,6 +113,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoProvider.getMiddleAuto();
+    return autoProvider.getSelected();
   }
 }

@@ -11,14 +11,11 @@ import frc.robot.utils.CurveFit;
  * The Teleop Command.
  */
 public class TeleopDriveArcade extends CommandBase {
-  private final Variables vars = Variables.getInstance();
-  private final OI oi = OI.getInstance();
-
   private final CurveFit throtFit;
   private final CurveFit steerFit;
 
   public TeleopDriveArcade() {
-    this(Variables.getInstance().pilotDriveSettings);
+    this(Variables.pilotDriveSettings);
   }
 
   public TeleopDriveArcade(double[][] settings) {
@@ -29,16 +26,12 @@ public class TeleopDriveArcade extends CommandBase {
   }
 
   @Override
-  public void initialize() {
-  }
-
-  @Override
   public void execute() {
     double throttle = 0;
     double steering = 0;
 
-    throttle = throtFit.fit(oi.applyAxisDeadband(oi.pilot.getLeftY()));
-    steering = steerFit.fit(oi.applyAxisDeadband(oi.pilot.getRightX()), throttle);// limiting max steering based on
+    throttle = throtFit.fit(OI.applyAxisDeadband(OI.pilot.getLeftY()));
+    steering = steerFit.fit(OI.applyAxisDeadband(OI.pilot.getRightX()), throttle);// limiting max steering based on
 
     // Invert steering when throttle >= 0 to mimic car controls
     if (throttle > 0) {
@@ -46,11 +39,11 @@ public class TeleopDriveArcade extends CommandBase {
     }
 
     // flips the direction of forward based on controller button
-    if (vars.invertDriveDirection) {
+    if (Variables.invertDriveDirection) {
       throttle *= -1;
     }
 
-    ShuffleControl.driveTab.setControlAxis(-oi.pilot.getLeftY(), oi.pilot.getRightX());
+    ShuffleControl.driveTab.setControlAxis(-OI.pilot.getLeftY(), OI.pilot.getRightX());
 
     Subsystems.drive.arcade(throttle, steering);
   }
