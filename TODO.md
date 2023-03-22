@@ -4,9 +4,9 @@
 - [ ] Separate MotorInfo into MotorBuilder and EncoderBuilder
 - [ ] Talking of naming, use better naming.
   - [ ] MotorInfo -> MotorBuilder
-  - [ ] PIDControllerConstants -> PIDControllerBuilder
+  - [x] PIDControllerConstants -> PIDControllerBuilder
   - [ ] ShuffleControl -> Something not cringe
-  - [ ] UpperArm and ForeArm -> ArmOne and ArmTwo
+  - [ ] UpperArm and ForeArm -> SegOne and SegTwo
 - [x] Move SimConstants into Constants
 - [x] Split Constants into multiple files for easier navigation
 - [x] Move constants in the Variables file (drive settings) into the Constants
