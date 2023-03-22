@@ -23,17 +23,17 @@ public class ArmSub extends SubsystemBase {
   private final PIDController armSeg1Controller = Constants.arm.SEG1_PID.build();
   private final PIDController ArmSeg2Controller = Constants.arm.SEG2_PID.build();
 
-  private final MotorController armSeg1MasterMotor = Constants.arm.SEG1_MASTER_MOTOR_ID.createMotorController();
-  private final MotorController armSeg1SlaveMotor = Constants.arm.SEG1_SLAVE_MOTOR_ID.createMotorController();
+  private final MotorController armSeg1MasterMotor = Constants.arm.SEG1_MASTER_MOTOR_ID.build();
+  private final MotorController armSeg1SlaveMotor = Constants.arm.SEG1_SLAVE_MOTOR_ID.build();
 
-  private final MotorController armSeg2MasterMotor = Constants.arm.SEG2_MASTER_MOTOR_ID.createMotorController();
-  private final MotorController armSeg2SlaveMotor = Constants.arm.SEG2_SLAVE_MOTOR_ID.createMotorController();
+  private final MotorController armSeg2MasterMotor = Constants.arm.SEG2_MASTER_MOTOR_ID.build();
+  private final MotorController armSeg2SlaveMotor = Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
 
   private final MotorControllerGroup armSeg1Motors = new MotorControllerGroup(armSeg1MasterMotor, armSeg1SlaveMotor);
   private final MotorControllerGroup armSeg2Motors = new MotorControllerGroup(armSeg2MasterMotor, armSeg2SlaveMotor);
 
-  private final Encoder armSeg1Encoder = Constants.arm.SEG1_MASTER_MOTOR_ID.createEncoder();
-  private final Encoder armSeg2Encoder = Constants.arm.SEG2_MASTER_MOTOR_ID.createEncoder();
+  private final Encoder armSeg1Encoder = Constants.arm.SEG1_ENCODER.build();
+  private final Encoder armSeg2Encoder = Constants.arm.SEG2_ENCODER.build();
 
   private boolean invert = false;
   private boolean calibrated = false;

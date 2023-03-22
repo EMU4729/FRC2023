@@ -11,7 +11,7 @@ import frc.robot.utils.logger.Logger;
 
 public class SubArmRotateSub extends SubsystemBase {
   private final Servo servo = new Servo(Constants.subarm.ROTATE_SERVO);
-  private final Encoder encoder = Constants.subarm.ROTATE_ENCODER_INFO.createEncoder();
+  private final Encoder encoder = Constants.subarm.ROTATE_ENCODER_INFO.build();
 
   private boolean calibrated = false;
 

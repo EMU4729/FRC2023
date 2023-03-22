@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
-import frc.robot.utils.MotorInfo;
+import frc.robot.utils.EncoderBuilder;
+import frc.robot.utils.MotorBuilder;
 import frc.robot.utils.PIDControllerBuilder;
 
 public class ArmConstants {
@@ -8,18 +9,23 @@ public class ArmConstants {
         }
 
         /** Information for Arm Seg1 Master Motor */
-        public final MotorInfo SEG1_MASTER_MOTOR_ID = new MotorInfo(7, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 10, 11 }, 360. / 16 / 2048.); // @wip account for gearing ratios to the
-                                                                           // actual
+        public final MotorBuilder SEG1_MASTER_MOTOR_ID = new MotorBuilder(7, MotorBuilder.Type.VictorSPX).withBrake();
+
+        /** Arm Seg1 Encoder Builder */
+        public final EncoderBuilder SEG1_ENCODER = new EncoderBuilder(new int[] { 10, 11 }, 360. / 16 / 2048.);
+
         // arm
         /** Information for Arm Seg1 Slave Motor */
-        public final MotorInfo SEG1_SLAVE_MOTOR_ID = new MotorInfo(8, MotorInfo.Type.VictorSPX).withBrake();
+        public final MotorBuilder SEG1_SLAVE_MOTOR_ID = new MotorBuilder(8, MotorBuilder.Type.VictorSPX).withBrake();
         /** Information for Arm Seg2 Master Motor */
-        public final MotorInfo SEG2_MASTER_MOTOR_ID = new MotorInfo(5, MotorInfo.Type.VictorSPX).withBrake()
-                        .encoder(new int[] { 8, 9 }, 360. / 4 / 2048.); // @wip account for gearing ratios to the actual
+        public final MotorBuilder SEG2_MASTER_MOTOR_ID = new MotorBuilder(5, MotorBuilder.Type.VictorSPX).withBrake();
+
+        /** Arm Seg1 Encoder Builder */
+        public final EncoderBuilder SEG2_ENCODER = new EncoderBuilder(new int[] { 8, 9 }, 360. / 16 / 2048.);
+
         // arm
         /** Information for Arm Seg2 Slave Motor */
-        public final MotorInfo SEG2_SLAVE_MOTOR_ID = new MotorInfo(6, MotorInfo.Type.VictorSPX).withBrake();
+        public final MotorBuilder SEG2_SLAVE_MOTOR_ID = new MotorBuilder(6, MotorBuilder.Type.VictorSPX).withBrake();
         /**
          * Length of the armseg2 (second segment)(between axles), in (mm) @wip update
          * arm length

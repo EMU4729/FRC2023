@@ -1,9 +1,9 @@
 # Code TODO List
 
 - [x] Make everything static. No singletons.
-- [ ] Separate MotorInfo into MotorBuilder and EncoderBuilder
+- [x] Separate MotorInfo into MotorBuilder and EncoderBuilder
 - [ ] Talking of naming, use better naming.
-  - [ ] MotorInfo -> MotorBuilder
+  - [x] MotorInfo -> MotorBuilder
   - [x] PIDControllerConstants -> PIDControllerBuilder
   - [ ] ShuffleControl -> Something not cringe
   - [ ] UpperArm and ForeArm -> SegOne and SegTwo

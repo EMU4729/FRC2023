@@ -24,8 +24,8 @@ public class NavigationSub extends SubsystemBase {
       Rotation2d.fromDegrees(imu.getAngle()),
       0., 0.);
 
-  public final Encoder drvLeftEncoder = Constants.drive.MOTOR_ID_LM.createEncoder();
-  public final Encoder drvRightEncoder = Constants.drive.MOTOR_ID_RM.createEncoder();
+  public final Encoder drvLeftEncoder = Constants.drive.ENCODER_ID_L.build();
+  public final Encoder drvRightEncoder = Constants.drive.ENCODER_ID_R.build();
 
   public Field2d field = new Field2d();
 

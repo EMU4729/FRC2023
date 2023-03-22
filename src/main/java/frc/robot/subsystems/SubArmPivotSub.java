@@ -14,8 +14,8 @@ import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
 public class SubArmPivotSub extends SubsystemBase {
-  private final MotorController motor = Constants.subarm.PIVOT_MOTOR_ID.createMotorController();
-  private final Encoder encoder = Constants.subarm.PIVOT_MOTOR_ID.createEncoder();
+  private final MotorController motor = Constants.subarm.PIVOT_MOTOR_ID.build();
+  private final Encoder encoder = Constants.subarm.PIVOT_ENCODER_ID.build();
   private final PIDController controller = Constants.subarm.PIVOT_PID.build();
 
   private boolean calibrated = false;

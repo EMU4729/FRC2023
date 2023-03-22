@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
-import frc.robot.utils.MotorInfo;
+import frc.robot.utils.EncoderBuilder;
+import frc.robot.utils.MotorBuilder;
 import frc.robot.utils.PIDControllerBuilder;
 
 public class SubArmConstants {
@@ -13,17 +14,20 @@ public class SubArmConstants {
   public final double ROTATE_LOWER_LIMIT = -5;
   /** Subarm Rotation Encoder Upper Bound */
   public final double ROTATE_UPPER_LIMIT = 180;
+
   /**
-   * Subarm Rotation Encoder Info. <strong>Do not try to create a motor controller
-   * with this.</strong>
+   * Subarm Rotation Encoder Info.
    */
-  public final MotorInfo ROTATE_ENCODER_INFO = new MotorInfo(-1, MotorInfo.Type.Never)
-      .encoder(new int[] { 2, 3 }, 1. / 20.);
+  public final EncoderBuilder ROTATE_ENCODER_INFO = new EncoderBuilder(new int[] { 2, 3 }, 1. / 20.);
+
   /**
    * Information for Subarm Pivot Motor
    */
-  public final MotorInfo PIVOT_MOTOR_ID = new MotorInfo(9, MotorInfo.Type.TalonSRX)
-      .encoder(new int[] { 0, 1 }, 360. / 44.4 / 4.);
+  public final MotorBuilder PIVOT_MOTOR_ID = new MotorBuilder(9, MotorBuilder.Type.TalonSRX);
+
+  /** Information for Subarm Pivot Encoder */
+  public final EncoderBuilder PIVOT_ENCODER_ID = new EncoderBuilder(new int[] {0, 1}, 360. / 44.4/ 4.);
+
   /** PID Constants for the Subarm Pivot */
   public final PIDControllerBuilder PIVOT_PID = new PIDControllerBuilder(0.05, 0, 0);
   /** Subarm Pivot Velocity (degrees per tick) */

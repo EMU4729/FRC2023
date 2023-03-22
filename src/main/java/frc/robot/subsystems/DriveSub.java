@@ -18,12 +18,12 @@ import frc.robot.constants.Constants;
  * Handles all drive functionality.
  */
 public class DriveSub extends SubsystemBase {
-  private final MotorController leftMaster = Constants.drive.MOTOR_ID_LM.createMotorController();
-  private final MotorController leftSlave = Constants.drive.MOTOR_ID_LS.createMotorController();
+  private final MotorController leftMaster = Constants.drive.MOTOR_ID_LM.build();
+  private final MotorController leftSlave = Constants.drive.MOTOR_ID_LS.build();
   private final MotorControllerGroup leftMotors = new MotorControllerGroup(leftMaster, leftSlave);
 
-  private final MotorController rightMaster = Constants.drive.MOTOR_ID_RM.createMotorController();
-  private final MotorController rightSlave = Constants.drive.MOTOR_ID_RS.createMotorController();
+  private final MotorController rightMaster = Constants.drive.MOTOR_ID_RM.build();
+  private final MotorController rightSlave = Constants.drive.MOTOR_ID_RS.build();
   private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightMaster, rightSlave);
 
   public final DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors); // pub for shuffleboard
