@@ -14,45 +14,6 @@ public final class Variables {
    */
   public static boolean invertDriveDirection = false;
 
-  /** max speed of robot m/s */
-  public static double driveMaxSpeed = 3.850;
-  /** min throttle for movement */
-  public static double driveMinThrot = 0.3;
-  /** min throttle for turning */
-  public static double driveMinTurn = 0.3;
-  /**
-   * settings for robot drive in default teleop
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
-   * power}
-   */
-  public static double[][] pilotDriveSettings = { { driveMinThrot, 1, 2 }, { driveMinTurn, 1, 3, 0.3 } };
-  /**
-   * settings for robot drive in demo mode
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
-   * power}
-   */
-  public static double[][] demoDriveSettings = { { driveMinThrot, 0.5, 3 }, { driveMinTurn, 0.6, 3, 0.1 } };
-
-  /**
-   * settings for copilot drive
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
-   * power}
-   */
-  public static double[][] copilotDriveSettings = { { driveMinThrot, 0.5, 3 }, { driveMinTurn, 0.6, 3, 0.1 } };
-
-  /**
-   * settings for robot drive in PID drive
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
-   * power}
-   */
-  public static double[][] pid1DriveSettings = { { 0, driveMaxSpeed, 3 }, { 0, 1, 3, 0.3 } };
-  /**
-   * settings for robot drive in PID drive
-   * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
-   * power}
-   */
-  public static double[][] pid2DriveSettings = { { driveMinThrot, 1, 1 }, { driveMinTurn, 1, 1, 0.3 } };
-
   /** LED string brightness modifier (0-1) */
   public static double ledBrightnessMod = 1;
 }

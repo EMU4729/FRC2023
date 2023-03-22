@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
+import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.CurveFit;
 
@@ -15,12 +16,12 @@ public class TeleopDriveTank extends CommandBase {
   private final CurveFit copilotThrotFit;
 
   public TeleopDriveTank() {
-    this(Variables.pilotDriveSettings);
+    this(Constants.drive.PILOT_SETTINGS);
   }
 
   public TeleopDriveTank(double[][] settings) {
     throtFit = CurveFit.throtFromDriveSettings(settings);
-    copilotThrotFit = CurveFit.throtFromDriveSettings(Variables.copilotDriveSettings);
+    copilotThrotFit = CurveFit.throtFromDriveSettings(Constants.drive.COPILOT_SETTINGS);
 
     addRequirements(Subsystems.drive);
   }

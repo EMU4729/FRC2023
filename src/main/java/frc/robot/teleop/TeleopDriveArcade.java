@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Subsystems;
 import frc.robot.Variables;
+import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.CurveFit;
 
@@ -15,7 +16,7 @@ public class TeleopDriveArcade extends CommandBase {
   private final CurveFit steerFit;
 
   public TeleopDriveArcade() {
-    this(Variables.pilotDriveSettings);
+    this(Constants.drive.PILOT_SETTINGS);
   }
 
   public TeleopDriveArcade(double[][] settings) {

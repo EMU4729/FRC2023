@@ -44,11 +44,51 @@ public class DriveConstants {
     public final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(
             TRACK_WIDTH_METERS);
     /** Auto max velocity */
-    public final double MAX_METERS_PER_SECOND = 2;
+    public final double AUTO_MAX_SPEED = 2;
     /** Auto max acceleration */
-    public final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
+    public final double AUTO_MAX_ACCELERATION = 1;
     /** Auto ramsete b variable */
     public final double RAMSETE_B = 2;
     /** Auto ramsete zeta variable */
     public final double RAMSETE_ZETA = 0.7;
+
+    // Drive Settings
+    /** max speed of robot m/s */
+    public double MAX_SPEED = 3.850;
+    /** min throttle for movement */
+    public double MIN_THROT = 0.3;
+    /** min throttle for turning */
+    public double MIN_TURN = 0.3;
+    /**
+     * settings for robot drive in default teleop
+     * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+     * power}
+     */
+    public double[][] PILOT_SETTINGS = { { MIN_THROT, 1, 2 }, { MIN_TURN, 1, 3, 0.3 } };
+    /**
+     * settings for robot drive in demo mode
+     * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+     * power}
+     */
+    public double[][] DEMO_SETTINGS = { { MIN_THROT, 0.5, 3 }, { MIN_TURN, 0.6, 3, 0.1 } };
+
+    /**
+     * settings for copilot drive
+     * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+     * power}
+     */
+    public double[][] COPILOT_SETTINGS = { { MIN_THROT, 0.5, 3 }, { MIN_TURN, 0.6, 3, 0.1 } };
+
+    /**
+     * settings for robot drive in PID drive
+     * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+     * power}
+     */
+    public double[][] PID1_SETTINGS = { { 0, MAX_SPEED, 3 }, { 0, 1, 3, 0.3 } };
+    /**
+     * settings for robot drive in PID drive
+     * {min throt,max throt,curve power}, {min turn throt, max turn throt,curve
+     * power}
+     */
+    public double[][] PID2_SETTINGS = { { MIN_THROT, 1, 1 }, { MIN_TURN, 1, 1, 0.3 } };
 }

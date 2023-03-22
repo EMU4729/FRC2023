@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Variables;
+import frc.robot.constants.Constants;
 
 /**
  * Command for Autonomous.
@@ -15,10 +15,10 @@ public class TeleopProvider {
   private static Optional<TeleopProvider> inst = Optional.empty();
 
   private final Command teleop = new TeleopDriveArcade();
-  private final Command demoTeleop = new TeleopDriveArcade(Variables.demoDriveSettings);
+  private final Command demoTeleop = new TeleopDriveArcade(Constants.drive.DEMO_SETTINGS);
 
   private final Command teleopTank = new TeleopDriveTank();
-  private final Command demoTeleopTank = new TeleopDriveTank(Variables.demoDriveSettings);
+  private final Command demoTeleopTank = new TeleopDriveTank(Constants.drive.DEMO_SETTINGS);
 
   public final SendableChooser<Command> chooser = new SendableChooser<>(); // pub for shuffle board
 
