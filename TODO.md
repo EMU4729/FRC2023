@@ -7,8 +7,8 @@
   - [ ] PIDControllerConstants -> PIDControllerBuilder
   - [ ] ShuffleControl -> Something not cringe
   - [ ] UpperArm and ForeArm -> ArmOne and ArmTwo
-- [ ] Move SimConstants into Constants
-- [ ] Split Constants into multiple files for easier navigation
+- [x] Move SimConstants into Constants
+- [x] Split Constants into multiple files for easier navigation
 - [ ] Move constants in the Variables file (drive settings) into the Constants
 - [ ] Make LEDControl a subsystem, for gods sake
 - [ ] Custom ShuffleBoard component for visualizing arm (2D plotter,
