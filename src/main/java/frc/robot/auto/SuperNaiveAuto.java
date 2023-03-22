@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Subsystems;
 
 public class SuperNaiveAuto extends SequentialCommandGroup {
-  private final double runDuration = 1;
+  private final double runDuration = 1.3;
 
   protected SuperNaiveAuto() {
     addCommands(
