@@ -7,11 +7,11 @@
 - 3: Drive Right Master
 - 4: Drive Right Slave
 
-- 7: Upper Arm Master
-- 8: Upper Arm Slave
+- 7: Arm Seg1 Master
+- 8: Arm Seg1 Slave
 
-- 5: Fore Arm Master
-- 6: Fore Arm Slave
+- 5: Arm Seg2 Master
+- 6: Arm Seg2 Slave
 
 - 9: Subarm Pivot
 
@@ -28,6 +28,5 @@
 - 4, 5: Drive Left Encoder
 - 6, 7: Drive Right Encoder
 
-- 8, 9: Fore Arm Encoder
-- 10 11: Upper Arm Encoder
-
+- 8, 9: Arm Seg2 Encoder
+- 10 11: Arm Seg1 Encoder
