@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,24 +17,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
-import frc.robot.utils.CurveFit;
 import frc.robot.utils.logger.Logger;
 
 public class ArmSub extends SubsystemBase {
   private final WPI_VictorSPX seg1MasterMotor = (WPI_VictorSPX) Constants.arm.SEG1_MASTER_MOTOR_ID.build();
   private final WPI_VictorSPX seg1SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG1_SLAVE_MOTOR_ID.build();
 
-  private final WPI_VictorSPX seg2MasterMotor = (WPI_VictorSPX) Constants.arm.SEG2_MASTER_MOTOR_ID.build();
-  private final WPI_VictorSPX seg2SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
+  private final WPI_TalonSRX seg2MasterMotor = (WPI_TalonSRX) Constants.arm.SEG2_MASTER_MOTOR_ID.build();
+  private final WPI_TalonSRX seg2SlaveMotor = (WPI_TalonSRX) Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
 
   private final MotorControllerGroup seg1Motors = new MotorControllerGroup(seg1MasterMotor, seg1SlaveMotor);
   private final MotorControllerGroup seg2Motors = new MotorControllerGroup(seg2MasterMotor, seg2SlaveMotor);
 
   private final Encoder seg1Encoder = Constants.arm.SEG1_ENCODER.build();
   private final Encoder seg2Encoder = Constants.arm.SEG2_ENCODER.build();
-
-  private final CurveFit seg1Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
-  private final CurveFit seg2Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
 
   private FileWriter dataFile;
 
@@ -183,8 +180,8 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
-    double seg1Throttle = seg1Curve.fit(OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value));
-    double seg2Throttle = seg2Curve.fit(OI.copilot.getRawAxis(XboxController.Axis.kRightY.value));
+    double seg1Throttle = OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value);
+    double seg2Throttle = OI.copilot.getRawAxis(XboxController.Axis.kRightX.value);
 
     seg1Output = MathUtil.clamp(seg1Throttle, -0.3, 0.3);
     seg2Output = MathUtil.clamp(seg2Throttle, -0.3, 0.3);

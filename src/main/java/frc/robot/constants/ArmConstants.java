@@ -17,14 +17,14 @@ public class ArmConstants {
         /** Information for Arm Seg1 Slave Motor */
         public final MotorBuilder SEG1_SLAVE_MOTOR_ID = new MotorBuilder(8, MotorBuilder.Type.VictorSPX).withBrake();
         /** Information for Arm Seg2 Master Motor */
-        public final MotorBuilder SEG2_MASTER_MOTOR_ID = new MotorBuilder(5, MotorBuilder.Type.VictorSPX).withBrake();
+        public final MotorBuilder SEG2_MASTER_MOTOR_ID = new MotorBuilder(3, MotorBuilder.Type.TalonSRX).withBrake();
 
         /** Arm Seg1 Encoder Builder */
         public final EncoderBuilder SEG2_ENCODER = new EncoderBuilder(new int[] { 8, 9 }, 360. / 16 / 2048.);
 
         // arm
         /** Information for Arm Seg2 Slave Motor */
-        public final MotorBuilder SEG2_SLAVE_MOTOR_ID = new MotorBuilder(6, MotorBuilder.Type.VictorSPX).withBrake();
+        public final MotorBuilder SEG2_SLAVE_MOTOR_ID = new MotorBuilder(4, MotorBuilder.Type.TalonSRX).withBrake();
         /**
          * Length of the armseg2 (second segment)(between axles), in (mm) @wip update
          * arm length
