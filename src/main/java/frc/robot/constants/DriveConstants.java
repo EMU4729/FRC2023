@@ -21,7 +21,7 @@ public class DriveConstants {
      * Information for right master drive [Port,controller type,
      * {invert,brake,connectionSaftey}]
      */
-    public final MotorBuilder MOTOR_ID_RM = new MotorBuilder(3, MotorBuilder.Type.TalonSRX).withInvert().withSafety();
+    public final MotorBuilder MOTOR_ID_RM = new MotorBuilder(99, MotorBuilder.Type.TalonSRX).withInvert().withSafety();
 
     /** Drive left encoder builder */
     public final EncoderBuilder ENCODER_ID_R = new EncoderBuilder(new int[] { 6, 7 }, 59.883 / 256. / 1000)
@@ -37,7 +37,7 @@ public class DriveConstants {
      * Information for right slave drive [Port,controller type,
      * {invert,brake,connectionSaftey}]
      */
-    public final MotorBuilder MOTOR_ID_RS = new MotorBuilder(4, MotorBuilder.Type.TalonSRX)
+    public final MotorBuilder MOTOR_ID_RS = new MotorBuilder(98, MotorBuilder.Type.TalonSRX)
             .withInvert().withSafety();
 
     /** KS value from SysId */
