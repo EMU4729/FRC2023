@@ -2,7 +2,6 @@ package frc.robot.constants;
 
 import frc.robot.utils.EncoderBuilder;
 import frc.robot.utils.MotorBuilder;
-import frc.robot.utils.PIDControllerBuilder;
 
 public class ArmConstants {
         protected ArmConstants() {
@@ -43,14 +42,6 @@ public class ArmConstants {
          * pos) @wip value guessed
          */ // wip
         public final double SEG1_X_OFFSET = 0.01;
-        /** Velocity of the arm movements */
-        public final double VELOCITY = 0.002;
-        /** Interpolation step of the arm */
-        public final double INTERPOLATION_STEP = 0.05;
-        /** PID Constants for Arm Seg1 Movement @wip update constants */ // wip
-        public final PIDControllerBuilder SEG1_PID = new PIDControllerBuilder(0.03, 0.01, 0); // UPDATE
-        /** PID Constants for Arm Seg2 Movement */ // wip
-        public final PIDControllerBuilder SEG2_PID = new PIDControllerBuilder(0.01, 0.007, 0); // UPDATE
         /**
          * distance in x and y from the arm seg1 axle to the max distance the robot is
          * allowed to reach

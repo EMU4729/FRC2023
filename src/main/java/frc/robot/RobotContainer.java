@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.AutoProvider;
-import frc.robot.commands.ArmPickUp;
 import frc.robot.teleop.TeleopProvider;
 import frc.robot.utils.LEDControl.LEDControl;
 
@@ -69,21 +68,6 @@ public class RobotContainer {
     OI.copilot.start().onTrue(
         new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
-    // Preprogrammed arm positions
-    OI.copilot.povUp().onTrue(Subsystems.arm.farField());
-    OI.copilot.povRight().onTrue(new ArmPickUp());
-    OI.copilot.povDown().onTrue(Subsystems.arm.lowerRung());
-    OI.copilot.povLeft().onTrue(Subsystems.arm.upperRung());
-
-    // Fine arm movement bindings @wip should get proportional control like drive
-    OI.copilot.axisGreaterThan(XboxController.Axis.kRightX.value, 0.8).whileTrue(Subsystems.arm.moveForward());
-    OI.copilot.axisLessThan(XboxController.Axis.kRightX.value, -0.8).whileTrue(Subsystems.arm.moveBack());
-    OI.copilot.axisLessThan(XboxController.Axis.kRightY.value, -0.8).whileTrue(Subsystems.arm.moveUp());
-    OI.copilot.axisGreaterThan(XboxController.Axis.kRightY.value, 0.8).whileTrue(Subsystems.arm.moveDown());
-
-    // Arm Invert
-    OI.copilot.x().onTrue(new InstantCommand(Subsystems.arm::invert, Subsystems.arm));
-
     // Subarm Control
     OI.copilot.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.8).whileTrue(Subsystems.subArmPivot.moveUp());
     OI.copilot.axisLessThan(XboxController.Axis.kLeftY.value, -0.8).whileTrue(Subsystems.subArmPivot.moveDown());
@@ -96,6 +80,8 @@ public class RobotContainer {
     OI.copilot.a().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
     OI.copilot.b().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCube, Subsystems.gripperGrip));
     OI.copilot.y().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCone, Subsystems.gripperGrip));
+
+    // Arm controls handled in ArmSub
   }
 
   /**
