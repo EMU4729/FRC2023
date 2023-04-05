@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -33,6 +35,8 @@ public class ArmSub extends SubsystemBase {
   private final CurveFit seg1Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
   private final CurveFit seg2Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
 
+  private FileWriter dataFile;
+
   private Instant lastUpdate = Instant.now();
 
   private boolean calibrated = false;
@@ -45,6 +49,16 @@ public class ArmSub extends SubsystemBase {
 
   // private double seg1Current = 0;
   // private double seg2Current = 0;
+
+  public ArmSub() {
+    try {
+      dataFile = new FileWriter(Constants.file.PATH_USB[0] + "arm.csv");
+      dataFile.write(
+          "seg1_output,seg2_output,seg1_encoder_angle,seg2_encoder_angle,seg1_encoder_counts,seg2_encoder_counts,seg1_encoder_rate,seg2_encoder_rate,seg1_voltage,seg2_voltage,seg1_current,seg2_current,kinematics_x,kinematics_y,update_delta\n");
+    } catch (IOException e) {
+      Logger.error("ArmSub : Error writing headers to data file");
+    }
+  }
 
   /**
    * Updates the arm tab in shuffleboard. Call this function regularly.
@@ -68,6 +82,20 @@ public class ArmSub extends SubsystemBase {
 
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
+
+    try {
+      dataFile.write(String.format("%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n", seg1Output, seg2Output,
+          seg1Encoder.getDistance(), seg2Encoder.getDistance(), seg1Encoder.get(), seg2Encoder.get(),
+          seg1Encoder.getRate(), seg2Encoder.getRate(), seg1MasterMotor.getMotorOutputVoltage(),
+          seg2MasterMotor.getMotorOutputVoltage(),
+          Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
+          Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port), kinematicsCoords.getFirst(),
+          kinematicsCoords.getSecond(), Duration.between(lastUpdate, nextUpdate).toMillis()));
+
+    } catch (IOException e) {
+      Logger.error("ArmSub : Error writing data to data file");
+    }
+
     lastUpdate = nextUpdate;
   }
 
