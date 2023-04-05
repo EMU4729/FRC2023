@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import java.time.Duration;
+import java.time.Instant;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
@@ -14,11 +18,11 @@ import frc.robot.utils.CurveFit;
 import frc.robot.utils.logger.Logger;
 
 public class ArmSub extends SubsystemBase {
-  private final MotorController seg1MasterMotor = Constants.arm.SEG1_MASTER_MOTOR_ID.build();
-  private final MotorController seg1SlaveMotor = Constants.arm.SEG1_SLAVE_MOTOR_ID.build();
+  private final WPI_VictorSPX seg1MasterMotor = (WPI_VictorSPX) Constants.arm.SEG1_MASTER_MOTOR_ID.build();
+  private final WPI_VictorSPX seg1SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG1_SLAVE_MOTOR_ID.build();
 
-  private final MotorController seg2MasterMotor = Constants.arm.SEG2_MASTER_MOTOR_ID.build();
-  private final MotorController seg2SlaveMotor = Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
+  private final WPI_VictorSPX seg2MasterMotor = (WPI_VictorSPX) Constants.arm.SEG2_MASTER_MOTOR_ID.build();
+  private final WPI_VictorSPX seg2SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
 
   private final MotorControllerGroup seg1Motors = new MotorControllerGroup(seg1MasterMotor, seg1SlaveMotor);
   private final MotorControllerGroup seg2Motors = new MotorControllerGroup(seg2MasterMotor, seg2SlaveMotor);
@@ -29,7 +33,18 @@ public class ArmSub extends SubsystemBase {
   private final CurveFit seg1Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
   private final CurveFit seg2Curve = new CurveFit(-0.5, 0.5, 0.1, 0.5, 1);
 
+  private Instant lastUpdate = Instant.now();
+
   private boolean calibrated = false;
+
+  private double seg1Output = 0;
+  private double seg2Output = 0;
+
+  // private double seg1Voltage = 0;
+  // private double seg2Voltage = 0;
+
+  // private double seg1Current = 0;
+  // private double seg2Current = 0;
 
   /**
    * Updates the arm tab in shuffleboard. Call this function regularly.
@@ -37,10 +52,23 @@ public class ArmSub extends SubsystemBase {
    * @param armSeg1Output The speed of the upper arm motors
    * @param armSeg2Output The speed of the fore arm motors
    */
-  private void updateShuffleboard(double armSeg1Output, double armSeg2Output) {
-    ShuffleControl.armTab.setOutputs(armSeg1Output, armSeg2Output);
-    ShuffleControl.armTab.setEncoderAngles(seg1Encoder.getDistance(), seg2Encoder.getDistance());
+  private void updateShuffleboard() {
     ShuffleControl.calibrationTab.setArmCalibrated(calibrated);
+
+    ShuffleControl.armTab.setOutputs(seg1Output, seg2Output);
+    ShuffleControl.armTab.setEncoderAngles(seg1Encoder.getDistance(), seg2Encoder.getDistance());
+    ShuffleControl.armTab.setEncoderCounts(seg1Encoder.get(), seg2Encoder.get());
+    ShuffleControl.armTab.setEncoderRates(seg1Encoder.getRate(), seg2Encoder.getRate());
+    ShuffleControl.armTab.setVoltages(seg1MasterMotor.getMotorOutputVoltage(), seg2MasterMotor.getMotorOutputVoltage());
+    ShuffleControl.armTab.setCurrents(Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
+        Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port));
+
+    Pair<Double, Double> kinematicsCoords = forK();
+    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
+
+    Instant nextUpdate = Instant.now();
+    ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
+    lastUpdate = nextUpdate;
   }
 
   /**
@@ -123,19 +151,19 @@ public class ArmSub extends SubsystemBase {
   public void periodic() {
     if (!calibrated) {
       // Don't do anything if no calibration has happened.
-      updateShuffleboard(0, 0);
+      updateShuffleboard();
       return;
     }
 
     double seg1Throttle = seg1Curve.fit(OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value));
     double seg2Throttle = seg2Curve.fit(OI.copilot.getRawAxis(XboxController.Axis.kRightY.value));
 
-    double seg1Output = MathUtil.clamp(seg1Throttle, -0.3, 0.3);
-    double seg2Output = MathUtil.clamp(seg2Throttle, -0.3, 0.3);
+    seg1Output = MathUtil.clamp(seg1Throttle, -0.3, 0.3);
+    seg2Output = MathUtil.clamp(seg2Throttle, -0.3, 0.3);
 
     seg1Motors.set(seg1Output);
     seg2Motors.set(seg2Output);
 
-    updateShuffleboard(seg1Output, seg2Output);
+    updateShuffleboard();
   }
 }

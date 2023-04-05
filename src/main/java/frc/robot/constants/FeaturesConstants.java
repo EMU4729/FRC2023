@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PowerDistribution;
 
 public class FeaturesConstants {
 
@@ -19,4 +20,6 @@ public class FeaturesConstants {
   public final double[] ROBOT_REACH_MAX = { (Units.inchesToMeters(48)),
       (Units.inchesToMeters(78)) };
 
+  /** Power distribution object */
+  public final PowerDistribution PDB = new PowerDistribution();
 }
