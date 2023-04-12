@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -43,6 +45,16 @@ public class ArmSub extends SubsystemBase {
   // private double seg1Current = 0;
   // private double seg2Current = 0;
 
+  private FileWriter logFile;
+
+  public ArmSub() {
+    try {
+      logFile = new FileWriter(Constants.file.PATH_INTERNAL + "arm.csv");
+    } catch (IOException e) {
+      throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
+    }
+  }
+
   private double getSeg1Angle() {
     return seg1Encoder.getDistance();
   }
@@ -74,22 +86,39 @@ public class ArmSub extends SubsystemBase {
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
 
-    /*
-     * System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
-     * getSeg1Angle() + "," + getSeg2Angle() + "," +
-     * seg1Encoder.get() + ","
-     * + seg2Encoder.get() + "," +
-     * seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
-     * seg1MasterMotor.getMotorOutputVoltage() + "," +
-     * seg2MasterMotor.getMotorOutputVoltage() + "," +
-     * Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
-     * "," +
-     * Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
-     * ","
-     * + kinematicsCoords.getFirst() + "," +
-     * kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
-     * nextUpdate).toMillis());
-     */
+    try {
+        logFile.append(seg1Output + "," + seg2Output + "," +
+            getSeg1Angle() + "," + getSeg2Angle() + "," +
+            seg1Encoder.get() + ","
+            + seg2Encoder.get() + "," +
+            seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
+            seg1MasterMotor.getMotorOutputVoltage() + "," +
+            seg2MasterMotor.getMotorOutputVoltage() + "," +
+            Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
+            "," +
+            Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
+            ","
+            + kinematicsCoords.getFirst() + "," +
+            kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
+                nextUpdate).toMillis());
+    } catch (IOException e) {
+      Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
+    }
+
+    // System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
+    // getSeg1Angle() + "," + getSeg2Angle() + "," +
+    // seg1Encoder.get() + ","
+    // + seg2Encoder.get() + "," +
+    // seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
+    // seg1MasterMotor.getMotorOutputVoltage() + "," +
+    // seg2MasterMotor.getMotorOutputVoltage() + "," +
+    // Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
+    // "," +
+    // Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
+    // ","
+    // + kinematicsCoords.getFirst() + "," +
+    // kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
+    // nextUpdate).toMillis());
 
     lastUpdate = nextUpdate;
   }
