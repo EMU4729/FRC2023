@@ -101,7 +101,7 @@ public class ArmSub extends SubsystemBase {
           ","
           + kinematicsCoords.getFirst() + "," +
           kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
-              nextUpdate).toMillis());
+              nextUpdate).toMillis() + "\n");
     } catch (IOException e) {
       Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
     }
