@@ -97,9 +97,9 @@ public class ArmConstants {
         public final SustainStrategy SUSTAIN_STRATEGY = SustainStrategy.CURVE;
 
         /** Seg2 Sustain curve for curve sustain strategy */
-        public final CurveFit SUSTAIN_CURVE = new CurveFit(-180, 180, -180, 180, 1.2);
+        public final CurveFit SUSTAIN_CURVE = new CurveFit(-180, 180, -0.1, 0.1, 1.2);
         /** Seg2 sustain curve output multiplier */
-        public final double SUSTAIN_CURVE_MULTIPLIER = 0.01;
+        public final double SUSTAIN_CURVE_MULTIPLIER = 1;
 
         /** KS constant for feedforward sustain strategy */
         public final double SUSTAIN_FEEDFORWARD_KS = 0;

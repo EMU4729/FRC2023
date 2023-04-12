@@ -66,7 +66,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   private double getSeg2Angle() {
-    return seg2Encoder.getDistance() - getSeg1Angle();
+    return seg2Encoder.getDistance() + getSeg1Angle();
   }
 
   /**
@@ -230,7 +230,7 @@ public class ArmSub extends SubsystemBase {
 
     switch (Constants.arm.SUSTAIN_STRATEGY) {
       case CURVE:
-        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(getSeg2Angle()) * Constants.arm.SUSTAIN_CURVE_MULTIPLIER;
+        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(MathUtil.applyDeadband(getSeg2Angle(), 10)) * Constants.arm.SUSTAIN_CURVE_MULTIPLIER;
 
         if (Constants.arm.USE_INTEGRAL_SUSTAIN) {
           seg2Output += integralSustainController.calculate(getSeg2Angle());
