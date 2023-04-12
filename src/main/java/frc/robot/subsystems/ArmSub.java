@@ -230,7 +230,7 @@ public class ArmSub extends SubsystemBase {
 
     switch (Constants.arm.SUSTAIN_STRATEGY) {
       case CURVE:
-        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(getSeg2Angle());
+        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(getSeg2Angle()) * Constants.arm.SUSTAIN_CURVE_MULTIPLIER;
 
         if (Constants.arm.USE_INTEGRAL_SUSTAIN) {
           seg2Output += integralSustainController.calculate(getSeg2Angle());
