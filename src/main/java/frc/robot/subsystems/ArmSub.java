@@ -61,7 +61,7 @@ public class ArmSub extends SubsystemBase {
     ShuffleControl.calibrationTab.setArmCalibrated(calibrated);
 
     ShuffleControl.armTab.setOutputs(seg1Output, seg2Output);
-    ShuffleControl.armTab.setEncoderAngles(seg1Encoder.getDistance(), seg2Encoder.getDistance());
+    ShuffleControl.armTab.setEncoderAngles(getSeg1Angle(), getSeg2Angle());
     ShuffleControl.armTab.setEncoderCounts(seg1Encoder.get(), seg2Encoder.get());
     ShuffleControl.armTab.setEncoderRates(seg1Encoder.getRate(), seg2Encoder.getRate());
     ShuffleControl.armTab.setVoltages(seg1MasterMotor.getMotorOutputVoltage(), seg2MasterMotor.getMotorOutputVoltage());
@@ -76,7 +76,7 @@ public class ArmSub extends SubsystemBase {
 
     /*
      * System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
-     * seg1Encoder.getDistance() + "," + seg2Encoder.getDistance() + "," +
+     * getSeg1Angle() + "," + getSeg2Angle() + "," +
      * seg1Encoder.get() + ","
      * + seg2Encoder.get() + "," +
      * seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
