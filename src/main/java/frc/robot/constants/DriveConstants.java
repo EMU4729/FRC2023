@@ -15,7 +15,7 @@ public class DriveConstants {
     public final MotorBuilder MOTOR_ID_LM = new MotorBuilder(1, MotorBuilder.Type.TalonSRX).withSafety();
 
     /** Drive left encoder builder */
-    public final EncoderBuilder ENCODER_ID_L = new EncoderBuilder(new int[] { 4, 5 }, 60.078 / 256. / 1000);
+public final EncoderBuilder ENCODER_ID_L = new EncoderBuilder(new int[] { /*4, 5*/ 10, 11 }, 60.078 / 256. / 1000);
 
     /**
      * Information for right master drive [Port,controller type,

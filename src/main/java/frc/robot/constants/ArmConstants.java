@@ -11,7 +11,7 @@ public class ArmConstants {
         public final MotorBuilder SEG1_MASTER_MOTOR_ID = new MotorBuilder(7, MotorBuilder.Type.VictorSPX).withBrake();
 
         /** Arm Seg1 Encoder Builder */
-        public final EncoderBuilder SEG1_ENCODER = new EncoderBuilder(new int[] { 10, 11 }, 360. / 16 / 2048.);
+        public final EncoderBuilder SEG1_ENCODER = new EncoderBuilder(new int[] { 4, 5 }, 360. / 16 / 2048.);
 
         // arm
         /** Information for Arm Seg1 Slave Motor */
