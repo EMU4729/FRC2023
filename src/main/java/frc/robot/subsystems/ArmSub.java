@@ -50,7 +50,7 @@ public class ArmSub extends SubsystemBase {
 
   public ArmSub() {
     try {
-      logFile = new FileWriter(Paths.get(Constants.file.PATH_INTERNAL, "arm.csv").toString());
+      logFile = new FileWriter("/home/lvuser/arm.csv");
     } catch (IOException e) {
       throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
     }
