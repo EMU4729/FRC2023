@@ -1,7 +1,9 @@
 package frc.robot.constants;
 
+import frc.robot.utils.CurveFit;
 import frc.robot.utils.EncoderBuilder;
 import frc.robot.utils.MotorBuilder;
+import frc.robot.utils.PIDControllerBuilder;
 
 public class ArmConstants {
         protected ArmConstants() {
@@ -75,4 +77,38 @@ public class ArmConstants {
          * height the arm should seek to hold if moving or stored inside frame perimiter
          */
         public final double SWING_THROUGH_HEIGHT = SEG1_LENGTH - SEG2_LENGTH;
+
+        /** Copilot input curve for seg 1 */
+        public final CurveFit SEG1_INPUT_CURVE = new CurveFit(0, 1, 0, 0.3, 1);
+        /** Copilot input curve for seg 2 */
+        public final CurveFit SEG2_INPUT_CURVE = new CurveFit(0, 1, 0, 0.3, 1);
+
+        /** The arm sustain strategies */
+        public static enum SustainStrategy {
+                /** No sustain strategy */
+                NONE,
+                /** Sustain using an angle-power curve in addition to driver input */
+                CURVE,
+                /** Sustain using a feedforward loop */
+                FEEDFORWARD
+        }
+
+        /** The current arm sustain strategy being used. */
+        public final SustainStrategy SUSTAIN_STRATEGY = SustainStrategy.CURVE;
+
+        /** Seg2 Sustain curve for curve sustain strategy */
+        public final CurveFit SUSTAIN_CURVE = new CurveFit(0, 0, 0, 0, 0);
+
+        /** KS constant for feedforward sustain strategy */
+        public final double SUSTAIN_FEEDFORWARD_KS = 0;
+        /** KV constant for feedforward sustain strategy */
+        public final double SUSTAIN_FEEDFORWARD_KV = 0;
+        /** KA constant for feedforward sustain strategy */
+        public final double SUSTAIN_FEEDFORWARD_KA = 0;
+
+        /** Flag controlling if integral sustain is used */
+        public final boolean USE_INTEGRAL_SUSTAIN = false;
+
+        /** PID controller builder for integral sustain */
+        public final PIDControllerBuilder INTEGRAL_SUSTAIN = new PIDControllerBuilder(0, 0.05, 0);
 }

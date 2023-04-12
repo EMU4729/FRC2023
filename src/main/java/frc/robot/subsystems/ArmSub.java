@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -33,12 +34,16 @@ public class ArmSub extends SubsystemBase {
   private final Encoder seg1Encoder = Constants.arm.SEG1_ENCODER.build();
   private final Encoder seg2Encoder = Constants.arm.SEG2_ENCODER.build();
 
+  private final PIDController integralSustainController = Constants.arm.INTEGRAL_SUSTAIN.build();
+
   private Instant lastUpdate = Instant.now();
 
   private boolean calibrated = false;
 
   private double seg1Output = 0;
   private double seg2Output = 0;
+
+  private boolean angleIsControlled = false;
 
   // private double seg1Voltage = 0;
   // private double seg2Voltage = 0;
@@ -101,7 +106,8 @@ public class ArmSub extends SubsystemBase {
           ","
           + kinematicsCoords.getFirst() + "," +
           kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
-              nextUpdate).toMillis() + "\n");
+              nextUpdate).toMillis()
+          + "\n");
     } catch (IOException e) {
       Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
     }
@@ -208,11 +214,37 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
-    double seg1Throttle = OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value);
-    double seg2Throttle = OI.copilot.getRawAxis(XboxController.Axis.kRightX.value);
+    seg1Output = Constants.arm.SEG1_INPUT_CURVE
+        .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value)));
+    seg2Output = Constants.arm.SEG2_INPUT_CURVE
+        .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kRightX.value)));
 
-    seg1Output = MathUtil.clamp(seg1Throttle, -0.3, 0.3);
-    seg2Output = MathUtil.clamp(seg2Throttle, -0.3, 0.3);
+    if (seg1Output == 0 && seg2Output == 0) {
+      if (angleIsControlled) {
+        angleIsControlled = false;
+        integralSustainController.setSetpoint(getSeg2Angle());
+      }
+    } else {
+      angleIsControlled = true;
+    }
+
+    switch (Constants.arm.SUSTAIN_STRATEGY) {
+      case CURVE:
+        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(getSeg2Angle());
+
+        if (Constants.arm.USE_INTEGRAL_SUSTAIN) {
+          seg2Output += integralSustainController.calculate(getSeg2Angle());
+        }
+
+        break;
+      case FEEDFORWARD:
+        break;
+      case NONE:
+        break;
+    }
+
+    seg1Output = MathUtil.clamp(seg1Output, -0.3, 0.3);
+    seg2Output = MathUtil.clamp(seg2Output, -0.3, 0.3);
 
     seg1Motors.set(seg1Output);
     seg2Motors.set(seg2Output);
