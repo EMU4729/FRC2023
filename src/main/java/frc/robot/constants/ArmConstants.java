@@ -20,7 +20,7 @@ public class ArmConstants {
         public final MotorBuilder SEG2_MASTER_MOTOR_ID = new MotorBuilder(3, MotorBuilder.Type.TalonSRX).withBrake();
 
         /** Arm Seg1 Encoder Builder */
-        public final EncoderBuilder SEG2_ENCODER = new EncoderBuilder(new int[] { 8, 9 }, 360. / 16 / 2048.);
+        public final EncoderBuilder SEG2_ENCODER = new EncoderBuilder(new int[] { 8, 9 }, 360. / 2048.);
 
         // arm
         /** Information for Arm Seg2 Slave Motor */

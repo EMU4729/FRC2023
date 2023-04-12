@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -45,6 +43,14 @@ public class ArmSub extends SubsystemBase {
   // private double seg1Current = 0;
   // private double seg2Current = 0;
 
+  private double getSeg1Angle() {
+    return seg1Encoder.getDistance();
+  }
+
+  private double getSeg2Angle() {
+    return seg2Encoder.getDistance() - getSeg1Angle();
+  }
+
   /**
    * Updates the arm tab in shuffleboard. Call this function regularly.
    * 
@@ -68,15 +74,22 @@ public class ArmSub extends SubsystemBase {
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
 
-    System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
-        seg1Encoder.getDistance() + "," + seg2Encoder.getDistance() + "," + seg1Encoder.get() + ","
-        + seg2Encoder.get() + "," +
-        seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," + seg1MasterMotor.getMotorOutputVoltage() + "," +
-        seg2MasterMotor.getMotorOutputVoltage() + "," +
-        Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) + "," +
-        Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) + ","
-        + kinematicsCoords.getFirst() + "," +
-        kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate, nextUpdate).toMillis());
+    /*
+     * System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
+     * seg1Encoder.getDistance() + "," + seg2Encoder.getDistance() + "," +
+     * seg1Encoder.get() + ","
+     * + seg2Encoder.get() + "," +
+     * seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
+     * seg1MasterMotor.getMotorOutputVoltage() + "," +
+     * seg2MasterMotor.getMotorOutputVoltage() + "," +
+     * Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
+     * "," +
+     * Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
+     * ","
+     * + kinematicsCoords.getFirst() + "," +
+     * kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
+     * nextUpdate).toMillis());
+     */
 
     lastUpdate = nextUpdate;
   }
@@ -109,12 +122,12 @@ public class ArmSub extends SubsystemBase {
    * @return The calculated coordinates of the end of the arm.
    */
   private Pair<Double, Double> forK() {
-    return forK(seg1Encoder.getDistance(), seg2Encoder.getDistance());
+    return forK(getSeg1Angle(), getSeg2Angle());
   }
 
   /** @return The angle that the end of the arm makes with the robot horizontal */
   public double getEndAngle() {
-    double armSeg2Angle = seg2Encoder.getDistance();
+    double armSeg2Angle = getSeg2Angle();
     return armSeg2Angle - 90;
   }
 
@@ -132,8 +145,8 @@ public class ArmSub extends SubsystemBase {
 
   /** Kills the robot if an illegal arm angle is reached. */
   private void killCheck() {
-    double armSeg1Angle = seg1Encoder.getDistance();
-    double armSeg2Angle = seg2Encoder.getDistance();
+    double armSeg1Angle = getSeg1Angle();
+    double armSeg2Angle = getSeg2Angle();
 
     if (Math.abs(armSeg1Angle) > 90 || Math.abs(armSeg2Angle) > 185) {
       throw new IllegalStateException(
