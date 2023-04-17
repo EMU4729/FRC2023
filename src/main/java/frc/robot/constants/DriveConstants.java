@@ -24,7 +24,7 @@ public final EncoderBuilder ENCODER_ID_L = new EncoderBuilder(new int[] { /*4, 5
     public final MotorBuilder MOTOR_ID_RM = new MotorBuilder(99, MotorBuilder.Type.TalonSRX).withInvert().withSafety();
 
     /** Drive left encoder builder */
-    public final EncoderBuilder ENCODER_ID_R = new EncoderBuilder(new int[] { 6, 7 }, 59.883 / 256. / 1000)
+    public final EncoderBuilder ENCODER_ID_R = new EncoderBuilder(new int[] { 14, 15 }, 59.883 / 256. / 1000)
             .withInvert();
 
     /**

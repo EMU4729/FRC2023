@@ -3,10 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
@@ -19,23 +16,18 @@ public class SubArmPivotSub extends SubsystemBase {
   private final PIDController controller = Constants.subarm.PIVOT_PID.build();
 
   private boolean calibrated = false;
-  private double targetAngle = 0;
+  private final double targetAngle = 0;
 
   /**
    * Calibrates the subarm.
-   * Only run this when the subarm is pointed as low as possible.
+   * Only run this when the subarm is pointed as high as possible forwards.
    */
   public void calibrate() {
     encoder.reset();
+    controller.reset();
+    controller.setSetpoint(targetAngle);
     calibrated = true;
     Logger.info("SubArmPivotSub : Calibrated!");
-  }
-
-  /** Warns user if uncalibrated */
-  private void calibrationCheck() {
-    if (!calibrated) {
-      Logger.warn("SubArmPivotSub : Uncalibrated! Be careful!");
-    }
   }
 
   /**
@@ -46,7 +38,6 @@ public class SubArmPivotSub extends SubsystemBase {
   private void updateShuffleboard(double output) {
     ShuffleControl.subArmTab.setOutput(output);
     ShuffleControl.subArmTab.setEncoderAngle(encoder.getDistance());
-    ShuffleControl.subArmTab.setTargetAngle(targetAngle);
     ShuffleControl.subArmTab.setControllerError(controller.getPositionError());
     ShuffleControl.calibrationTab.setSubArmPivotCalibrated(calibrated);
   }
@@ -64,67 +55,6 @@ public class SubArmPivotSub extends SubsystemBase {
    */
   private double clampAngle(double angle) {
     return MathUtil.clamp(angle, Constants.subarm.PIVOT_LOWER_LIMIT, Constants.subarm.PIVOT_UPPER_LIMIT);
-  }
-
-  /**
-   * Sets the destination angle of the subarm pivot.
-   * 
-   * @param angle The desired angle
-   */
-  private void setAngle(double angle) {
-    calibrationCheck();
-    if (!angleIsValid(angle)) {
-      Logger.warn("SubArmRotateSub::setAngle : Invalid angle " + angle);
-      return;
-    }
-    targetAngle = angle;
-  }
-
-  /**
-   * Shifts the destination angle by a specified angle.
-   * 
-   * @param angle The amount to shift the destination by.
-   */
-  private void shiftAngle(double angle) {
-    setAngle(targetAngle + angle);
-  }
-
-  /** @return a {@link Command} that pivots the subarm to a specified angle. */
-  private Command turnTo(double angle) {
-    return new FunctionalCommand(
-        () -> setAngle(angle),
-        () -> {
-        },
-        (interrupted) -> {
-        },
-        () -> {
-          if (RobotBase.isSimulation()) {
-            Logger.info("SubArmPivotSub::turnTo : In simulation, skipping...");
-            return true;
-          }
-
-          return controller.atSetpoint();
-        }, this);
-  }
-
-  /** @return a {@link Command} to pivot the subarm upwards */
-  public Command moveUp() {
-    return this.run(() -> shiftAngle(Constants.subarm.PIVOT_VELOCITY));
-  }
-
-  /** @return a {@link Command} to pivot the subarm downwards */
-  public Command moveDown() {
-    return this.run(() -> shiftAngle(-Constants.subarm.PIVOT_VELOCITY));
-  }
-
-  /** @return a {@link Command} to move the subarm to the forward position. */
-  public Command pointForward() {
-    return turnTo(90);
-  }
-
-  /** @return a {@link Command} to move the subarm to the downwards position. */
-  public Command pointDown() {
-    return turnTo(0);
   }
 
   @Override

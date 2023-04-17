@@ -68,14 +68,6 @@ public class RobotContainer {
     OI.copilot.start().onTrue(
         new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
-    // Subarm Control
-    OI.copilot.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.8).whileTrue(Subsystems.subArmPivot.moveUp());
-    OI.copilot.axisLessThan(XboxController.Axis.kLeftY.value, -0.8).whileTrue(Subsystems.subArmPivot.moveDown());
-    OI.copilot.axisGreaterThan(XboxController.Axis.kLeftX.value, 0.8)
-        .whileTrue(Subsystems.subArmRotate.turnClockwise());
-    OI.copilot.axisLessThan(XboxController.Axis.kLeftX.value, -0.8)
-        .whileTrue(Subsystems.subArmRotate.turnAnticlockwise());
-
     // Gripper Control
     OI.copilot.a().onTrue(new InstantCommand(Subsystems.gripperGrip::open, Subsystems.gripperGrip));
     OI.copilot.b().onTrue(new InstantCommand(Subsystems.gripperGrip::closeCube, Subsystems.gripperGrip));

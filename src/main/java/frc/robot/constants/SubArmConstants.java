@@ -26,7 +26,7 @@ public class SubArmConstants {
   public final MotorBuilder PIVOT_MOTOR_ID = new MotorBuilder(9, MotorBuilder.Type.TalonSRX);
 
   /** Information for Subarm Pivot Encoder */
-  public final EncoderBuilder PIVOT_ENCODER_ID = new EncoderBuilder(new int[] {0, 1}, 360. / 44.4/ 4.);
+  public final EncoderBuilder PIVOT_ENCODER_ID = new EncoderBuilder(new int[] {6, 7}, 360. / 44.4/ 4.);
 
   /** PID Constants for the Subarm Pivot */
   public final PIDControllerBuilder PIVOT_PID = new PIDControllerBuilder(0.05, 0, 0);

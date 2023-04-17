@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -56,6 +55,7 @@ public class ArmSub extends SubsystemBase {
   public ArmSub() {
     try {
       logFile = new FileWriter("/home/lvuser/arm.csv");
+      logFile.write("seg1_output,seg2_output,seg1_angle,seg2_angle,seg1_angular_velocity,seg2_angular_velocity,seg1_voltage,seg2_voltage,seg1_current,seg2_current,kinematics_x,kinematics_y,update_delta\n");
     } catch (IOException e) {
       throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
     }
@@ -91,26 +91,26 @@ public class ArmSub extends SubsystemBase {
 
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
-
-    try {
-      logFile.append(seg1Output + "," + seg2Output + "," +
-          getSeg1Angle() + "," + getSeg2Angle() + "," +
-          seg1Encoder.get() + ","
-          + seg2Encoder.get() + "," +
-          seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
-          seg1MasterMotor.getMotorOutputVoltage() + "," +
-          seg2MasterMotor.getMotorOutputVoltage() + "," +
-          Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
-          "," +
-          Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
-          ","
-          + kinematicsCoords.getFirst() + "," +
-          kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
-              nextUpdate).toMillis()
-          + "\n");
-    } catch (IOException e) {
-      Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
-    }
+    if (calibrated)
+      try {
+        logFile.append(seg1Output + "," + seg2Output + "," +
+            getSeg1Angle() + "," + getSeg2Angle() + "," +
+            seg1Encoder.get() + ","
+            + seg2Encoder.get() + "," +
+            seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
+            seg1MasterMotor.getMotorOutputVoltage() + "," +
+            seg2MasterMotor.getMotorOutputVoltage() + "," +
+            Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
+            "," +
+            Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
+            ","
+            + kinematicsCoords.getFirst() + "," +
+            kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
+                nextUpdate).toMillis()
+            + "\n");
+      } catch (IOException e) {
+        Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
+      }
 
     // System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
     // getSeg1Angle() + "," + getSeg2Angle() + "," +
@@ -230,7 +230,7 @@ public class ArmSub extends SubsystemBase {
 
     switch (Constants.arm.SUSTAIN_STRATEGY) {
       case CURVE:
-        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(MathUtil.applyDeadband(getSeg2Angle(), 10)) * Constants.arm.SUSTAIN_CURVE_MULTIPLIER;
+        seg2Output += Constants.arm.SUSTAIN_CURVE.fit(MathUtil.applyDeadband(getSeg2Angle(), 10));
 
         if (Constants.arm.USE_INTEGRAL_SUSTAIN) {
           seg2Output += integralSustainController.calculate(getSeg2Angle());
@@ -243,8 +243,8 @@ public class ArmSub extends SubsystemBase {
         break;
     }
 
-    seg1Output = MathUtil.clamp(seg1Output, -0.3, 0.3);
-    seg2Output = MathUtil.clamp(seg2Output, -0.3, 0.3);
+    seg1Output = MathUtil.clamp(seg1Output, -0.4, 0.4);
+    seg2Output = MathUtil.clamp(seg2Output, -0.4, 0.4);
 
     seg1Motors.set(seg1Output);
     seg2Motors.set(seg2Output);
