@@ -16,7 +16,6 @@ public class SubArmPivotSub extends SubsystemBase {
   private final PIDController controller = Constants.subarm.PIVOT_PID.build();
 
   private boolean calibrated = false;
-  private final double targetAngle = 0;
 
   /**
    * Calibrates the subarm.
@@ -25,7 +24,7 @@ public class SubArmPivotSub extends SubsystemBase {
   public void calibrate() {
     encoder.reset();
     controller.reset();
-    controller.setSetpoint(targetAngle);
+    controller.setSetpoint(0);
     calibrated = true;
     Logger.info("SubArmPivotSub : Calibrated!");
   }
@@ -65,7 +64,7 @@ public class SubArmPivotSub extends SubsystemBase {
     }
 
     // This should make the subarm's angle independent of the arm's angle
-    double armOffset = -Subsystems.arm.getEndAngle() - 90;
+    double armOffset = -Subsystems.arm.getEndAngle();
 
     double currentAngle = encoder.getDistance();
     double output;
@@ -76,9 +75,9 @@ public class SubArmPivotSub extends SubsystemBase {
       output = clampAngle(currentAngle + armOffset);
     }
 
-    output = controller.calculate(output) * -1;
+    output = controller.calculate(output) * -1; // TODO: Confirm if inversion here actually works
 
-    output = MathUtil.clamp(output, -0.2, 0.2); // This is a safety measure, will be increased to -1 and 1 when stable
+    output = MathUtil.clamp(output, -0.2, 0.2); // This is a safety measure, will be increased when stable
 
     motor.set(output);
 

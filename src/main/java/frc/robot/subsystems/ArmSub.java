@@ -44,18 +44,13 @@ public class ArmSub extends SubsystemBase {
 
   private boolean angleIsControlled = false;
 
-  // private double seg1Voltage = 0;
-  // private double seg2Voltage = 0;
-
-  // private double seg1Current = 0;
-  // private double seg2Current = 0;
-
   private FileWriter logFile;
 
   public ArmSub() {
     try {
       logFile = new FileWriter("/home/lvuser/arm.csv");
-      logFile.write("seg1_output,seg2_output,seg1_angle,seg2_angle,seg1_angular_velocity,seg2_angular_velocity,seg1_voltage,seg2_voltage,seg1_current,seg2_current,kinematics_x,kinematics_y,update_delta\n");
+      logFile.write(
+          "seg1_output,seg2_output,seg1_angle,seg2_angle,seg1_angular_velocity,seg2_angular_velocity,seg1_voltage,seg2_voltage,seg1_current,seg2_current,kinematics_x,kinematics_y,update_delta\n");
     } catch (IOException e) {
       throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
     }
@@ -163,8 +158,8 @@ public class ArmSub extends SubsystemBase {
 
   /** @return The angle that the end of the arm makes with the robot horizontal */
   public double getEndAngle() {
-    double armSeg2Angle = getSeg2Angle();
-    return armSeg2Angle - 90;
+    // How on earth does this geometrically work?
+    return getSeg2Angle() - 90;
   }
 
   /**
@@ -199,7 +194,7 @@ public class ArmSub extends SubsystemBase {
    * @param c Length of side c
    * @return The included angle C
    */
-  double invCosRule(double a, double b, double c) {
+  private double invCosRule(double a, double b, double c) {
     double C = Math.acos(
         (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2))
             / (2 * a * b));
