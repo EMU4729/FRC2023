@@ -50,7 +50,33 @@ public class ArmSub extends SubsystemBase {
     try {
       logFile = new FileWriter("/home/lvuser/arm.csv");
       logFile.write(
-          "seg1_counts,seg2_counts,seg1_voltage,seg2_voltage,seg1_current,seg2_current,seg1_output,seg2_output,seg1_angle,seg2_angle,seg1_angular_velocity,seg2_angular_velocity,kinematics_x,kinematics_y,update_delta\n");
+          // Counts
+          "seg1_counts," +
+              "seg2_counts," +
+              // Voltage
+              "seg1_master_voltage," +
+              "seg2_master_voltage," +
+              "seg1_slave_voltage," +
+              "seg2_slave_voltage," +
+              // Current
+              "seg1_master_current," +
+              "seg2_master_current," +
+              "seg1_slave_current," +
+              "seg2_slave_current," +
+              // Output
+              "seg1_output," +
+              "seg2_output," +
+              // Angle
+              "seg1_angle," +
+              "seg2_angle," +
+              // Angular Velocity
+              "seg1_angular_velocity," +
+              "seg2_angular_velocity," +
+              // Kinematics Coords
+              "kinematics_x," +
+              "kinematics_y," +
+              // Update Delta
+              "update_delta\n");
     } catch (IOException e) {
       throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
     }
@@ -95,10 +121,16 @@ public class ArmSub extends SubsystemBase {
                 // Voltage
                 seg1MasterMotor.getMotorOutputVoltage() + "," +
                 seg2MasterMotor.getMotorOutputVoltage() + "," +
+                seg1SlaveMotor.getMotorOutputVoltage() + "," +
+                seg2SlaveMotor.getMotorOutputVoltage() + "," +
                 // Current
                 Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
                 "," +
                 Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
+                "," +
+                Constants.features.PDB.getCurrent(Constants.arm.SEG1_SLAVE_MOTOR_ID.port) +
+                "," +
+                Constants.features.PDB.getCurrent(Constants.arm.SEG2_SLAVE_MOTOR_ID.port) +
                 "," +
                 // Output
                 seg1Output + "," +
