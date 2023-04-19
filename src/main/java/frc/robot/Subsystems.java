@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DriveSub;
 import frc.robot.subsystems.GripperGripSub;
+import frc.robot.subsystems.LEDSub;
 import frc.robot.subsystems.NavigationSub;
 import frc.robot.subsystems.SubArmPivotSub;
 import frc.robot.subsystems.SubArmRotateSub;
@@ -17,6 +18,7 @@ public class Subsystems {
   public static final SubArmPivotSub subArmPivot = new SubArmPivotSub();
   public static final SubArmRotateSub subArmRotate = new SubArmRotateSub();
   public static final ArmSub arm = new ArmSub();
+  public static final LEDSub led = new LEDSub();
 
   /** Calibrates all subsystems. */
   public static void calibrate() {
