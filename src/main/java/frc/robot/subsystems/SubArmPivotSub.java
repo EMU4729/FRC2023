@@ -24,7 +24,6 @@ public class SubArmPivotSub extends SubsystemBase {
   public void calibrate() {
     encoder.reset();
     controller.reset();
-    controller.setSetpoint(0);
     calibrated = true;
     Logger.info("SubArmPivotSub : Calibrated!");
   }

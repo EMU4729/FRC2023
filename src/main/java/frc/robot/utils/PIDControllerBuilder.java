@@ -1,19 +1,33 @@
 package frc.robot.utils;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.controller.PIDController;
 
 public class PIDControllerBuilder {
   public final double kp;
   public final double ki;
   public final double kd;
+  public final Optional<Double> setpoint;
 
   public PIDControllerBuilder(double kp, double ki, double kd) {
     this.kp = kp;
     this.ki = ki;
     this.kd = kd;
+    this.setpoint = Optional.empty();
+  }
+
+  public PIDControllerBuilder(double kp, double ki, double kd, double setpoint) {
+    this.kp = kp;
+    this.ki = ki;
+    this.kd = kd;
+    this.setpoint = Optional.of(setpoint);
   }
 
   public PIDController build() {
-    return new PIDController(kp, ki, ki);
+    PIDController controller = new PIDController(kp, ki, kd);
+    if (setpoint.isPresent())
+      controller.setSetpoint(setpoint.get());
+    return controller;
   }
 }
