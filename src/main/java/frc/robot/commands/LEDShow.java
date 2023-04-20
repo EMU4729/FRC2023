@@ -115,7 +115,7 @@ public class LEDShow extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return repeat && currentPattern >= patterns.size();
+    return !repeat && currentPattern >= patterns.size();
   }
 
   @Override
