@@ -3,6 +3,7 @@ package frc.robot.utils.LED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 
+/** {@link LEDPattern} that's just a solid {@link Color} */
 public class SolidPattern implements LEDPattern {
   private final Color color;
   private final double duration;

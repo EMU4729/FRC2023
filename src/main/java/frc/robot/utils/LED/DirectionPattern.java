@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Variables;
 
+/** {@link LEDPattern} that shows the current robot drive direction */
 public class DirectionPattern implements LEDPattern {
   private final double duration;
 
