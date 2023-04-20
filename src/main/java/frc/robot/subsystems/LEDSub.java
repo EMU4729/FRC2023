@@ -18,7 +18,7 @@ public class LEDSub extends SubsystemBase {
     ledSim.setInitialized(true);
   }
 
-  public void setLights(AddressableLEDBuffer buffer) {
+  public void setLEDs(AddressableLEDBuffer buffer) {
     if (buffer.getLength() != Constants.led.STRING_LENGTH) {
       Logger.warn("ArmSub::setLights : Invalid buffer length " + buffer.getLength() + ", expected "
           + Constants.led.STRING_LENGTH);
