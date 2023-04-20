@@ -5,6 +5,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
@@ -20,28 +21,34 @@ public class LEDShow extends CommandBase {
 
   private int currentPattern = 0;
 
-  public static LEDShow direction() {
+  public static Command direction() {
     return new LEDShow(
         List.of(
-            new DirectionPattern(250),
-            new SolidPattern(Color.kBlack, 250)),
-        true);
+            new DirectionPattern(0.25),
+            new SolidPattern(Color.kBlack, 0.25)),
+        true)
+        .withTimeout(3)
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
   }
 
-  public static LEDShow cube() {
+  public static Command cube() {
     return new LEDShow(
         List.of(
-            new SolidPattern(Color.kMagenta, 250),
-            new SolidPattern(Color.kBlack, 250)),
-        true);
+            new SolidPattern(Color.kMagenta, 0.25),
+            new SolidPattern(Color.kBlack, 0.25)),
+        true)
+        .withTimeout(3)
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
   }
 
-  public static LEDShow cone() {
+  public static Command cone() {
     return new LEDShow(
         List.of(
-            new SolidPattern(Color.kYellow, 250),
-            new SolidPattern(Color.kBlack, 250)),
-        true);
+            new SolidPattern(Color.kYellow, 0.25),
+            new SolidPattern(Color.kBlack, 0.25)),
+        true)
+        .withTimeout(3)
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
   }
 
   public LEDShow(List<LEDPattern> patterns, boolean repeat) {
@@ -62,9 +69,14 @@ public class LEDShow extends CommandBase {
     Subsystems.led.setLEDs(buffer);
   }
 
+  private void resetTimer() {
+    timer.reset();
+    timer.start();
+  }
+
   @Override
   public void initialize() {
-    timer = new Timer();
+    resetTimer();
     updateLEDs();
   }
 
@@ -75,7 +87,7 @@ public class LEDShow extends CommandBase {
       if (repeat && currentPattern >= patterns.size()) {
         currentPattern = 0;
       }
-      timer = new Timer();
+      resetTimer();
       updateLEDs();
     }
   }

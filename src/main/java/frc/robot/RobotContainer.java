@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.AutoProvider;
 import frc.robot.commands.LEDShow;
@@ -46,9 +47,10 @@ public class RobotContainer {
     // Invert Drive
     OI.pilot.start().onTrue(new InstantCommand(() -> {
       Variables.invertDriveDirection = !Variables.invertDriveDirection;
-    }).andThen(LEDShow.direction().withTimeout(3)));
-    OI.pilot.rightBumper().onTrue(LEDShow.cone().withTimeout(3));
-    OI.pilot.leftBumper().onTrue(LEDShow.cube().withTimeout(3));
+      CommandScheduler.getInstance().schedule(LEDShow.direction());
+    }));
+    OI.pilot.rightBumper().onTrue(LEDShow.cone());
+    OI.pilot.leftBumper().onTrue(LEDShow.cube());
 
     // Drive bindings handled in teleop command
 
