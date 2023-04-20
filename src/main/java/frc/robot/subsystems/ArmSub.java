@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,39 +48,40 @@ public class ArmSub extends SubsystemBase {
   private FileWriter logFile;
 
   public ArmSub() {
-    try {
-      logFile = new FileWriter("/home/lvuser/arm.csv");
-      logFile.write(
-          // Counts
-          "seg1_counts," +
-              "seg2_counts," +
-              // Voltage
-              "seg1_master_voltage," +
-              "seg2_master_voltage," +
-              "seg1_slave_voltage," +
-              "seg2_slave_voltage," +
-              // Current
-              "seg1_master_current," +
-              "seg2_master_current," +
-              "seg1_slave_current," +
-              "seg2_slave_current," +
-              // Output
-              "seg1_output," +
-              "seg2_output," +
-              // Angle
-              "seg1_angle," +
-              "seg2_angle," +
-              // Angular Velocity
-              "seg1_angular_velocity," +
-              "seg2_angular_velocity," +
-              // Kinematics Coords
-              "kinematics_x," +
-              "kinematics_y," +
-              // Update Delta
-              "update_delta\n");
-    } catch (IOException e) {
-      throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
-    }
+    if (RobotBase.isReal())
+      try {
+        logFile = new FileWriter("/home/lvuser/arm.csv");
+        logFile.write(
+            // Counts
+            "seg1_counts," +
+                "seg2_counts," +
+                // Voltage
+                "seg1_master_voltage," +
+                "seg2_master_voltage," +
+                "seg1_slave_voltage," +
+                "seg2_slave_voltage," +
+                // Current
+                "seg1_master_current," +
+                "seg2_master_current," +
+                "seg1_slave_current," +
+                "seg2_slave_current," +
+                // Output
+                "seg1_output," +
+                "seg2_output," +
+                // Angle
+                "seg1_angle," +
+                "seg2_angle," +
+                // Angular Velocity
+                "seg1_angular_velocity," +
+                "seg2_angular_velocity," +
+                // Kinematics Coords
+                "kinematics_x," +
+                "kinematics_y," +
+                // Update Delta
+                "update_delta\n");
+      } catch (IOException e) {
+        throw new RuntimeException("ArmSub: Error opening csv file: " + e.toString());
+      }
   }
 
   private double getSeg1Angle() {
@@ -112,7 +114,7 @@ public class ArmSub extends SubsystemBase {
 
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
-    if (calibrated)
+    if (calibrated && RobotBase.isReal())
       try {
         logFile.append(
             // Encoder Counts
