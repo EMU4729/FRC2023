@@ -146,7 +146,7 @@ public class Logger {
       System.out.println("Logger : File Save Failed : Security Exeption : " + e);
     } finally {
       if (!cache.isEmpty()) {
-        System.out.println("Logger : Save Error : Dumping Cache to Consol");
+        System.out.println("Logger : Save Error : Dumping Cache to Console");
       }
       while (!cache.isEmpty()) {
         System.out.println(cache.remove(0).toString());
