@@ -7,7 +7,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
@@ -17,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
-import frc.robot.utils.logger.Logger;
 
 public class NavigationSub extends SubsystemBase {
   public final ADIS16470_IMU imu = new ADIS16470_IMU();
@@ -25,21 +23,10 @@ public class NavigationSub extends SubsystemBase {
       Rotation2d.fromDegrees(imu.getAngle()),
       0., 0.);
 
-  public final Encoder drvLeftEncoder = Constants.drive.ENCODER_ID_L.build();
-  public final Encoder drvRightEncoder = Constants.drive.ENCODER_ID_R.build();
+  private final Encoder drvLeftEncoder = Constants.drive.ENCODER_ID_L.build();
+  private final Encoder drvRightEncoder = Constants.drive.ENCODER_ID_R.build();
 
-  public final Field2d field = new Field2d();
-
-  /** m from start pos in x rel to start angle @WIP not implimented */
-  public double xPos = 0;
-  /** m from start pos in y rel to start angle @WIP not implimented */
-  public double yPos = 0;
-  /** rotation rel to start in deg */
-  public double rot = 0;
-  /** m/s of speed */
-  public double speed = 0;
-  /** deg/s of rotation (CW = pos) */
-  public double turn = 0;
+  private final Field2d field = new Field2d();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Simulation Variables
@@ -62,17 +49,13 @@ public class NavigationSub extends SubsystemBase {
         drvRightEncoder.getDistance());
     field.setRobotPose(getPose());
     updateShuffleboard();
-
-    if (RobotController.getUserButton() && false) {
-      Logger.info("Resetting Odometry (0,0,0)");
-      imu.calibrate();
-      resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    }
   }
 
   public void updateShuffleboard() {
     ShuffleControl.navTab.setRotation(getHeadingDeg(), getPitch(), getRoll());
-    ShuffleControl.navTab.setEncoderDistances(drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
+    ShuffleControl.navTab.setEncoderDistances(
+        drvLeftEncoder.getDistance(),
+        drvRightEncoder.getDistance());
   }
 
   /** @return The currently-estimated pose of the robot. */
@@ -82,7 +65,9 @@ public class NavigationSub extends SubsystemBase {
 
   /** @return The wheel speeds of the robot */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftEncoderRate(), getRightEncoderRate());
+    return new DifferentialDriveWheelSpeeds(
+        getLeftEncoderRate(),
+        getRightEncoderRate());
   }
 
   /** @return direction the robot is facing in degrees */
@@ -103,7 +88,6 @@ public class NavigationSub extends SubsystemBase {
   /** @return The roll angle of the robot */
   public double getRoll() {
     return imu.getXComplementaryAngle();
-
   }
 
   /** @return The pitch angle of the robot */
@@ -168,6 +152,5 @@ public class NavigationSub extends SubsystemBase {
     drvRightEncoderSim.setRate(drvTrnSim.getRightVelocityMetersPerSecond());
 
     imuSim.setGyroAngleZ(drvTrnSim.getHeading().getDegrees());
-
   }
 }
