@@ -9,8 +9,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -109,8 +109,8 @@ public class ArmSub extends SubsystemBase {
     ShuffleControl.armTab.setCurrents(Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
         Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port));
 
-    Pair<Double, Double> kinematicsCoords = forK();
-    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getFirst(), kinematicsCoords.getSecond());
+    Translation2d kinematicsCoords = forK();
+    ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getX(), kinematicsCoords.getY());
 
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
@@ -144,29 +144,14 @@ public class ArmSub extends SubsystemBase {
                 seg1Encoder.getRate() + "," +
                 seg2Encoder.getRate() + "," +
                 // Kinematics Coords
-                kinematicsCoords.getFirst() + "," +
-                kinematicsCoords.getSecond() + "," +
+                kinematicsCoords.getX() + "," +
+                kinematicsCoords.getY() + "," +
                 // Update Delta
                 Duration.between(lastUpdate, nextUpdate).toMillis() +
                 "\n");
       } catch (IOException e) {
         Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
       }
-
-    // System.out.println("ARM DATA: " + seg1Output + "," + seg2Output + "," +
-    // getSeg1Angle() + "," + getSeg2Angle() + "," +
-    // seg1Encoder.get() + ","
-    // + seg2Encoder.get() + "," +
-    // seg1Encoder.getRate() + "," + seg2Encoder.getRate() + "," +
-    // seg1MasterMotor.getMotorOutputVoltage() + "," +
-    // seg2MasterMotor.getMotorOutputVoltage() + "," +
-    // Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port) +
-    // "," +
-    // Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port) +
-    // ","
-    // + kinematicsCoords.getFirst() + "," +
-    // kinematicsCoords.getSecond() + "," + Duration.between(lastUpdate,
-    // nextUpdate).toMillis());
 
     lastUpdate = nextUpdate;
   }
@@ -178,7 +163,7 @@ public class ArmSub extends SubsystemBase {
    * @param armSeg2Angle The angle of the fore arm
    * @return The calculated coordinates of the end of the arm.
    */
-  private Pair<Double, Double> forK(double armSeg1Angle, double armSeg2Angle) {
+  private Translation2d forK(double armSeg1Angle, double armSeg2Angle) {
     armSeg2Angle *= -1;
     double l1 = Constants.arm.SEG1_LENGTH;
     double l2 = Constants.arm.SEG2_LENGTH;
@@ -189,7 +174,7 @@ public class ArmSub extends SubsystemBase {
     double x2 = l2 * Math.cos(Math.toRadians(armSeg2Angle - 90)) + x1;
     double y2 = l2 * Math.sin(Math.toRadians(armSeg2Angle - 90)) + y1;
 
-    return new Pair<Double, Double>(x2, y2);
+    return new Translation2d(x2, y2);
   }
 
   /**
@@ -198,7 +183,7 @@ public class ArmSub extends SubsystemBase {
    * 
    * @return The calculated coordinates of the end of the arm.
    */
-  private Pair<Double, Double> forK() {
+  private Translation2d forK() {
     return forK(getSeg1Angle(), getSeg2Angle());
   }
 
