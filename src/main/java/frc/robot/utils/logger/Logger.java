@@ -16,7 +16,7 @@ import frc.robot.constants.Constants;
 public class Logger {
   private static Optional<Logger> inst = Optional.empty();
 
-  private ArrayList<LogLine> logCache = new ArrayList<LogLine>();
+  private ArrayList<LogLine> cache = new ArrayList<LogLine>();
 
   private final ReentrantLock cacheLock = new ReentrantLock();
 
@@ -67,7 +67,7 @@ public class Logger {
   private static void addLine(LogLine line) {
     Logger logger = getInstance();
     logger.cacheLock.lock();
-    logger.logCache.add(line);
+    logger.cache.add(line);
     logger.cacheLock.unlock();
   }
 
@@ -119,15 +119,15 @@ public class Logger {
   }
 
   public void save() {
-    if (logCache.isEmpty() || paused) {
+    if (cache.isEmpty() || paused) {
       return;
     }
 
     cacheLock.lock();
 
     if (fileCreationFailed) {
-      while (!logCache.isEmpty()) {
-        System.out.println(logCache.remove(0).toString());
+      while (!cache.isEmpty()) {
+        System.out.println(cache.remove(0).toString());
       }
       cacheLock.unlock();
       return;
@@ -135,8 +135,8 @@ public class Logger {
 
     try {
       FileWriter writer = new FileWriter(file, true);
-      while (!logCache.isEmpty()) {
-        writer.write(logCache.remove(0).toString());
+      while (!cache.isEmpty()) {
+        writer.write(cache.remove(0).toString());
         writer.write(System.lineSeparator());
       }
       writer.close();
@@ -145,11 +145,11 @@ public class Logger {
     } catch (SecurityException e) {
       System.out.println("Logger : File Save Failed : Security Exeption : " + e);
     } finally {
-      if (!logCache.isEmpty()) {
+      if (!cache.isEmpty()) {
         System.out.println("Logger : Save Error : Dumping Cache to Consol");
       }
-      while (!logCache.isEmpty()) {
-        System.out.println(logCache.remove(0).toString());
+      while (!cache.isEmpty()) {
+        System.out.println(cache.remove(0).toString());
       }
       cacheLock.unlock();
     }
