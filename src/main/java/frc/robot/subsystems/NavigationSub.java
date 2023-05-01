@@ -113,7 +113,7 @@ public class NavigationSub extends SubsystemBase {
 
   /** @return the reported drive encoder distances */
   public Pair<Double, Double> getEncoderDistances() {
-    return new Pair<Double, Double>(drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
+    return new Pair<>(drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
   }
 
   /** @return the average reported drive encoder distance */
