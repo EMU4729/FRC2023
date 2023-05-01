@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
@@ -27,7 +28,7 @@ public class NavigationSub extends SubsystemBase {
   public final Encoder drvLeftEncoder = Constants.drive.ENCODER_ID_L.build();
   public final Encoder drvRightEncoder = Constants.drive.ENCODER_ID_R.build();
 
-  public Field2d field = new Field2d();
+  public final Field2d field = new Field2d();
 
   /** m from start pos in x rel to start angle @WIP not implimented */
   public double xPos = 0;
@@ -49,10 +50,17 @@ public class NavigationSub extends SubsystemBase {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  public NavigationSub() {
+    SmartDashboard.putData("Field", field);
+  }
+
   @Override
   public void periodic() {
-    odometry.update(Rotation2d.fromDegrees(imu.getAngle()), drvLeftEncoder.getDistance(),
+    odometry.update(
+        Rotation2d.fromDegrees(getYaw()),
+        drvLeftEncoder.getDistance(),
         drvRightEncoder.getDistance());
+    field.setRobotPose(getPose());
     updateShuffleboard();
 
     if (RobotController.getUserButton() && false) {
@@ -63,7 +71,6 @@ public class NavigationSub extends SubsystemBase {
   }
 
   public void updateShuffleboard() {
-    ShuffleControl.navTab.setPose(getPose());
     ShuffleControl.navTab.setRotation(getHeadingDeg(), getPitch(), getRoll());
     ShuffleControl.navTab.setEncoderDistances(drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
   }
@@ -86,6 +93,11 @@ public class NavigationSub extends SubsystemBase {
   /** @return direction the robot is facing as a Rotation2d */
   public Rotation2d getHeadingRot2d() {
     return getPose().getRotation();
+  }
+
+  /** @return The yaw angle of the robot */
+  public double getYaw() {
+    return imu.getAngle();
   }
 
   /** @return The roll angle of the robot */

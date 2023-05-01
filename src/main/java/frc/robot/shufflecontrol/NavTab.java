@@ -1,11 +1,8 @@
 package frc.robot.shufflecontrol;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NavTab {
   private ShuffleboardTab nav = Shuffleboard.getTab("Nav");
@@ -15,11 +12,8 @@ public class NavTab {
   private GenericEntry rollEntry = nav.add("Roll Degrees", 0).getEntry();
   private GenericEntry leftEncoderEntry = nav.add("Left Encoder Distance", 0).getEntry();
   private GenericEntry rightEncoderEntry = nav.add("Right Encoder Distance", 0).getEntry();
-  private Field2d field = new Field2d();
 
   protected NavTab() {
-    nav.add("Field", field); 
-    SmartDashboard.putData("Field", field);
   }
 
   public void setRotation(double yaw, double pitch, double roll) {
@@ -31,9 +25,5 @@ public class NavTab {
   public void setEncoderDistances(double left, double right) {
     leftEncoderEntry.setDouble(left);
     rightEncoderEntry.setDouble(right);
-  }
-
-  public void setPose(Pose2d pose) {
-    field.setRobotPose(pose);
   }
 }
