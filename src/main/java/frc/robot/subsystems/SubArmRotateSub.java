@@ -9,6 +9,7 @@ import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
+/** Subsystems for controlling Subarm Rotation */
 public class SubArmRotateSub extends SubsystemBase {
   private final Servo servo = new Servo(Constants.subarm.ROTATE_SERVO);
   private final Encoder encoder = Constants.subarm.ROTATE_ENCODER_INFO.build();

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Subsystems;
 import frc.robot.commands.TimedRunCommand;
 
+/** Super Naive Auto - literally just drives out of the community zone */
 public class SuperNaiveAuto extends SequentialCommandGroup {
   protected SuperNaiveAuto() {
     addCommands(

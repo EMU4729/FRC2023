@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.Constants;
 
 /**
- * Command for Autonomous.
+ * Provides the default command for teleop.
  */
 public class TeleopProvider {
   private static Optional<TeleopProvider> inst = Optional.empty();

@@ -29,8 +29,11 @@ public class OI {
     return MathUtil.applyDeadband(value, Constants.controller.CONTROLLER_AXIS_DEADZONE);
   }
 
+  /** The pilot's controller */
   public static final CommandXboxController pilot = new CommandXboxController(
       Constants.controller.PILOT_XBOX_CONTROLLER_PORT);
+
+  /** The copilot's controller */
   public static final CommandXboxController copilot = new CommandXboxController(
       Constants.controller.COPILOT_XBOX_CONTROLLER_PORT);
 }

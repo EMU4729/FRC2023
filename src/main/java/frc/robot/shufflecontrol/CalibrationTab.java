@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class CalibrationTab {
-
   private final ShuffleboardTab tab = Shuffleboard.getTab("Calibration");
+
   private final GenericEntry armEntry = tab.add("Arm Calibrated", false).withWidget(BuiltInWidgets.kBooleanBox)
       .getEntry();
   private final GenericEntry subArmPivotEntry = tab.add("SubArm Pivot Calibrated", false)

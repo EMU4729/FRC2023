@@ -10,6 +10,7 @@ import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
+/** Subsystem that handles Subarm pivotting */
 public class SubArmPivotSub extends SubsystemBase {
   private final MotorController motor = Constants.subarm.PIVOT_MOTOR_ID.build();
   private final Encoder encoder = Constants.subarm.PIVOT_ENCODER_ID.build();

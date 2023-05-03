@@ -9,7 +9,7 @@ import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.CurveFit;
 
 /**
- * The Teleop Command.
+ * The Arcade Teleop command
  */
 public class TeleopDriveArcade extends CommandBase {
   private final CurveFit throtFit;

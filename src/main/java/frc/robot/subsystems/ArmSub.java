@@ -21,6 +21,7 @@ import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
 
+/** Subsystem for controlling the two-stage arm */
 public class ArmSub extends SubsystemBase {
   private final WPI_VictorSPX seg1MasterMotor = (WPI_VictorSPX) Constants.arm.SEG1_MASTER_MOTOR_ID.build();
   private final WPI_VictorSPX seg1SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG1_SLAVE_MOTOR_ID.build();
@@ -43,12 +44,14 @@ public class ArmSub extends SubsystemBase {
   private double seg1Output = 0;
   private double seg2Output = 0;
 
+  /** Indicates whether the copilot is actively moving the arm or not */
   private boolean angleIsControlled = false;
 
   private FileWriter logFile;
 
   public ArmSub() {
     if (RobotBase.isReal())
+      // Create arm log file + csv headers
       try {
         logFile = new FileWriter("/home/lvuser/arm.csv");
         logFile.write(
@@ -114,6 +117,8 @@ public class ArmSub extends SubsystemBase {
 
     Instant nextUpdate = Instant.now();
     ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
+
+    // Write new data to the arm log
     if (calibrated && RobotBase.isReal())
       try {
         logFile.append(
@@ -240,6 +245,7 @@ public class ArmSub extends SubsystemBase {
       return;
     }
 
+    // Get arm throttle values from copilot controller
     seg1Output = Constants.arm.SEG1_INPUT_CURVE
         .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value)));
     seg2Output = Constants.arm.SEG2_INPUT_CURVE
@@ -254,6 +260,8 @@ public class ArmSub extends SubsystemBase {
       angleIsControlled = true;
     }
 
+    // This keeps the arm from moving downwards due to gravity when it is at a high
+    // angle.
     switch (Constants.arm.SUSTAIN_STRATEGY) {
       case CURVE:
         seg2Output += Constants.arm.SUSTAIN_CURVE.fit(MathUtil.applyDeadband(getSeg2Angle(), 10));
@@ -264,6 +272,7 @@ public class ArmSub extends SubsystemBase {
 
         break;
       case FEEDFORWARD:
+        // unimplemented
         break;
       case NONE:
         break;

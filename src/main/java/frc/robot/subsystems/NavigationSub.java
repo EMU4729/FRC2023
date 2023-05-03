@@ -17,6 +17,7 @@ import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 
+/** Subsystem that handles all robot navigation */
 public class NavigationSub extends SubsystemBase {
   public final ADIS16470_IMU imu = new ADIS16470_IMU();
   private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
@@ -28,14 +29,10 @@ public class NavigationSub extends SubsystemBase {
 
   private final Field2d field = new Field2d();
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Simulation Variables
-
   private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
   private final EncoderSim drvLeftEncoderSim = new EncoderSim(drvLeftEncoder);
   private final EncoderSim drvRightEncoderSim = new EncoderSim(drvRightEncoder);
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public NavigationSub() {
     SmartDashboard.putData("Field", field);
@@ -80,27 +77,27 @@ public class NavigationSub extends SubsystemBase {
     return getPose().getRotation();
   }
 
-  /** @return The yaw angle of the robot */
+  /** @return The yaw angle of the robot in degrees */
   public double getYaw() {
     return imu.getAngle();
   }
 
-  /** @return The roll angle of the robot */
+  /** @return The roll angle of the robot in degrees */
   public double getRoll() {
     return imu.getXComplementaryAngle();
   }
 
-  /** @return The pitch angle of the robot */
+  /** @return The pitch angle of the robot in degrees */
   public double getPitch() {
     return imu.getYComplementaryAngle();
   }
 
-  /** Gets the left encoder rate. @return The speed. m/s */
+  /** Gets the left encoder rate. @return The speed in m/s */
   public double getLeftEncoderRate() {
     return drvLeftEncoder.getRate();
   }
 
-  /** Gets the right encoder rate. @return The speed. m/s */
+  /** Gets the right encoder rate. @return The speed in m/s */
   public double getRightEncoderRate() {
     return drvRightEncoder.getRate();
   }
@@ -138,9 +135,7 @@ public class NavigationSub extends SubsystemBase {
     Subsystems.drive.drivetrainSimulator.setPose(pose);
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Simulation Functions
-
   @Override
   public void simulationPeriodic() {
     DifferentialDrivetrainSim drvTrnSim = Subsystems.drive.drivetrainSimulator;

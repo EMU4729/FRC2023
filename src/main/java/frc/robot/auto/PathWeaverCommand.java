@@ -25,7 +25,12 @@ public class PathWeaverCommand extends SequentialCommandGroup {
    *                       robot's deploy directory.
    */
   public PathWeaverCommand(String pathweaverPath) {
+    // The following code was adapted from the code at
+    // https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html
+
     Trajectory trajectory = new Trajectory();
+
+    // Reads trajectory from the specified filepath
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(pathweaverPath);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -34,6 +39,8 @@ public class PathWeaverCommand extends SequentialCommandGroup {
       Logger.error("PathWeaverCommand : Unable to open trajectory: " + pathweaverPath + e);
     }
 
+    // Don't even ask me what this does
+    // All I know is that it works and no one should touch it
     RamseteCommand ramseteCommand = new RamseteCommand(
         trajectory,
         Subsystems.nav::getPose,

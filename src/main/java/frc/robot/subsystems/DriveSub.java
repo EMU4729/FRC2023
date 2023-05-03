@@ -28,9 +28,7 @@ public class DriveSub extends SubsystemBase {
 
   public final DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors); // pub for shuffleboard
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Simulation Variables
-
   /** @wip add corrected values */
   private final LinearSystem<N2, N2, N2> drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(
       Constants.sim.KV_LINEAR,
@@ -40,8 +38,6 @@ public class DriveSub extends SubsystemBase {
   public final DifferentialDrivetrainSim drivetrainSimulator = new DifferentialDrivetrainSim(
       drivetrainSystem, DCMotor.getCIM(2), 10.71, Constants.features.ROBOT_WHEEL_WIDTH,
       Constants.features.ROBOT_WHEEL_RAD, null);
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public DriveSub() {
     addChild("Differential Drive", drive);
@@ -60,7 +56,7 @@ public class DriveSub extends SubsystemBase {
   }
 
   /**
-   * Tank drives the robot using voltages.
+   * Tank drives the robot using the specified voltages.
    * <strong>Highly unsafe.</strong> Values are uncapped, so use with caution.
    * 
    * @param leftVoltage  The left output
@@ -89,9 +85,6 @@ public class DriveSub extends SubsystemBase {
   public void off() {
     tank(0, 0);
   }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Simulation Functions
 
   @Override
   public void simulationPeriodic() {

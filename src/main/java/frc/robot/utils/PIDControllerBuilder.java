@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import edu.wpi.first.math.controller.PIDController;
 
+/** Utility class to build a {@link PIDController} */
 public class PIDControllerBuilder {
   public final double kp;
   public final double ki;

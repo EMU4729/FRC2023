@@ -4,6 +4,10 @@ import java.util.Optional;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+/**
+ * This handles most networking with the raspberry pi - not in use right now
+ * though
+ */
 public class PiBridge {
     private static Optional<PiBridge> inst = Optional.empty();
 

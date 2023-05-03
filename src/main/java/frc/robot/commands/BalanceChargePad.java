@@ -22,7 +22,7 @@ public class BalanceChargePad extends CommandBase {
   public void execute() {
     double pitch = Subsystems.nav.getPitch();
 
-    // don't move if the angle is correct
+    // don't move if the angle is within the correct range
     if (Math.abs(pitch) < DEADBAND)
       return;
 
