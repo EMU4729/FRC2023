@@ -17,8 +17,10 @@ public class FeaturesConstants {
   /** width of the robot frame (m) @wip check num */
   public final double ROBOT_WIDTH = Units.inchesToMeters(24);
   /** max reach outside frame perim [x(from frame),y(from floor)] (m) */
-  public final double[] ROBOT_REACH_MAX = { (Units.inchesToMeters(48)),
-      (Units.inchesToMeters(78)) };
+  public final double[] ROBOT_REACH_MAX = {
+      (Units.inchesToMeters(48)),
+      (Units.inchesToMeters(78))
+  };
 
   /** Power distribution object */
   public final PowerDistribution PDB = new PowerDistribution();

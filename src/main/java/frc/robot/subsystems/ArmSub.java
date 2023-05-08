@@ -108,8 +108,11 @@ public class ArmSub extends SubsystemBase {
     ShuffleControl.armTab.setEncoderAngles(getSeg1Angle(), getSeg2Angle());
     ShuffleControl.armTab.setEncoderCounts(seg1Encoder.get(), seg2Encoder.get());
     ShuffleControl.armTab.setEncoderRates(seg1Encoder.getRate(), seg2Encoder.getRate());
-    ShuffleControl.armTab.setVoltages(seg1MasterMotor.getMotorOutputVoltage(), seg2MasterMotor.getMotorOutputVoltage());
-    ShuffleControl.armTab.setCurrents(Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
+    ShuffleControl.armTab.setVoltages(
+        seg1MasterMotor.getMotorOutputVoltage(),
+        seg2MasterMotor.getMotorOutputVoltage());
+    ShuffleControl.armTab.setCurrents(
+        Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
         Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port));
 
     Translation2d kinematicsCoords = forK();
@@ -217,7 +220,8 @@ public class ArmSub extends SubsystemBase {
 
     if (Math.abs(armSeg1Angle) > 90 || Math.abs(armSeg2Angle) > 185) {
       throw new IllegalStateException(
-          String.format("ArmSub::killCheck : Illegal angles reached, killing robot! (armSeg2: %f, armSeg1: %f)",
+          String.format(
+              "ArmSub::killCheck : Illegal angles reached, killing robot! (armSeg2: %f, armSeg1: %f)",
               armSeg2Angle, armSeg1Angle));
     }
   }

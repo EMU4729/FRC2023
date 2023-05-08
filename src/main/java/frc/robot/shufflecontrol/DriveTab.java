@@ -10,14 +10,12 @@ import frc.robot.teleop.TeleopProvider;
 public class DriveTab {
   private ShuffleboardTab drive = Shuffleboard.getTab("Drive");
 
-  private final GenericEntry controlX = drive
-      .add("Control X axis", 0)
+  private final GenericEntry controlX = drive.add("Control X axis", 0)
       .withSize(4, 1).withPosition(0, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .getEntry();
 
-  private final GenericEntry controlY = drive
-      .add("Control Y axis", 0)
+  private final GenericEntry controlY = drive.add("Control Y axis", 0)
       .withSize(4, 1).withPosition(0, 3)
       .withWidget(BuiltInWidgets.kNumberBar)
       .getEntry();

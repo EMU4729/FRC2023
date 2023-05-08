@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class CalibrationTab {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Calibration");
 
-  private final GenericEntry armEntry = tab.add("Arm Calibrated", false).withWidget(BuiltInWidgets.kBooleanBox)
-      .getEntry();
+  private final GenericEntry armEntry = tab.add("Arm Calibrated", false)
+      .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
   private final GenericEntry subArmPivotEntry = tab.add("SubArm Pivot Calibrated", false)
       .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
   private final GenericEntry subArmRotateEntry = tab.add("SubArm Rotation Calibrated", false)

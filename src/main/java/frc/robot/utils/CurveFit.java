@@ -15,7 +15,8 @@ public class CurveFit {
   }
 
   public static CurveFit steerFromDriveSettings(double[][] settings) {
-    return new CurveFit(settings[1][0], settings[1][1], settings[1][2]).setThrotEffect(settings[1][3]);
+    return new CurveFit(settings[1][0], settings[1][1], settings[1][2])
+        .setThrotEffect(settings[1][3]);
   }
 
   /** fits curve and adjusts range of input */

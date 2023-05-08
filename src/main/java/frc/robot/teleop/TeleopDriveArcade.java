@@ -32,7 +32,8 @@ public class TeleopDriveArcade extends CommandBase {
     double steering = 0;
 
     throttle = throtFit.fit(OI.applyAxisDeadband(OI.pilot.getLeftY()));
-    steering = steerFit.fit(OI.applyAxisDeadband(OI.pilot.getRightX()), throttle);// limiting max steering based on
+    // limiting max steering based on throttle
+    steering = steerFit.fit(OI.applyAxisDeadband(OI.pilot.getRightX()), throttle);
 
     // Invert steering when throttle >= 0 to mimic car controls
     if (throttle > 0) {

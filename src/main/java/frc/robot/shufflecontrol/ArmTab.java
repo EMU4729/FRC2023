@@ -7,28 +7,36 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class ArmTab {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Arm");
 
-  private final GenericEntry seg1Output = tab
-      .add("Seg1 Output", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg2Output = tab.add("Seg2 Output", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg1EncoderAngle = tab.add("Seg1 Encoder Angle (degrees)", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg2EncoderAngle = tab.add("Seg2 Encoder Angle (degrees)", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg1EncoderCounts = tab.add("Seg1 Encoder Counts", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg2EncoderCounts = tab.add("Seg2 Encoder Counts", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg1EncoderRate = tab
-      .add("Seg1 Encoder Rate (degrees sec ^-1)", 0)
-      .withSize(2, 1)
-      .getEntry();
-  private final GenericEntry seg2EncoderRate = tab
-      .add("Seg2 Encoder Rate (degrees sec ^-1)", 0)
-      .withSize(2, 1)
-      .getEntry();
-  private final GenericEntry seg1Voltage = tab.add("Seg1 Voltage", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg2Voltage = tab.add("Seg2 Voltage", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg1Current = tab.add("Seg1 Current", 0).withSize(2, 1).getEntry();
-  private final GenericEntry seg2Current = tab.add("Seg2 Current", 0).withSize(2, 1).getEntry();
-  private final GenericEntry forKX = tab.add("Forward Kinematics X (m)", 0).withSize(2, 1).getEntry();
-  private final GenericEntry forKY = tab.add("Forward Kinematics Y (m)", 0).withSize(2, 1).getEntry();
-  private final GenericEntry updateDelta = tab.add("Update Delta (ms)", 0).withSize(2, 1).getEntry();
+  private final GenericEntry seg1Output = tab.add("Seg1 Output", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg2Output = tab.add("Seg2 Output", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg1EncoderAngle = tab.add("Seg1 Encoder Angle (degrees)", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg2EncoderAngle = tab.add("Seg2 Encoder Angle (degrees)", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg1EncoderCounts = tab.add("Seg1 Encoder Counts", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg2EncoderCounts = tab.add("Seg2 Encoder Counts", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg1EncoderRate = tab.add("Seg1 Encoder Rate (degrees sec ^-1)", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg2EncoderRate = tab.add("Seg2 Encoder Rate (degrees sec ^-1)", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg1Voltage = tab.add("Seg1 Voltage", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg2Voltage = tab.add("Seg2 Voltage", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg1Current = tab.add("Seg1 Current", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry seg2Current = tab.add("Seg2 Current", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry forKX = tab.add("Forward Kinematics X (m)", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry forKY = tab.add("Forward Kinematics Y (m)", 0)
+      .withSize(2, 1).getEntry();
+  private final GenericEntry updateDelta = tab.add("Update Delta (ms)", 0)
+      .withSize(2, 1).getEntry();
 
   public void setOutputs(double seg1, double seg2) {
     seg1Output.setDouble(seg1);
