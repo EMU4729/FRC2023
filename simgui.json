@@ -1,58 +1,14 @@
 {
-  "HALProvider": {
-    "Addressable LEDs": {
-      "0": {
-        "columns": 60
-      },
-      "window": {
-        "visible": true
-      }
-    },
-    "RoboRIO": {
-      "6V Rail": {
-        "open": true
-      },
-      "RoboRIO Input": {
-        "open": true
-      },
-      "window": {
-        "visible": true
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/DriveSub": "Subsystem",
-      "/LiveWindow/DriveSub/Differential Drive": "DifferentialDrive",
-      "/LiveWindow/NavigationSub": "Subsystem",
-      "/LiveWindow/TurretSub": "Subsystem",
-      "/LiveWindow/Ungrouped/DigitalInput[4]": "Digital Input",
-      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
-      "/LiveWindow/Ungrouped/Victor SPX [7]": "Motor Controller",
-      "/Shuffleboard/Calibration/Calibrate All": "Command",
-      "/Shuffleboard/Calibration/Calibrate Arm": "Command",
-      "/Shuffleboard/Calibration/Calibrate SubArm Pivot": "Command",
-      "/Shuffleboard/Calibration/Calibrate SubArm Rotation": "Command",
       "/Shuffleboard/Drive/DriveOutput": "DifferentialDrive",
       "/Shuffleboard/Drive/TeleopType": "String Chooser",
-      "/Shuffleboard/Nav/Field": "Field2d",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
-      "/FMSInfo": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Shuffleboard/Drive/DriveOutput": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
         "window": {
           "visible": true
@@ -62,44 +18,30 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/SendableChooser[1]": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
   "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
     "Shuffleboard": {
       "Drive": {
         "TeleopType": {
-          "open": true
+          "open": false
         },
-        "open": true
+        "open": false
       },
-      "open": true
+      "open": false
     },
     "SmartDashboard": {
       "Field": {
-        "open": true
+        "open": false
       },
-      "open": true
+      "open": false
     },
     "transitory": {
       "Shuffleboard": {
         "Arm": {
-          "open": true
+          "open": false
         }
-      },
-      "SmartDashboard": {
-        "Field": {
-          "open": true
-        },
-        "open": true
       }
     }
   }
