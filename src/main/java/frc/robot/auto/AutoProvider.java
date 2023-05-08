@@ -20,9 +20,10 @@ public class AutoProvider {
     chooser.addOption("Bumpless Super Naive Auto", new BumplessSuperNaiveAuto());
     chooser.addOption("Balance Auto", new BalanceAuto());
     chooser.addOption("Naive Auto", new NaiveAuto());
+    chooser.addOption("PathWeaver Test", new PathWeaverCommand("paths/Sample.wpilib.json"));
     chooser.addOption("Disable Auto", new InstantCommand());
 
-    SmartDashboard.putData(chooser);
+    SmartDashboard.putData("Auto Chooser", chooser);
   }
 
   public static AutoProvider getInstance() {

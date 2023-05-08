@@ -32,7 +32,7 @@ public class TeleopProvider {
     chooser.addOption("Demo Tank Teleop", demoTeleopTank);
     chooser.addOption("Disable Teleop", new InstantCommand());
 
-    SmartDashboard.putData(chooser);
+    SmartDashboard.putData("Teleop Chooser", chooser);
   }
 
   public static TeleopProvider getInstance() {

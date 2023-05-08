@@ -4,17 +4,24 @@
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Drive/DriveOutput": "DifferentialDrive",
       "/Shuffleboard/Drive/TeleopType": "String Chooser",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
-      "/SmartDashboard/SendableChooser[1]": "String Chooser"
+      "/SmartDashboard/SendableChooser[1]": "String Chooser",
+      "/SmartDashboard/Teleop Chooser": "String Chooser"
     },
     "windows": {
-      "/SmartDashboard/Field": {
+      "/Shuffleboard/Drive/DriveOutput": {
         "window": {
           "visible": true
         }
       },
-      "/SmartDashboard/SendableChooser[0]": {
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
         "window": {
           "visible": true
         }
