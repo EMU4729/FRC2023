@@ -6,4 +6,5 @@ public class ShuffleControl {
   public static ArmTab armTab = new ArmTab();
   public static SubArmTab subArmTab = new SubArmTab();
   public static CalibrationTab calibrationTab = new CalibrationTab();
+  public static GripperTab gripperTab = new GripperTab();
 }
