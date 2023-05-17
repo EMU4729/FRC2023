@@ -7,7 +7,7 @@ public class LEDConstants {
   /** LED string length (in leds) */
   public final int STRING_LENGTH = 42;
   /** LED string port num */
-  public final int STRING_PORT = 9;
+  public final int STRING_PORT = 7;
   /**
    * Max number of colour changes/s (red -> black -> red -> black = 4) for leds
    */

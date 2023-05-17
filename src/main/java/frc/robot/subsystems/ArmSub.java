@@ -13,10 +13,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
 import frc.robot.utils.logger.Logger;
@@ -26,8 +28,8 @@ public class ArmSub extends SubsystemBase {
   private final WPI_VictorSPX seg1MasterMotor = (WPI_VictorSPX) Constants.arm.SEG1_MASTER_MOTOR_ID.build();
   private final WPI_VictorSPX seg1SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG1_SLAVE_MOTOR_ID.build();
 
-  private final WPI_TalonSRX seg2MasterMotor = (WPI_TalonSRX) Constants.arm.SEG2_MASTER_MOTOR_ID.build();
-  private final WPI_TalonSRX seg2SlaveMotor = (WPI_TalonSRX) Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
+  private final WPI_VictorSPX seg2MasterMotor = (WPI_VictorSPX) Constants.arm.SEG2_MASTER_MOTOR_ID.build();
+  private final WPI_VictorSPX seg2SlaveMotor = (WPI_VictorSPX) Constants.arm.SEG2_SLAVE_MOTOR_ID.build();
 
   private final MotorControllerGroup seg1Motors = new MotorControllerGroup(seg1MasterMotor, seg1SlaveMotor);
   private final MotorControllerGroup seg2Motors = new MotorControllerGroup(seg2MasterMotor, seg2SlaveMotor);
@@ -112,14 +114,11 @@ public class ArmSub extends SubsystemBase {
         seg1MasterMotor.getMotorOutputVoltage(),
         seg2MasterMotor.getMotorOutputVoltage());
     ShuffleControl.armTab.setCurrents(
-        Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
-        Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port));
+       Constants.features.PDB.getCurrent(Constants.arm.SEG1_MASTER_MOTOR_ID.port),
+       Constants.features.PDB.getCurrent(Constants.arm.SEG2_MASTER_MOTOR_ID.port));
 
     Translation2d kinematicsCoords = forK();
     ShuffleControl.armTab.setKinematicsCoords(kinematicsCoords.getX(), kinematicsCoords.getY());
-
-    Instant nextUpdate = Instant.now();
-    ShuffleControl.armTab.setUpdateDelta(Duration.between(lastUpdate, nextUpdate).toMillis());
 
     // Write new data to the arm log
     if (calibrated && RobotBase.isReal())
@@ -155,13 +154,11 @@ public class ArmSub extends SubsystemBase {
                 kinematicsCoords.getX() + "," +
                 kinematicsCoords.getY() + "," +
                 // Update Delta
-                Duration.between(lastUpdate, nextUpdate).toMillis() +
+                RobotController.getFPGATime() +
                 "\n");
       } catch (IOException e) {
         Logger.warn("ArmSub : Error writing to arm csv : " + e.toString());
       }
-
-    lastUpdate = nextUpdate;
   }
 
   /**

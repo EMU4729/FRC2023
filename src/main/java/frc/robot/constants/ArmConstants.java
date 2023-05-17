@@ -19,14 +19,14 @@ public class ArmConstants {
   /** Information for Arm Seg1 Slave Motor */
   public final MotorBuilder SEG1_SLAVE_MOTOR_ID = new MotorBuilder(8, MotorBuilder.Type.VictorSPX).withBrake();
   /** Information for Arm Seg2 Master Motor */
-  public final MotorBuilder SEG2_MASTER_MOTOR_ID = new MotorBuilder(3, MotorBuilder.Type.TalonSRX).withBrake();
+  public final MotorBuilder SEG2_MASTER_MOTOR_ID = new MotorBuilder(5, MotorBuilder.Type.VictorSPX).withBrake();
 
   /** Arm Seg1 Encoder Builder */
   public final EncoderBuilder SEG2_ENCODER = new EncoderBuilder(new int[] { 8, 9 }, 360. / 2048.);
 
   // arm
   /** Information for Arm Seg2 Slave Motor */
-  public final MotorBuilder SEG2_SLAVE_MOTOR_ID = new MotorBuilder(4, MotorBuilder.Type.TalonSRX).withBrake();
+  public final MotorBuilder SEG2_SLAVE_MOTOR_ID = new MotorBuilder(6, MotorBuilder.Type.VictorSPX).withBrake();
   /**
    * Length of the armseg2 (second segment)(between axles), in (mm) @wip update
    * arm length
@@ -79,9 +79,9 @@ public class ArmConstants {
   public final double SWING_THROUGH_HEIGHT = SEG1_LENGTH - SEG2_LENGTH;
 
   /** Copilot input curve for seg 1 */
-  public final CurveFit SEG1_INPUT_CURVE = new CurveFit(0, 1, 0, 0.4, 1);
+  public final CurveFit SEG1_INPUT_CURVE = new CurveFit(-1, 1, 0, 0.4, 1);
   /** Copilot input curve for seg 2 */
-  public final CurveFit SEG2_INPUT_CURVE = new CurveFit(0, 1, 0, 0.3, 1);
+  public final CurveFit SEG2_INPUT_CURVE = new CurveFit(-1, 1, 0, 0.3, 1);
 
   /** The arm sustain strategies */
   public static enum SustainStrategy {

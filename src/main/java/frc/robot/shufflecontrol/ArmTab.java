@@ -35,8 +35,6 @@ public class ArmTab {
       .withSize(2, 1).getEntry();
   private final GenericEntry forKY = tab.add("Forward Kinematics Y (m)", 0)
       .withSize(2, 1).getEntry();
-  private final GenericEntry updateDelta = tab.add("Update Delta (ms)", 0)
-      .withSize(2, 1).getEntry();
 
   public void setOutputs(double seg1, double seg2) {
     seg1Output.setDouble(seg1);
@@ -71,9 +69,5 @@ public class ArmTab {
   public void setKinematicsCoords(double x, double y) {
     forKX.setDouble(x);
     forKY.setDouble(y);
-  }
-
-  public void setUpdateDelta(double delta) {
-    updateDelta.setDouble(delta);
   }
 }

@@ -32,6 +32,11 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/Teleop Chooser": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },

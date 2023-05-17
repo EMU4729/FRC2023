@@ -13,8 +13,8 @@ public class GripperSub extends SubsystemBase {
 
   public GripperSub() {
     // https://cdn.andymark.com/media/W1siZiIsIjIwMTkvMDMvMjIvMTAvMjYvNDMvZjQzZTk3NzMtN2MxNi00MDIwLWE5YTgtMTA4MDliMTMxZDExL1VzaW5nIEwxNiBMaW5lYXIgU2Vydm8gMDMtMjAxOS5wZGYiXV0/Using%20L16%20Linear%20Servo%2003-2019.pdf?sha=7b43b981c4f1c13d
-    servoOne.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
-    servoTwo.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+    //servoOne.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+    //servoTwo.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
   }
 
   /** Opens the gripper */
