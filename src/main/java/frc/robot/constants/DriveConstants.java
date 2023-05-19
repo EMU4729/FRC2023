@@ -13,7 +13,7 @@ public class DriveConstants {
    * {invert,brake,connectionSaftey}]
    */
   public final MotorBuilder MOTOR_ID_LM = new MotorBuilder(1, MotorBuilder.Type.TalonSRX)
-      .withSafety();
+      .withSafety().withInvert();
 
   /** Drive left encoder builder */
   public final EncoderBuilder ENCODER_ID_L = new EncoderBuilder(new int[] { /* 4, 5 */ 10, 11 }, 60.078 / 256. / 1000);
@@ -34,7 +34,7 @@ public class DriveConstants {
    * {invert,brake,connectionSaftey}]
    */
   public final MotorBuilder MOTOR_ID_LS = new MotorBuilder(2, MotorBuilder.Type.TalonSRX)
-      .withSafety();
+      .withSafety().withInvert();
   /**
    * Information for right slave drive [Port,controller type,
    * {invert,brake,connectionSaftey}]
