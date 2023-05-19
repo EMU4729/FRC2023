@@ -10,24 +10,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class GripperTab {
   private final ShuffleboardTab tab = Shuffleboard.getTab("Gripper");
 
-  public final GenericEntry valueOneEntry = tab.add("Servo 1 Value", 0)
+  public final GenericEntry valueOneEntry = tab.add("Servos Value", 0)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", 0, "max", 1))
       .withSize(2, 1)
       .getEntry();
 
-  public final GenericEntry valueTwoEntry = tab.add("Servo 2 Value", 0)
-      .withWidget(BuiltInWidgets.kNumberSlider)
-      .withProperties(Map.of("min", 0, "max", 1))
-      .withSize(2, 1)
-      .getEntry();
-
-  public double getValueOne() {
+  public double getValue() {
     return valueOneEntry.getDouble(0);
   }
-
-  public double getValueTwo() {
-    return valueTwoEntry.getDouble(0);
-  }
-
 }

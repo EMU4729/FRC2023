@@ -51,6 +51,7 @@ public class RobotContainer {
       // LEDPattern.runDirLEDS();
     }));
 
+    // LED Control
     OI.pilot.rightBumper().onTrue(new InstantCommand(() -> {
       LEDControl.getInstance().runConeLights();
     }));
@@ -69,9 +70,15 @@ public class RobotContainer {
         new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
     // Gripper Control
-    // OI.copilot.a().onTrue(new InstantCommand(Subsystems.gripper::open, Subsystems.gripper));
-    // OI.copilot.b().onTrue(new InstantCommand(Subsystems.gripper::closeCube, Subsystems.gripper));
-    // OI.copilot.y().onTrue(new InstantCommand(Subsystems.gripper::closeCone, Subsystems.gripper));
+    OI.copilot.a().onTrue(new InstantCommand(
+        Subsystems.gripper::open,
+        Subsystems.gripper));
+    OI.copilot.b().onTrue(new InstantCommand(
+        Subsystems.gripper::closeCube,
+        Subsystems.gripper));
+    OI.copilot.y().onTrue(new InstantCommand(
+        Subsystems.gripper::closeCone,
+        Subsystems.gripper));
 
     // Arm controls handled in ArmSub
   }
