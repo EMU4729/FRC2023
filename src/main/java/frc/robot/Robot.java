@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     // LEDControl.getInstance().runDirectionLights();
-    CameraServer.startAutomaticCapture();
+    Subsystems.calibrate();
     new ShuffleControl();
   }
 

@@ -79,9 +79,9 @@ public class ArmConstants {
   public final double SWING_THROUGH_HEIGHT = SEG1_LENGTH - SEG2_LENGTH;
 
   /** Copilot input curve for seg 1 */
-  public final CurveFit SEG1_INPUT_CURVE = new CurveFit(-1, 1, 0, 0.4, 1);
+  public final CurveFit SEG1_INPUT_CURVE = new CurveFit(-1, 1, 0, 0.3, 1);
   /** Copilot input curve for seg 2 */
-  public final CurveFit SEG2_INPUT_CURVE = new CurveFit(-1, 1, 0, 0.3, 1);
+  public final CurveFit SEG2_INPUT_CURVE = new CurveFit(-1, 1, 0, 0.25, 1);
 
   /** The arm sustain strategies */
   public static enum SustainStrategy {

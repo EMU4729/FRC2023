@@ -70,16 +70,16 @@ public class RobotContainer {
         new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
 
     // Gripper Control
-    OI.copilot.a().onTrue(new InstantCommand(
-        Subsystems.gripper::open,
-        Subsystems.gripper));
-    OI.copilot.b().onTrue(new InstantCommand(
-        Subsystems.gripper::close,
-        Subsystems.gripper));
+    // OI.copilot.rightBumper().onTrue(new InstantCommand(
+    //     Subsystems.gripper::open,
+    //     Subsystems.gripper));
+    // OI.copilot.leftBumper().onTrue(new InstantCommand(
+    //     Subsystems.gripper::close,
+    //     Subsystems.gripper));
 
     // Subarm Rotation
-    OI.copilot.povLeft().whileTrue(Subsystems.subArmRotate.turnClockwise());
-    OI.copilot.povLeft().whileTrue(Subsystems.subArmRotate.turnAnticlockwise());
+    // OI.copilot.povLeft().whileTrue(Subsystems.subArmRotate.turnClockwise());
+    // OI.copilot.povLeft().whileTrue(Subsystems.subArmRotate.turnAnticlockwise());
 
     // Arm controls handled in ArmSub
   }

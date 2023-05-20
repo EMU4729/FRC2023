@@ -9,7 +9,7 @@ import frc.robot.commands.TimedRunCommand;
 public class BumplessSuperNaiveAuto extends SequentialCommandGroup {
   protected BumplessSuperNaiveAuto() {
     addCommands(
-        new TimedRunCommand(() -> Subsystems.drive.tank(-0.5, -0.5), 0.4, Subsystems.drive),
+        new TimedRunCommand(() -> Subsystems.drive.tank(-0.5, -0.5), 0.55, Subsystems.drive),
         new InstantCommand(Subsystems.drive::off, Subsystems.drive));
   }
 }
