@@ -92,9 +92,14 @@ public class ArmSub extends SubsystemBase {
   }
 
   private double getSeg2Angle() {
-    return seg2Encoder.getDistance() + getSeg1Angle();
+    return seg2Encoder.getDistance(); //+ getSeg1Angle();
   }
-
+private double getSeg1Velocity() {
+    return seg1Encoder.getRate();
+}
+private double getSeg2Velocity() {
+  return seg2Encoder.getRate();
+}
   /**
    * Updates the arm tab in shuffleboard. Call this function regularly.
    * 
@@ -222,7 +227,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   /**
-   * Inverse cosine rule.
+   * InverseMath.cosine rule.
    * 
    * @param a Length of side a
    * @param b Length of side b
@@ -243,13 +248,21 @@ public class ArmSub extends SubsystemBase {
       updateShuffleboard();
       return;
     }
+    double L1 = Constants.arm.SEG1_LENGTH;
+    double L2 = Constants.arm.SEG2_LENGTH;
+    double theta = Math.toRadians(getSeg1Angle());
+    double alpha = Math.toRadians(getSeg2Angle());
 
     // Get arm throttle values from copilot controller
     seg1Output = Constants.arm.SEG1_INPUT_CURVE
         .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value)));
     seg2Output = Constants.arm.SEG2_INPUT_CURVE
         .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kRightX.value)));
-
+    double v_x = seg1Output;
+    double v_y = seg2Output;
+    double seg1_vel = ((L2 *Math.cos(theta + alpha)) / ((-L1 *Math.sin(theta) - L2 *Math.sin(theta + alpha)) * (L2 *Math.cos(theta + alpha)) - (-L2 *Math.sin(theta + alpha)) * (L1 *Math.cos(theta) + L2 *Math.cos(theta + alpha)))) * v_x + ((-L2 *Math.sin(theta + alpha)) / ((-L1 *Math.sin(theta) - L2 *Math.sin(theta + alpha)) * (L2 *Math.cos(theta + alpha)) - (-L2 *Math.sin(theta + alpha)) * (L1 *Math.cos(theta) + L2 *Math.cos(theta + alpha)))) * v_y;
+    double seg2_vel = ((L1 *Math.cos(theta) + L2 *Math.cos(theta + alpha)) / ((-L1 *Math.sin(theta) - L2 *Math.sin(theta + alpha)) * (L2 *Math.cos(theta + alpha)) - (-L2 *Math.sin(theta + alpha)) * (L1 *Math.cos(theta) + L2 *Math.cos(theta + alpha)))) * v_x + ((-L1 *Math.sin(theta) - L2 *Math.sin(theta + alpha)) / ((-L1 *Math.sin(theta) - L2 *Math.sin(theta + alpha)) * (L2 *Math.cos(theta + alpha)) - (-L2 *Math.sin(theta + alpha)) * (L1 *Math.cos(theta) + L2 *Math.cos(theta + alpha)))) * v_y;
+    
     if (seg1Output == 0 && seg2Output == 0) {
       if (angleIsControlled) {
         angleIsControlled = false;
@@ -276,9 +289,11 @@ public class ArmSub extends SubsystemBase {
       case NONE:
         break;
     }
+    seg1Output = seg1_vel*0.4;
+    seg2Output = seg2_vel*0.4;
 
-    seg1Output = MathUtil.clamp(seg1Output, -0.4, 0.4);
-    seg2Output = MathUtil.clamp(seg2Output, -0.4, 0.4);
+    //seg1Output = MathUtil.clamp(seg1Output, -0.4, 0.4);
+    //seg2Output = MathUtil.clamp(seg2Output, -0.4, 0.4);
 
     seg1Motors.set(-seg1Output); // For consistency
     seg2Motors.set(seg2Output);
