@@ -9,7 +9,7 @@ import frc.robot.commands.TimedRunCommand;
 public class SuperNaiveAuto extends SequentialCommandGroup {
   protected SuperNaiveAuto() {
     addCommands(
-        new TimedRunCommand(() -> Subsystems.drive.tank(-0.6, -0.6), 1.3, Subsystems.drive),
+        new TimedRunCommand(() -> Subsystems.drive.tank(-0.6, -0.6), 1.8, Subsystems.drive),
         new InstantCommand(Subsystems.drive::off, Subsystems.drive));
   }
 }
