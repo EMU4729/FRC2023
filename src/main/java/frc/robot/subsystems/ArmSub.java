@@ -238,7 +238,8 @@ public class ArmSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!calibrated) {
+    // Bypass all arm things
+    if (!calibrated || true) {
       // Don't do anything if no calibration has happened.
       updateShuffleboard();
       return;
@@ -246,9 +247,9 @@ public class ArmSub extends SubsystemBase {
 
     // Get arm throttle values from copilot controller
     seg1Output = Constants.arm.SEG1_INPUT_CURVE
-        .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kLeftX.value)));
+        .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kLeftY.value)));
     seg2Output = Constants.arm.SEG2_INPUT_CURVE
-        .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kRightX.value)));
+        .fit(OI.applyAxisDeadband(OI.copilot.getRawAxis(XboxController.Axis.kRightY.value)));
 
     if (seg1Output == 0 && seg2Output == 0) {
       if (angleIsControlled) {

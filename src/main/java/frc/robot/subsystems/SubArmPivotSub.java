@@ -58,7 +58,8 @@ public class SubArmPivotSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!calibrated) {
+    // bypass all subarm stuff
+    if (!calibrated || true) {
       updateShuffleboard(0);
       return;
     }
