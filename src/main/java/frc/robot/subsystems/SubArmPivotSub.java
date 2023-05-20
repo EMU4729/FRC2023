@@ -64,10 +64,11 @@ public class SubArmPivotSub extends SubsystemBase {
     }
 
     // This should make the subarm's angle independent of the arm's angle
-    double armOffset = -Subsystems.arm.getEndAngle();
+    double armOffset = Subsystems.arm.getEndAngle();
 
     double currentAngle = encoder.getDistance();
     double output;
+
 
     if (!angleIsValid(currentAngle)) {
       output = clampAngle(currentAngle) + armOffset;

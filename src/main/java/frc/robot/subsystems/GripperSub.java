@@ -18,24 +18,21 @@ public class GripperSub extends SubsystemBase {
 
   /** Opens the gripper */
   public void open() {
-    servos.set(1);
+    servos.set(0.2);
   }
 
-  /** Closes the gripper for cones. */
-  public void closeCone() {
-    servos.set(0);
-  }
-
-  /** Closes the gripper for cubes. */
-  public void closeCube() {
+  public void close() {
     // This uses a lower value than closeCone() because the cube could pop if too
     // much force is applied
-    servos.set(0.4);
+    servos.set(0.6);
   }
 
   @Override
   public void periodic() {
-    final double value = MathUtil.clamp(ShuffleControl.gripperTab.getValue(), 0, 1);
-    servos.set(value);
+    // Only accept controller input
+    if (false) {
+      final double value = MathUtil.clamp(ShuffleControl.gripperTab.getValue(), 0, 1);
+      servos.set(value);
+    }
   }
 }

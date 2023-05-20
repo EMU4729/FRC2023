@@ -16,7 +16,7 @@ public class DriveConstants {
       .withSafety().withInvert();
 
   /** Drive left encoder builder */
-  public final EncoderBuilder ENCODER_ID_L = new EncoderBuilder(new int[] { /* 4, 5 */ 10, 11 }, 60.078 / 256. / 1000);
+  public final EncoderBuilder ENCODER_ID_L = new EncoderBuilder(new int[] { 19, 20 }, 60.078 / 256. / 1000);
 
   /**
    * Information for right master drive [Port,controller type,

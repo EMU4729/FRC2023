@@ -80,19 +80,19 @@ public class SubArmRotateSub extends SubsystemBase {
   /** Stops the servo. */
   public void stop() {
     calibrationCheck();
-    servo.set(0.5);
+    servo.set(0.4);
   }
 
   /** Starts running the servo clockwise. */
   public void clockwise() {
     calibrationCheck();
-    servo.set(1);
+    servo.set(0.6);
   }
 
   /** Starts running the servo anticlockwise. */
   public void anticlockwise() {
     calibrationCheck();
-    servo.set(0);
+    servo.set(0.2);
   }
 
   /**
@@ -115,12 +115,12 @@ public class SubArmRotateSub extends SubsystemBase {
 
   /** @return a {@link Command} to rotate the subarm clockwise */
   public Command turnClockwise() {
-    return turnCommand(1);
+    return turnCommand(0.6);
   }
 
   /** @return a {@link Command} to rotate the subarm anticlockwise */
   public Command turnAnticlockwise() {
-    return turnCommand(0);
+    return turnCommand(0.4);
   }
 
   @Override

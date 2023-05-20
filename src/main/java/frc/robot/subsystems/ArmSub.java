@@ -39,8 +39,6 @@ public class ArmSub extends SubsystemBase {
 
   private final PIDController integralSustainController = Constants.arm.INTEGRAL_SUSTAIN.build();
 
-  private Instant lastUpdate = Instant.now();
-
   private boolean calibrated = false;
 
   private double seg1Output = 0;
@@ -195,7 +193,7 @@ public class ArmSub extends SubsystemBase {
   /** @return The angle that the end of the arm makes with the robot horizontal */
   public double getEndAngle() {
     // How on earth does this geometrically work?
-    return getSeg2Angle() - 90;
+    return getSeg2Angle();
   }
 
   /**
@@ -282,7 +280,7 @@ public class ArmSub extends SubsystemBase {
     seg1Output = MathUtil.clamp(seg1Output, -0.4, 0.4);
     seg2Output = MathUtil.clamp(seg2Output, -0.4, 0.4);
 
-    seg1Motors.set(seg1Output);
+    seg1Motors.set(-seg1Output); // For consistency
     seg2Motors.set(seg2Output);
 
     updateShuffleboard();
