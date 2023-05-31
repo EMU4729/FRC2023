@@ -16,10 +16,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
+import frc.robot.utils.ADIS16470_INS;
 
 /** Subsystem that handles all robot navigation */
 public class NavigationSub extends SubsystemBase {
-  public final ADIS16470_IMU imu = new ADIS16470_IMU();
+  public final ADIS16470_INS imu = new ADIS16470_INS();
   private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
       Rotation2d.fromDegrees(imu.getAngle()),
       0., 0.);
@@ -30,7 +31,7 @@ public class NavigationSub extends SubsystemBase {
   private final Field2d field = new Field2d();
 
   // Simulation Variables
-  private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
+  //private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
   private final EncoderSim drvLeftEncoderSim = new EncoderSim(drvLeftEncoder);
   private final EncoderSim drvRightEncoderSim = new EncoderSim(drvRightEncoder);
 
@@ -84,12 +85,12 @@ public class NavigationSub extends SubsystemBase {
 
   /** @return The roll angle of the robot in degrees */
   public double getRoll() {
-    return imu.getXComplementaryAngle();
+    return 0;//imu.getXComplementaryAngle();
   }
 
   /** @return The pitch angle of the robot in degrees */
   public double getPitch() {
-    return imu.getYComplementaryAngle();
+    return 0;//imu.getYComplementaryAngle();
   }
 
   /** Gets the left encoder rate. @return The speed in m/s */
@@ -146,6 +147,6 @@ public class NavigationSub extends SubsystemBase {
     drvRightEncoderSim.setDistance(drvTrnSim.getRightPositionMeters());
     drvRightEncoderSim.setRate(drvTrnSim.getRightVelocityMetersPerSecond());
 
-    imuSim.setGyroAngleZ(drvTrnSim.getHeading().getDegrees());
+    //imuSim.setGyroAngleZ(drvTrnSim.getHeading().getDegrees());
   }
 }
