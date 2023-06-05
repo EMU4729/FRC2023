@@ -13,6 +13,7 @@ package frc.robot.utils;
 
 // import java.lang.FdLibm.Pow;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -128,28 +129,68 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
   private static final int FLSHCNT_LOW = 0x7C; // Flash update count, lower word
   private static final int FLSHCNT_HIGH = 0x7E; // Flash update count, upper word
 
-  private static final byte[] autoSPIPacket = {
+  private static final byte[] autoSPIPacketX = {
     X_DELTANG_OUT,
+    FLASH_CNT,
     X_DELTANG_LOW,
+    FLASH_CNT,
     Y_DELTANG_OUT,
-    Y_DELTANG_LOW,
+    FLASH_CNT,
     Z_DELTANG_OUT,
-    Z_DELTANG_LOW,
+    FLASH_CNT,
 
     X_DELTVEL_OUT,
-    X_DELTVEL_LOW,
+    FLASH_CNT,
     Y_DELTVEL_OUT,
-    Y_DELTVEL_LOW,
+    FLASH_CNT,
     Z_DELTVEL_OUT,
-    Z_DELTVEL_LOW,
+    FLASH_CNT,
 
-    X_ACCL_OUT,
-    Y_ACCL_OUT,
-    Z_ACCL_OUT,
-
-    DIAG_STAT
+    DIAG_STAT,
+    FLASH_CNT
   };
 
+  private static final byte[] autoSPIPacketY = {
+    X_DELTANG_OUT,
+    FLASH_CNT,
+    Y_DELTANG_OUT,
+    FLASH_CNT,
+    Y_DELTANG_LOW,
+    FLASH_CNT,
+    Z_DELTANG_OUT,
+    FLASH_CNT,
+
+    X_DELTVEL_OUT,
+    FLASH_CNT,
+    Y_DELTVEL_OUT,
+    FLASH_CNT,
+    Z_DELTVEL_OUT,
+    FLASH_CNT,
+
+    DIAG_STAT,
+    FLASH_CNT
+  };
+  
+  private static final byte[] autoSPIPacketZ = {
+    X_DELTANG_OUT,
+    FLASH_CNT,
+    Y_DELTANG_OUT,
+    FLASH_CNT,
+    Z_DELTANG_OUT,
+    FLASH_CNT,
+    Z_DELTANG_LOW,
+    FLASH_CNT,
+
+    X_DELTVEL_OUT,
+    FLASH_CNT,
+    Y_DELTVEL_OUT,
+    FLASH_CNT,
+    Z_DELTVEL_OUT,
+    FLASH_CNT,
+
+    DIAG_STAT,
+    FLASH_CNT
+  };
   public enum CalibrationTime {
     _32ms(0),
     _64ms(1),
@@ -294,11 +335,11 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
   }
 
   public ADIS16470_INS() {
-    this(IMUAxis.X_CW, IMUAxis.Y_CW, IMUAxis.Z_CW, SPI.Port.kOnboardCS0, CalibrationTime._4s);
+    this(IMUAxis.X_CW, IMUAxis.Y_CW, IMUAxis.Z_CW, SPI.Port.kOnboardCS0, CalibrationTime._8s);
   }
 
   public ADIS16470_INS(IMUAxis pitchAxis, IMUAxis rollAxis, IMUAxis yawAxis) {
-    this(pitchAxis, rollAxis, yawAxis, SPI.Port.kOnboardCS0, CalibrationTime._4s);
+    this(pitchAxis, rollAxis, yawAxis, SPI.Port.kOnboardCS0, CalibrationTime._8s);
   }
 
   /**
@@ -523,7 +564,7 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
       m_auto_configured = true;
     }
     // set spi packet (what is wanted back from imu)
-    spi.setAutoTransmitData(autoSPIPacket, 2);
+    spi.setAutoTransmitData(autoSPIPacketZ, 2);
     // Configure auto stall time
     spi.configureAutoStall(5, 1000, 1);
     // Kick off auto SPI (Note: Device configuration impossible after auto SPI is
@@ -713,8 +754,8 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
   /** */
   private void acquire() {
     // Set data packet length
-    final int dataset_len = 35; // 12 d_gyro, 12 d_accel, 6 accel, 2 error, 2 junk?, 1 timestamp
-    final int BUFFER_SIZE = 8000;
+    final int dataset_len = 19; // 12 d_gyro, 12 d_accel, 6 accel, 2 error, 2 junk?, 1 timestamp
+    final int BUFFER_SIZE = 4000;
     // effective size of the buffer if it is to hold the max number of whole datasets
     final int BUFFER_SIZE_EFFECTIVE = BUFFER_SIZE - (BUFFER_SIZE % dataset_len);
 
@@ -727,9 +768,13 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
     double[] robotDeltaVel = {0.0,0.0,0.0};
     double[] robotAccel    = {0.0,0.0,0.0};
 
+    //clear initialization data
+    data_to_read = countDMABufferElements(dataset_len, BUFFER_SIZE_EFFECTIVE);
+    spi.readAutoReceivedData(buffer, data_to_read, 0);
+
     while (true) {
       // Sleep loop for 10ms
-      ThreadSleep(1000);
+      ThreadSleep(10);
 
 
 
@@ -745,9 +790,9 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
         //  7 AngAccelX_H,  8 AngAccelX_L,  9 AngAccelY_H, 10 AngAccelY_L, 11 AngAccelZ_H, 12 AngAccelZ_L,
         // 13 AccelX_H,    14 AccelX_L,    15 AccelY_H,    16 AccelY_L,    17 AccelZ_H,    18 AccelZ_L,
         spi.readAutoReceivedData(buffer, data_to_read, 0);
-
+        int a = 1;
         // Could be multiple data sets in the buffer. Handle each one.
-        for (int i = 0; i < Math.min(data_to_read,1); i += dataset_len) {
+        for (int i = 0; i < data_to_read; i += dataset_len) {
           // Timestamp is at buffer[i]
           m_dt = ((double) buffer[i] - previous_timestamp) / 1000000.0;
 
@@ -757,15 +802,16 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
            */
           // samples covered by the delta reading
           elapsedSamples = m_scaled_sample_rate / (buffer[i] - previous_timestamp);
-          System.out.println("---------------------");
+          //System.out.println("---------------------");
           robotDeltaAng = bufferReadAng(  buffer, i + 3,  elapsedSamples);
-          System.out.printf("%f, %f, %f - ",robotDeltaAng[0], robotDeltaAng[1],robotDeltaAng[2]);
-          robotDeltaVel = bufferReadVel(  buffer, i + 15, elapsedSamples);
-          System.out.printf("%f, %f, %f - ",robotDeltaVel[0], robotDeltaVel[1],robotDeltaVel[2]);
-          robotAccel    = bufferReadAccel(buffer, i + 27, elapsedSamples);
-          System.out.printf("%f, %f, %f - ",robotAccel[0], robotAccel[1],robotAccel[2]);
-          IMUDebugOut = buffer[i + 33];
-          System.out.printf("%s\n",Integer.toString(IMUDebugOut, 2));
+          RobotAngularVelX += MathUtil.applyDeadband(robotDeltaAng[2], 0.001);
+          //System.out.printf("%f, %f, %f - ",RobotAngularVelX, robotDeltaAng[1],robotDeltaAng[2]);
+          robotDeltaVel = bufferReadVel(  buffer, i + 11, elapsedSamples);
+          //System.out.printf("%f, %f, %f - ",robotDeltaVel[0], robotDeltaVel[1],robotDeltaVel[2]);
+          //robotAccel    = bufferReadAccel(buffer, i + 27, elapsedSamples);
+          //System.out.printf("%f, %f, %f - ",robotAccel[0], robotAccel[1],robotAccel[2]);
+          IMUDebugOut = readBuffShort(i + 17, buffer);
+          //System.out.printf("%s\n",Integer.toString(IMUDebugOut, 2));
 
           // Store timestamp for next iteration
           previous_timestamp = buffer[i];
@@ -776,6 +822,8 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
         m_thread_idle = true;
         previous_timestamp = 0.0;
       }
+      System.out.printf("%s ",Integer.toString(IMUDebugOut, 2));
+      System.out.printf("%d %f %f\n", data_to_read, RobotAngularVelX, robotDeltaAng[2]);
     }
   }
 
@@ -800,16 +848,16 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
    * @param buffer array read from DMA buffer
    * @param i index into the array
    * @param elapsedSamples 
-   * @return
+   * @return [2byte pitch, 2 byte roll, 4byte yaw]
    */
   private double[] bufferReadAng(int[] buffer, int i, double elapsedSamples){
     double[] IMUDeltaAngle = {0.0,0.0,0.0};
     IMUDeltaAngle[robotPitch.axis() - 1] = 
-        (readBuffInt(i,     buffer) * MULT_DELTA_ANGLE_SF_32) / elapsedSamples * robotPitch.direction();
+        (readBuffShort(i,     buffer) * MULT_DELTA_ANGLE_SF_16) / elapsedSamples * robotPitch.direction();
     IMUDeltaAngle[robotRoll.axis()  - 1] = 
-        (readBuffInt(i + 4, buffer) * MULT_DELTA_ANGLE_SF_32) / elapsedSamples * robotRoll.direction();
+        (readBuffShort(i + 2, buffer) * MULT_DELTA_ANGLE_SF_16) / elapsedSamples * robotRoll.direction();
     IMUDeltaAngle[robotYaw.axis()   - 1] = 
-        (readBuffInt(i + 8, buffer) * MULT_DELTA_ANGLE_SF_32) / elapsedSamples * robotYaw.direction();
+        (readBuffInt(i + 4, buffer) * MULT_DELTA_ANGLE_SF_32) / elapsedSamples;
     return IMUDeltaAngle;
   }
   
@@ -818,16 +866,16 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
    * @param buffer array read from DMA buffer
    * @param i index into the array
    * @param elapsedSamples 
-   * @return
+   * @return 
    */
   private double[] bufferReadVel(int[] buffer, int i, double elapsedSamples){
     double[] IMUDeltaVel = {0.0,0.0,0.0};
     IMUDeltaVel[robotPitch.axis() - 1] = 
-        (readBuffInt(i,     buffer) * MULT_DELTA_VEL_SF_32) / elapsedSamples * robotPitch.direction();
+        (readBuffShort(i,     buffer) * MULT_DELTA_VEL_SF_16) / elapsedSamples * robotPitch.direction();
     IMUDeltaVel[robotRoll.axis()  - 1] =
-        (readBuffInt(i + 4, buffer) * MULT_DELTA_VEL_SF_32) / elapsedSamples * robotRoll.direction();
+        (readBuffShort(i + 2, buffer) * MULT_DELTA_VEL_SF_16) / elapsedSamples * robotRoll.direction();
     IMUDeltaVel[robotYaw.axis()   - 1] = 
-        (readBuffInt(i + 8, buffer) * MULT_DELTA_VEL_SF_32) / elapsedSamples * robotYaw.direction();
+        (readBuffShort(i + 4, buffer) * MULT_DELTA_VEL_SF_16) / elapsedSamples * robotYaw.direction();
     return IMUDeltaVel;
   }
   
