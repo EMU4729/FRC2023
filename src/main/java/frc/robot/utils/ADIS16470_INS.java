@@ -216,6 +216,13 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
     }
   }
 
+  /**
+   * axis are built around the standard
+   * pos = CW
+   * CW Pitch = pitch up (lift robot front)
+   * CW Roll = right roll (top of robot moves right)
+   * CW Yaw = right turn (front of robot moves right)
+   */
   public enum IMUAxis {
     X_CW(1),
     X_ACW(-1),
@@ -261,6 +268,8 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
   private IMUAxis robotPitch;
   private IMUAxis robotRoll;
   private IMUAxis robotYaw;
+
+  private int a=0;
 
   // Estimated Robot Angular and Linear Acceleration
   private double RobotAngularAccelX = 0.0; // deg/s^2
@@ -784,12 +793,12 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
         // Count number of full packets waiting in the DMA buffer
         data_to_read = countDMABufferElements(dataset_len, BUFFER_SIZE_EFFECTIVE);
         
-        // Read data from DMA buffer (only complete sets)
-        //  0 timestamp,    1 idk,          2 idk, 
-        //  3 , 4 , 5 , 6 , 
-        //  7 AngAccelX_H,  8 AngAccelX_L,  9 AngAccelY_H, 10 AngAccelY_L, 11 AngAccelZ_H, 12 AngAccelZ_L,
-        // 13 AccelX_H,    14 AccelX_L,    15 AccelY_H,    16 AccelY_L,    17 AccelZ_H,    18 AccelZ_L,
+
         spi.readAutoReceivedData(buffer, data_to_read, 0);
+        if(data_to_read > 0 && (buffer[0] < previous_timestamp || buffer[1] != 0 || buffer[2] != 0)){
+          throw new IllegalStateException("IMU SPI Read desync");
+        }
+
         int a = 1;
         // Could be multiple data sets in the buffer. Handle each one.
         for (int i = 0; i < data_to_read; i += dataset_len) {
@@ -803,15 +812,9 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
           // samples covered by the delta reading
           elapsedSamples = m_scaled_sample_rate / (buffer[i] - previous_timestamp);
           //System.out.println("---------------------");
-          robotDeltaAng = bufferReadAng(  buffer, i + 3,  elapsedSamples);
-          RobotAngularVelX += MathUtil.applyDeadband(robotDeltaAng[2], 0.001);
-          //System.out.printf("%f, %f, %f - ",RobotAngularVelX, robotDeltaAng[1],robotDeltaAng[2]);
-          robotDeltaVel = bufferReadVel(  buffer, i + 11, elapsedSamples);
-          //System.out.printf("%f, %f, %f - ",robotDeltaVel[0], robotDeltaVel[1],robotDeltaVel[2]);
-          //robotAccel    = bufferReadAccel(buffer, i + 27, elapsedSamples);
-          //System.out.printf("%f, %f, %f - ",robotAccel[0], robotAccel[1],robotAccel[2]);
-          IMUDebugOut = readBuffShort(i + 17, buffer);
-          //System.out.printf("%s\n",Integer.toString(IMUDebugOut, 2));
+          robotDeltaAng = bufferReadAng(buffer, i + 3,  elapsedSamples);
+          robotDeltaVel = bufferReadVel(buffer, i + 11, elapsedSamples);
+          IMUDebugOut   = readBuffShort(i + 17, buffer);
 
           // Store timestamp for next iteration
           previous_timestamp = buffer[i];
@@ -822,8 +825,6 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
         m_thread_idle = true;
         previous_timestamp = 0.0;
       }
-      System.out.printf("%s ",Integer.toString(IMUDebugOut, 2));
-      System.out.printf("%d %f %f\n", data_to_read, RobotAngularVelX, robotDeltaAng[2]);
     }
   }
 
@@ -866,7 +867,7 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
    * @param buffer array read from DMA buffer
    * @param i index into the array
    * @param elapsedSamples 
-   * @return 
+   * @return [X movement +R/-L, Y movement +F/-B, Z movement +U/-D]
    */
   private double[] bufferReadVel(int[] buffer, int i, double elapsedSamples){
     double[] IMUDeltaVel = {0.0,0.0,0.0};
@@ -877,24 +878,6 @@ public class ADIS16470_INS implements AutoCloseable, NTSendable {
     IMUDeltaVel[robotYaw.axis()   - 1] = 
         (readBuffShort(i + 4, buffer) * MULT_DELTA_VEL_SF_16) / elapsedSamples * robotYaw.direction();
     return IMUDeltaVel;
-  }
-  
-  /** subfunction of aquire. Reads angle change out of the buffer array
-   * 
-   * @param buffer array read from DMA buffer
-   * @param i index into the array
-   * @param elapsedSamples 
-   * @return
-   */
-  private double[] bufferReadAccel(int[] buffer, int i, double elapsedSamples){
-    double[] IMUAccel = {0.0,0.0,0.0};
-    IMUAccel[robotPitch.axis() - 1] = 
-        (readBuffShort(i,     buffer) * MULT_ACCEL_SF_16) * robotPitch.direction();
-    IMUAccel[robotRoll.axis()  - 1] = 
-        (readBuffShort(i + 2, buffer) * MULT_ACCEL_SF_16) * robotRoll.direction();
-    IMUAccel[robotYaw.axis()   - 1] = 
-        (readBuffShort(i + 4, buffer) * MULT_ACCEL_SF_16) * robotYaw.direction();
-    return IMUAccel;
   }
 
   /**
