@@ -59,29 +59,17 @@ public class RobotContainer {
       LEDControl.getInstance().runCubeLights();
     }));
 
+    // Shoot crate
+    OI.pilot.axisGreaterThan(XboxController.Axis.kRightTrigger.value, 0.8)
+        .whileTrue(Subsystems.crate.shoot());
+
     // Drive bindings handled in teleop command
 
     // +------------------+
     // | COPILOT CONTROLS |
     // +------------------+
 
-    // Calibration
-    OI.copilot.start().onTrue(
-        new InstantCommand(Subsystems::calibrate, Subsystems.arm, Subsystems.subArmPivot, Subsystems.subArmRotate));
-
-    // Gripper Control
-    // OI.copilot.rightBumper().onTrue(new InstantCommand(
-    //     Subsystems.gripper::open,
-    //     Subsystems.gripper));
-    // OI.copilot.leftBumper().onTrue(new InstantCommand(
-    //     Subsystems.gripper::close,
-    //     Subsystems.gripper));
-
-    // Subarm Rotation
-    // OI.copilot.povLeft().whileTrue(Subsystems.subArmRotate.turnClockwise());
-    // OI.copilot.povLeft().whileTrue(Subsystems.subArmRotate.turnAnticlockwise());
-
-    // Arm controls handled in ArmSub
+    // ...there aren't any lol
   }
 
   /**

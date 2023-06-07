@@ -10,13 +10,11 @@ package frc.robot.constants;
  */
 public final class Constants {
   public static final FeaturesConstants features = new FeaturesConstants(); // do not move
-  public static final ArmConstants arm = new ArmConstants();
-  public static final GripperConstants gripper = new GripperConstants();
   public static final ControllerConstants controller = new ControllerConstants();
   public static final DriveConstants drive = new DriveConstants();
   public static final FileConstants file = new FileConstants();
   public static final LEDConstants led = new LEDConstants();
   public static final LoggerConstants logger = new LoggerConstants();
   public static final SimConstants sim = new SimConstants();
-  public static final SubArmConstants subarm = new SubArmConstants();
+  public static final CrateConstants crate = new CrateConstants();
 }

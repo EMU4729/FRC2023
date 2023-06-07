@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 
 public class FeaturesConstants {
@@ -24,4 +25,10 @@ public class FeaturesConstants {
 
   /** Power distribution object */
   public final PowerDistribution PDB = new PowerDistribution();
+
+  /** PCM Type */
+  public final PneumaticsModuleType PCM = PneumaticsModuleType.CTREPCM;
+
+  /** PCM CAN ID @wip */
+  public final int PCM_ID = 10;
 }
