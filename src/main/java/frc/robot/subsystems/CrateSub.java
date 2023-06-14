@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.Constants;
 
 public class CrateSub extends SubsystemBase {
@@ -37,8 +40,27 @@ public class CrateSub extends SubsystemBase {
    * @return a {@link Command} that extends the solenoid at start, and retracts it
    *         on end
    */
-  public Command shoot() {
+  public Command shootHold() {
     return this.startEnd(this::extend, this::retract);
+
+  }
+
+  /**
+   * @return a {@link Command} that extends the solenoid at start, and retracts it
+   *         after 0.5s
+   */
+  public Command shootPulse() {
+    return new SequentialCommandGroup(
+        this.runOnce(this::extend),
+        new WaitCommand(0.5),
+        this.runOnce(this::retract));
+  }
+
+  /**
+   * @return a {@link Command} that toggles the solenoid
+   */
+  public Command shootToggle() {
+    return this.runOnce(this::toggle);
   }
 
   // Simulation

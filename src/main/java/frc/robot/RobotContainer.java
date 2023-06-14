@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.auto.AutoProvider;
+import frc.robot.constants.Constants;
 import frc.robot.teleop.TeleopProvider;
 import frc.robot.utils.LEDControl.LEDControl;
 
@@ -60,8 +61,21 @@ public class RobotContainer {
     }));
 
     // Shoot crate
-    OI.pilot.axisGreaterThan(XboxController.Axis.kRightTrigger.value, 0.8)
-        .whileTrue(Subsystems.crate.shoot());
+    final double shootThresh = 0.8;
+    switch (Constants.crate.shootMode) {
+      case HOLD:
+        OI.pilot.axisGreaterThan(XboxController.Axis.kRightTrigger.value, shootThresh)
+            .whileTrue(Subsystems.crate.shootHold());
+        break;
+      case PULSE:
+        OI.pilot.axisGreaterThan(XboxController.Axis.kRightTrigger.value, shootThresh)
+            .onTrue(Subsystems.crate.shootPulse());
+        break;
+      case TOGGLE:
+        OI.pilot.axisGreaterThan(XboxController.Axis.kRightTrigger.value, shootThresh)
+            .onTrue(Subsystems.crate.shootToggle());
+        break;
+    }
 
     // Drive bindings handled in teleop command
 

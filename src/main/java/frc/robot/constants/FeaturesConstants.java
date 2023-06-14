@@ -30,5 +30,5 @@ public class FeaturesConstants {
   public final PneumaticsModuleType PCM = PneumaticsModuleType.CTREPCM;
 
   /** PCM CAN ID @wip */
-  public final int PCM_ID = 10;
+  public final int PCM_ID = 5;
 }
