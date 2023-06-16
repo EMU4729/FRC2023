@@ -46,12 +46,12 @@ public class RobotContainer {
     // +----------------+
 
     // Invert Drive
-    OI.pilot.start().onTrue(new InstantCommand(() -> {
-      Variables.invertDriveDirection = !Variables.invertDriveDirection;
-      CommandScheduler.getInstance().schedule(LEDShow.direction());
-    }));
-    OI.pilot.rightBumper().onTrue(LEDShow.cone());
-    OI.pilot.leftBumper().onTrue(LEDShow.cube());
+    // OI.pilot.start().onTrue(new InstantCommand(() -> {
+    //   Variables.invertDriveDirection = !Variables.invertDriveDirection;
+    //   CommandScheduler.getInstance().schedule(LEDShow.direction());
+    // }));
+    // OI.pilot.rightBumper().onTrue(LEDShow.cone());
+    // OI.pilot.leftBumper().onTrue(LEDShow.cube());
 
     // Shoot crate
     final double shootThresh = 0.8;

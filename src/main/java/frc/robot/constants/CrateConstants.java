@@ -13,5 +13,5 @@ public class CrateConstants {
     TOGGLE
   }
 
-  public final ShootMode shootMode = ShootMode.PULSE;
+  public final ShootMode shootMode = ShootMode.TOGGLE;
 }
