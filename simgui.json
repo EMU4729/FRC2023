@@ -1,10 +1,5 @@
 {
   "HALProvider": {
-    "Addressable LEDs": {
-      "window": {
-        "visible": true
-      }
-    },
     "PWM Outputs": {
       "window": {
         "visible": true
