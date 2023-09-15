@@ -91,9 +91,9 @@ public class CurveFit {
 
     /*
      * rough sketch of the result
-     * ___ outAbsMax
-     *         |
-     *      __/ ___ outAbsMin
+     *            ___ outAbsMax
+     *           |
+     *        __/ ___ outAbsMin
      * ______|______
      * __|
      * /
