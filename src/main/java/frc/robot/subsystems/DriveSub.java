@@ -78,7 +78,6 @@ public class DriveSub extends SubsystemBase {
     throttle = MathUtil.clamp(throttle, -1, 1);
     steering = -MathUtil.clamp(steering, -1, 1);
     drive.arcadeDrive(throttle, -steering, true); // squared input fix later
-
   }
 
   /** Stops all motors. */
@@ -89,9 +88,13 @@ public class DriveSub extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // set sim motor volts to cur motor throt * bat volts
+
+    // the order is reversed because otherwise, simulation direction is the opposite of real life
+    // this is probably a result of a deeper issue with the code that i don't want to fix right now
     drivetrainSimulator.setInputs(
-        leftMotors.get() * RobotController.getInputVoltage(),
-        rightMotors.get() * RobotController.getInputVoltage());
+        rightMotors.get() * RobotController.getInputVoltage(),
+        leftMotors.get() * RobotController.getInputVoltage()
+    );
     drivetrainSimulator.update(0.02);
   }
 }

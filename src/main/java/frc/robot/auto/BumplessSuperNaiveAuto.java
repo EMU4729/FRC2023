@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Subsystems;
 import frc.robot.commands.TimedRunCommand;
 
-/** {@link SuperNaiveAuto}, but for the side with the bump */
+/** {@link SuperNaiveAuto}, but for the side without the bump */
 public class BumplessSuperNaiveAuto extends SequentialCommandGroup {
   protected BumplessSuperNaiveAuto() {
     addCommands(
