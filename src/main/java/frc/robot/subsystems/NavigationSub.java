@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
@@ -16,18 +20,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems;
 import frc.robot.constants.Constants;
 import frc.robot.shufflecontrol.ShuffleControl;
+import frc.robot.utils.PhotonBridge;
 
 /** Subsystem that handles all robot navigation */
 public class NavigationSub extends SubsystemBase {
   public final ADIS16470_IMU imu = new ADIS16470_IMU();
-  private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
-      Rotation2d.fromDegrees(imu.getAngle()),
-      0., 0.);
 
   private final Encoder drvLeftEncoder = Constants.drive.ENCODER_ID_L.build();
   private final Encoder drvRightEncoder = Constants.drive.ENCODER_ID_R.build();
 
   private final Field2d field = new Field2d();
+  private final PhotonBridge photon = new PhotonBridge();
+  private final DifferentialDrivePoseEstimator poseEstimator = new DifferentialDrivePoseEstimator(
+      Constants.drive.KINEMATICS, getHeadingRot2d(), 0, 0, new Pose2d());
 
   // Simulation Variables
   private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
@@ -40,12 +45,28 @@ public class NavigationSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    odometry.update(
-        Rotation2d.fromDegrees(getYaw()),
-        drvLeftEncoder.getDistance(),
-        drvRightEncoder.getDistance());
-    field.setRobotPose(getPose());
+    updateOdometry();
     updateShuffleboard();
+  }
+
+  private void updateOdometry() {
+    poseEstimator.update(
+        Rotation2d.fromDegrees(imu.getAngle()), drvLeftEncoder.getDistance(), drvRightEncoder.getDistance());
+
+    Optional<EstimatedRobotPose> result = photon.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
+
+    if (result.isPresent()) {
+      EstimatedRobotPose camPose = result.get();
+      poseEstimator.addVisionMeasurement(
+          camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+      field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+    } else {
+      // move it way off the screen to make it disappear
+      field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+    }
+
+    field.getObject("Actual Pos").setPose(Subsystems.drive.drivetrainSimulator.getPose());
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
   }
 
   public void updateShuffleboard() {
@@ -57,7 +78,12 @@ public class NavigationSub extends SubsystemBase {
 
   /** @return The currently-estimated pose of the robot. */
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    // Not sure why, but poseEstimator is null for the first few seconds of runtime.
+    // Too bad!
+    if (poseEstimator == null)
+      return new Pose2d();
+
+    return poseEstimator.getEstimatedPosition();
   }
 
   /** @return The wheel speeds of the robot */
@@ -127,7 +153,7 @@ public class NavigationSub extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     imu.reset();
-    odometry.resetPosition(
+    poseEstimator.resetPosition(
         Rotation2d.fromDegrees(imu.getAngle()),
         0., 0., pose);
 
